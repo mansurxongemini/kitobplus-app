@@ -1,0 +1,49 @@
+# Локальный запуск backend KitobPlus. Инструкция: docs/LOCAL.md
+#
+# Секреты в коде заменены обозначениями __KP_*__ (docs/SECRETS.md). Локально обозначение само
+# служит значением: пароль пользователя базы kitobplus равен строке __KP_DB_PASSWORD__,
+# поэтому код запускается без подстановки и без правок.
+name: kitobplus
+
+services:
+  db:
+    image: docker.io/library/mariadb:10.5
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-local-root-only}
+      MARIADB_DATABASE: kitobplus
+      MARIADB_USER: kitobplus
+      MARIADB_PASSWORD: __KP_DB_PASSWORD__
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - db-data:/var/lib/mysql
+      - mysqld-sock:/run/mysqld
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:${DB_PORT:-3307}:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uroot -p\"$$MARIADB_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8080}:80"
+    volumes:
+      - .:/var/www/html
+      - mysqld-sock:/run/mysqld
+      # Данные, которые на сервере лежат вне репозитория
+      - ./.local/pics:/var/www/html/pics
+      - ./.local/restricted:/var/www/html/restricted
+      - ./.local/books:/var/www/html/books
+      - ./.local/storage:/kitobplus/books/storage
+
+volumes:
+  db-data:
+  mysqld-sock:

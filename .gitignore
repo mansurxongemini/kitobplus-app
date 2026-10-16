@@ -31,3 +31,12 @@ response.json*
 .DS_Store
 ._*
 srv/gemini/lib64
+
+# Локальное Docker-окружение (docs/LOCAL.md)
+.local/
+/pics/
+/restricted/
+/books/
+web/build/
+admin/build/
+!db/init/*.sql
