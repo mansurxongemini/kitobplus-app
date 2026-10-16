@@ -165,7 +165,8 @@
     $order_field = "authors_name $order_direction, b.name $order_direction, dictors_name $order_direction";
     if (array_key_exists('sort', $_GET)) {
         if ($_GET['sort'] == 'new') $order_field = "is_readable_from desc, $order_field";
-        if ($_GET['sort'] == 'popular') $order_field = "duration desc, $order_field";
+        // «Популярное» — по числу слушателей и добавлений на полку (раньше сортировалось по длительности).
+        if ($_GET['sort'] == 'popular') $order_field = "b.downloads_count desc, b.bookshelfs_count desc, is_readable_from desc, $order_field";
         if ($_GET['sort'] == 'recommend') $order_field = "authors_name desc, $order_field";
         if ($_GET['sort'] == 'rand') $order_field = "RAND()";
     }
@@ -197,7 +198,7 @@
 //		$query_string = "select SQL_CALC_FOUND_ROWS `b`.`id` AS `id`,`b`.`name` AS `name`,`b`.`preview_id` AS `preview_id`,`b`.`url` AS `url`,`b`.`dictors_id` AS `dictors_id`,`b`.`is_readable_from` AS `is_readable_from`,`b`.`seconds` AS `seconds`,sec_to_time(`b`.`seconds`) AS `duration`,date_format(`b`.`is_readable_from`,'%d.%m.%Y') AS `added`,`b`.`annotation` AS `annotation`,`b`.`adult` AS `adult`,`p`.`name` AS `publishers_name`,`p`.`id` AS `publishers_id`, coalesce(if(b2i.states_id = 4 or b2i.states_id = 5 or b2i.states_id = 6, b2i.states_id, null), max(`astates`.`states_id`),`dstates`.`states_id`,`pstates`.`states_id`,`b2i`.`states_id`,0) AS `states_id`,`s`.`name` AS `states_name`,`d`.`name` AS `dictors_name`,group_concat(`a`.`name` order by `b2a`.`pos` ASC separator ', ') AS `authors_name`,max(`astates`.`states_id`) AS `authors_states_id`,`dstates`.`states_id` AS `dictors_states_id`,`pstates`.`states_id` AS `publishers_states_id`,`b2i`.`states_id` AS `books_states_id`,`b2i`.`inbox_id` AS `inbox_id` from (((((((((`books` `b` left join `dictors` `d` on((`b`.`dictors_id` = `d`.`id`))) left join `books2authors` `b2a` on((`b`.`id` = `b2a`.`books_id`))) left join `authors` `a` on((`b2a`.`authors_id` = `a`.`id`))) left join `books2inbox` `b2i` on((`b2i`.`books_id` = `b`.`id`))) left join `states` `s` on((`s`.`id` = `b2i`.`states_id`))) left join `authors_states` `astates` on((`astates`.`authors_id` = `a`.`id`))) left join `dictors_states` `dstates` on((`dstates`.`dictors_id` = `d`.`id`))) left join `publishers` `p` on((`p`.`id` = `b`.`publishers_id`))) left join `publishers_states` `pstates` on((`pstates`.`publishers_id` = `p`.`id`))) " . (count($where) ? " where " . implode(' and ', $where) : '') . ' group by b.id ' . $order . $limit;
 	}
 
-    file_put_contents('books.sql', $query_string);
+    // Отладочная запись текста запроса в books.sql (в корне сайта, на каждый запрос) убрана.
 
     ($query = mysqli_query($db, $query_string)) || exit($query_string . "\n" . mysqli_error($db));
 
