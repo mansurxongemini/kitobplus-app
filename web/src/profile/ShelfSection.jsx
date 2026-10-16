@@ -1,35 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { BookGrid } from "../ds/components/BookCard";
-import { getHost } from "../lib/api";
+import { getHost, getToken } from "../lib/api";
 import T from "../lib/translator.js";
 
-// "Kitob javoni": books the user put on the shelf. Same books.php endpoint the
-// catalog uses, with the existing realm=bookshelf parameter — no new API.
 const ShelfSection = () => {
   const [books, setBooks] = useState(null);
-
   useEffect(() => {
+    const token = getToken();
+    if (!token) { setBooks([]); return undefined; }
     let cancelled = false;
-    fetch(`${getHost()}/srv/books.php?realm=bookshelf&sort=new&page=0&per_page=12`)
+    fetch(`${getHost()}/srv/books.php?realm=bookshelf&token=${encodeURIComponent(token)}&page=0&per_page=12`)
       .then((r) => r.json())
-      .then((json) => {
-        if (!cancelled) setBooks((json && json.data) || []);
-      })
-      .catch(() => {
-        if (!cancelled) setBooks([]);
-      });
-    return () => {
-      cancelled = true;
-    };
+      .then((json) => { if (!cancelled) setBooks((json && json.data) || []); })
+      .catch(() => { if (!cancelled) setBooks([]); });
+    return () => { cancelled = true; };
   }, []);
-
   return (
-    <Box
-      component="section"
-      aria-labelledby="profile-shelf-title"
-      aria-busy={books === null ? "true" : undefined}
-    >
+    <Box component="section" aria-labelledby="profile-shelf-title" aria-busy={books === null ? "true" : undefined}>
       <Typography id="profile-shelf-title" variant="h3" component="h2" sx={{ mb: 3 }}>{T("Книжная полка")}</Typography>
       {books !== null && books.length === 0 ? (
         <Typography sx={{ color: "text.secondary" }}>{T("Книжная полка пуста")}</Typography>
@@ -39,5 +27,4 @@ const ShelfSection = () => {
     </Box>
   );
 };
-
 export default ShelfSection;

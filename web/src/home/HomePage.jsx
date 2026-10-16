@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Typography, Tabs, Tab, Skeleton, useTheme } from "@mui/material";
+import { Box, Button, Typography, Skeleton, useTheme } from "@mui/material";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import PauseRounded from "@mui/icons-material/PauseRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
@@ -10,8 +10,8 @@ import HeadphonesRounded from "@mui/icons-material/HeadphonesRounded";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import PageShell, { SectionHeader } from "../ds/components/PageShell";
+import Feed from "./Feed";
 import Container from "../ds/components/Container";
-import { BookGrid } from "../ds/components/BookCard";
 import { Reveal, RiseText, Accent, useReducedMotion } from "../ds/motion";
 import { getHost, request } from "../lib/api";
 import useLibrary from "../LibraryContext";
@@ -183,24 +183,6 @@ const Hero = () => {
   );
 };
 
-/* ---------- Полка ---------- */
-const Shelf = () => {
-  const [tab, setTab] = useState(0);
-  const { data, isLoading } = useBooks(tab === 0 ? "new" : "popular", 5);
-  const tabs = [T("Последние"), T("Популярные")];
-  return (
-    <Section labelledBy="kp-shelf-title">
-      <SectionHeader id="kp-shelf-title" title={<>{T("На этой неделе")} <Accent>{T("с любовью")}</Accent> {T("слушают")}</>} linkTo="/books" linkLabel={T("Все книги")} />
-      <Tabs value={tab} onChange={(e, v) => setTab(v)} aria-label={T("Подборка книг")} sx={{ mb: { xs: 4, md: 5 } }}>
-        {tabs.map((t, i) => <Tab key={t} label={t} id={`kp-shelf-tab-${i}`} aria-controls="kp-shelf-panel" />)}
-      </Tabs>
-      <Box id="kp-shelf-panel" role="tabpanel" aria-labelledby={`kp-shelf-tab-${tab}`}>
-        <BookGrid books={data && data.data} loading={isLoading} label={tabs[tab]} />
-      </Box>
-    </Section>
-  );
-};
-
 /* ---------- Манифест и цифры (A) ---------- */
 const Statement = () => {
   const { kp } = useTheme();
@@ -224,33 +206,6 @@ const Statement = () => {
           <Reveal key={s.l} delay={i * 0.1} sx={{ py: { xs: 3, md: 4 }, pr: 3, display: "flex", flexDirection: "column-reverse", borderBottom: { xs: `1px solid ${kp.p.border}`, md: "none" } }}>
             <Box component="dt" sx={{ color: kp.p.textSecondary, fontSize: "1.0625rem", mt: 0.5 }}>{s.l}</Box>
             <Box component="dd" sx={{ m: 0, fontFamily: kp.fonts.heading, fontWeight: 800, fontSize: "clamp(2.5rem, 1.8rem + 2.4vw, 4rem)", letterSpacing: "-0.05em", lineHeight: 1 }}>{s.v}</Box>
-          </Reveal>
-        ))}
-      </Box>
-    </Section>
-  );
-};
-
-/* ---------- Жанры: редакционный указатель ---------- */
-const Genres = () => {
-  const { kp } = useTheme();
-  const { data, isLoading } = useSWR(`${getHost()}/srv/genres.php?sort=popular`, fetchJson);
-  const genres = ((data && data.data) || []).slice(0, 8);
-  return (
-    <Section labelledBy="kp-genres-title" sx={{ bgcolor: kp.isContrast ? kp.p.bg : kp.p.surfaceAlt }}>
-      <SectionHeader id="kp-genres-title" title={<>{T("Выберите")} <Accent>{T("настроение")}</Accent></>} linkTo="/genres" linkLabel={T("Все жанры")} />
-      <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, columnGap: 6 }}>
-        {isLoading && Array.from({ length: 4 }).map((_, i) => <li key={i}><Skeleton height={88} /></li>)}
-        {genres.map((g, i) => (
-          <Reveal as="li" key={g.id} delay={(i % 2) * 0.08}>
-            <Box component={RouterLink} to={`/person/genres/${g.id}`} sx={{
-              display: "flex", alignItems: "center", gap: 2, minHeight: 88, borderTop: `1px solid ${kp.isContrast ? kp.p.border : kp.p.borderStrong}`, color: kp.p.text, textDecoration: "none",
-              "& .kp-arrow": { transition: "transform .35s cubic-bezier(.2,.8,.2,1)" }, "&:hover .kp-arrow": { transform: "translateX(8px)" }, "&:hover .kp-gname": { color: kp.p.primary },
-            }}>
-              <Box className="kp-gname" component="span" sx={{ fontFamily: kp.fonts.heading, fontWeight: 700, fontSize: { xs: "1.5rem", md: "2rem" }, letterSpacing: "-0.035em", flex: 1, transition: "color .25s" }}>{g.name}</Box>
-              {g.books_count && <Box component="span" sx={{ color: kp.p.textSecondary }}>{g.books_count} {T("книг (число)")}</Box>}
-              <ArrowForwardRounded className="kp-arrow" aria-hidden="true" />
-            </Box>
           </Reveal>
         ))}
       </Box>
@@ -371,16 +326,15 @@ const HomePage = () => {
   useEffect(() => {
     if (location.hash === "#about") requestAnimationFrame(() => document.getElementById("about")?.scrollIntoView({ block: "start" }));
   }, [location]);
+  // Промо-блоки создаются один раз: новые элементы на каждом рендере пересобирали бы список полок ленты.
+  const promos = React.useMemo(() => ({
+    about: <><Statement /><Features /></>, join: <JoinCta />, access: <Access />, news: <News />,
+  }), []);
   return (
     <PageShell title={T("Главная")}>
       <Hero />
-      <Shelf />
-      <Statement />
-      <Genres />
-      <Access />
-      <Features />
-      <News />
-      <JoinCta />
+      <Box component="a" href="#site-footer" className="kp-skip-link">{T("Пропустить ленту")}</Box>
+      <Feed promos={promos} />
     </PageShell>
   );
 };

@@ -2234,5 +2234,85 @@
   "Перезагрузить страницу": {
     "UZ": "Sahifani qayta yuklash",
     "US": "Reload page"
+  },
+  "место": {
+    "UZ": "oʻrin",
+    "US": "place"
+  },
+  "Прослушано": {
+    "UZ": "Tinglandi",
+    "US": "Listened"
+  },
+  "Смотреть все": {
+    "UZ": "Hammasi",
+    "US": "See all"
+  },
+  "Предыдущие книги": {
+    "UZ": "Oldingi kitoblar",
+    "US": "Previous books"
+  },
+  "Следующие книги": {
+    "UZ": "Keyingi kitoblar",
+    "US": "Next books"
+  },
+  "Показать ещё": {
+    "UZ": "Yana koʻrsatish",
+    "US": "Show more"
+  },
+  "Загрузить ещё": {
+    "UZ": "Yana yuklash",
+    "US": "Load more"
+  },
+  "Загружено": {
+    "UZ": "Yuklandi",
+    "US": "Loaded"
+  },
+  "Пропустить ленту": {
+    "UZ": "Lentani oʻtkazib yuborish",
+    "US": "Skip the feed"
+  },
+  "новых полок": {
+    "UZ": "ta yangi javon",
+    "US": "new shelves"
+  },
+  "Продолжить прослушивание": {
+    "UZ": "Tinglashni davom ettiring",
+    "US": "Continue listening"
+  },
+  "Новые поступления": {
+    "UZ": "Yangi qoʻshilganlar",
+    "US": "New arrivals"
+  },
+  "Топ-10 недели": {
+    "UZ": "Haftaning top-10 kitobi",
+    "US": "Top 10 of the week"
+  },
+  "Ваша книжная полка": {
+    "UZ": "Kitob javoningiz",
+    "US": "Your bookshelf"
+  },
+  "произведения": {
+    "UZ": "asarlari",
+    "US": "works"
+  },
+  "Случайный выбор": {
+    "UZ": "Tasodifiy tanlov",
+    "US": "Random picks"
+  },
+  "Вы посмотрели все полки": {
+    "UZ": "Barcha javonlarni koʻrdingiz",
+    "US": "You have seen all the shelves"
+  },
+  "другие произведения": {
+    "UZ": "boshqa asarlari",
+    "US": "other works"
+  },
+  "читал другие книги": {
+    "UZ": "oʻqigan boshqa kitoblar",
+    "US": "has narrated other books"
+  },
+  "Случайные": {
+    "UZ": "Tasodifiy",
+    "US": "Random"
   }
 }

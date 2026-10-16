@@ -5,10 +5,11 @@ export const useFormatDuration = () => {
   const h = T("ч.");
   const m = T("мин.");
   return (seconds) => {
-    const s = Math.max(0, Math.round(Number(seconds) || 0));
-    const hours = Math.floor(s / 3600);
-    const mins = Math.round((s % 3600) / 60);
-    if (!s) return "";
+    // Округляем до минут один раз: иначе 8:59:40 давало «8 ч. 60 мин.».
+    const total = Math.round(Math.max(0, Number(seconds) || 0) / 60);
+    const hours = Math.floor(total / 60);
+    const mins = total % 60;
+    if (!Number(seconds)) return "";
     if (!hours) return `${mins || 1} ${m}`;
     return mins ? `${hours} ${h} ${mins} ${m}` : `${hours} ${h}`;
   };

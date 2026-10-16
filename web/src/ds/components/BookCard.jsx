@@ -13,7 +13,7 @@ const srOnly = { position: "absolute", width: "1px", height: "1px", overflow: "h
 // Карточка книги. Ссылка — на названии; через ::after она растянута на всю карточку,
 // поэтому экранная читалка слышит одну ссылку с названием, а остальное — обычным текстом.
 // Клик открывает книгу с переходом «обложка летит на страницу книги».
-const BookCard = ({ book, headingLevel = "h3", eager = false }) => {
+const BookCard = ({ book, headingLevel = "h3", eager = false, rank = null, progress = null, width }) => {
   const { kp } = useTheme();
   const fmt = useFormatDuration();
   const navigate = useNavigate();
@@ -31,13 +31,23 @@ const BookCard = ({ book, headingLevel = "h3", eager = false }) => {
     <Box
       component="article"
       sx={{
-        position: "relative", display: "flex", flexDirection: "column", gap: 1.75, height: "100%",
+        position: "relative", display: "flex", flexDirection: "column", gap: 1.75, height: "100%", width: width || undefined,
         "& .kp-cover": { transition: "transform .55s cubic-bezier(.2,.8,.2,1), box-shadow .55s" },
         "&:hover .kp-cover, &:focus-within .kp-cover": kp.isContrast ? {} : { transform: "translateY(-10px)", boxShadow: "0 30px 60px -24px rgba(14,26,43,.45)" },
         "&:focus-within": { outline: `3px solid ${kp.p.focus}`, outlineOffset: 8, borderRadius: "18px" },
       }}
     >
       <BookCover ref={coverRef} book={book} eager={eager} rounded={14} className="kp-cover" />
+      {progress !== null && progress !== undefined && (
+        <Box sx={{ mt: -0.5 }}>
+          <Box aria-hidden="true" sx={{ height: "6px", borderRadius: "3px", bgcolor: kp.p.surfaceSunken, overflow: "hidden" }}>
+            <Box sx={{ height: "100%", width: `${Math.min(100, Math.max(0, Math.round(progress * 100)))}%`, bgcolor: kp.p.primary }} />
+          </Box>
+          <Typography variant="caption" sx={{ display: "block", mt: 0.5, color: kp.p.textSecondary }}>
+            {T("Прослушано")} {Math.min(100, Math.max(0, Math.round(progress * 100)))}%
+          </Typography>
+        </Box>
+      )}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25, minWidth: 0 }}>
         <Typography component={headingLevel} sx={{ fontFamily: kp.fonts.heading, fontWeight: 650, fontSize: "1.125rem", lineHeight: 1.3, letterSpacing: "-0.02em", m: 0 }}>
           <Box
@@ -50,6 +60,7 @@ const BookCard = ({ book, headingLevel = "h3", eager = false }) => {
               "&:hover": { textDecoration: kp.isContrast ? "underline" : "none" },
             }}
           >
+            {rank !== null && rank !== undefined && <Box component="span" sx={srOnly}>{rank}-{T("место")} </Box>}
             {book.title}
           </Box>
         </Typography>

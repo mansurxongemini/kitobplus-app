@@ -36,7 +36,7 @@ const SiteFooter = () => {
   const year = new Date().getFullYear();
   const storeBtn = { justifyContent: "flex-start", color: kp.p.onInk, borderColor: kp.p.onInkSecondary, "&:hover": { borderColor: kp.p.onInk, bgcolor: "rgba(255,255,255,.06)" } };
   return (
-    <Box component="footer" sx={{ bgcolor: kp.p.ink, color: kp.p.onInk, mt: 0, borderTop: kp.isContrast ? `2px solid ${kp.p.border}` : "none" }}>
+    <Box component="footer" id="site-footer" tabIndex={-1} sx={{ bgcolor: kp.p.ink, color: kp.p.onInk, mt: 0, borderTop: kp.isContrast ? `2px solid ${kp.p.border}` : "none", "&:focus": { outline: "none" } }}>
       <Container sx={{ py: { xs: 6, md: 9 } }}>
         <Grid container spacing={{ xs: 5, md: 6 }}>
           <Grid item xs={12} md={4}>

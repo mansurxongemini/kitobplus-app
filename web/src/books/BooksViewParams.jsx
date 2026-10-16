@@ -5,6 +5,7 @@ import T from "../lib/translator";
 const OPTIONS = [
   { value: "new", label: "Последние" },
   { value: "popular", label: "Популярные" },
+  { value: "rand", label: "Случайные" },
 ];
 
 // Sort control rendered as accessible Tabs. Keeps the legacy

@@ -14,13 +14,26 @@ if (!window.matchMedia) {
   });
 }
 
-if (!window.IntersectionObserver) {
-  window.IntersectionObserver = class IntersectionObserver {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-}
+// IntersectionObserver mock: tests can trigger intersection via
+// window.__ioInstances / window.triggerIntersection().
+const ioInstances = [];
+window.__ioInstances = ioInstances;
+window.IntersectionObserver = class IntersectionObserver {
+  constructor(callback, options) {
+    this.callback = callback;
+    this.options = options;
+    this.elements = new Set();
+    ioInstances.push(this);
+  }
+  observe(el) { if (el) this.elements.add(el); }
+  unobserve(el) { this.elements.delete(el); }
+  disconnect() { this.elements.clear(); }
+  trigger(isIntersecting = true) {
+    const entries = [...this.elements].map((el) => ({ target: el, isIntersecting, intersectionRatio: isIntersecting ? 1 : 0 }));
+    if (entries.length) this.callback(entries, this);
+  }
+};
+window.triggerIntersection = () => { ioInstances.forEach((io) => io.trigger(true)); };
 
 // LibraryProvider fetches the current user on mount; keep tests offline.
 if (!window.fetch) {

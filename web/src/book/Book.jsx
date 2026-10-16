@@ -26,6 +26,24 @@ import { getHost } from "../lib/api";
 import { useRouteA11y } from "../lib/a11y";
 import T, { tr } from "../lib/translator.js";
 
+// Авторы и чтецы приходят массивами (books/get: authors[], dictors[]); в данных карточки каталога — только имя и,
+// иногда, id. Ссылка — только при известном id, иначе просто текст (раньше получалось /person/authors/undefined).
+const PersonLinks = ({ table, people, fallbackName, fallbackId, color }) => {
+  const list = Array.isArray(people) && people.length
+    ? people.map((p) => ({ id: p.id, name: p.name }))
+    : [{ id: fallbackId, name: fallbackName }];
+  return list.map((p, i) => (
+    <React.Fragment key={p.id || i}>
+      {i > 0 && ", "}
+      {p.id ? (
+        <Box component={RouterLink} to={`/person/${table}/${p.id}`} sx={{ color }}>{p.name}</Box>
+      ) : (
+        <span>{p.name}</span>
+      )}
+    </React.Fragment>
+  ));
+};
+
 const Book = () => {
   const { kp } = useTheme();
   const fmt = useFormatDuration();
@@ -210,13 +228,7 @@ const Book = () => {
                   <>
                     <Box component="dt" sx={{ color: kp.p.textSecondary }}>{T("Автор")}</Box>
                     <Box component="dd" sx={{ m: 0, fontWeight: 600 }}>
-                      <Box
-                        component={RouterLink}
-                        to={`/person/authors/${hero.authors_id}`}
-                        sx={{ color: kp.p.text }}
-                      >
-                        {hero.authors_name}
-                      </Box>
+                      <PersonLinks table="authors" people={hero.authors} fallbackName={hero.authors_name} fallbackId={hero.authors_id} color={kp.p.text} />
                     </Box>
                   </>
                 )}
@@ -224,13 +236,7 @@ const Book = () => {
                   <>
                     <Box component="dt" sx={{ color: kp.p.textSecondary }}>{T("Диктор")}</Box>
                     <Box component="dd" sx={{ m: 0, fontWeight: 600 }}>
-                      <Box
-                        component={RouterLink}
-                        to={`/person/dictors/${hero.dictors_id}`}
-                        sx={{ color: kp.p.text }}
-                      >
-                        {hero.dictors_name}
-                      </Box>
+                      <PersonLinks table="dictors" people={hero.dictors} fallbackName={hero.dictors_name} fallbackId={hero.dictors_id} color={kp.p.text} />
                     </Box>
                   </>
                 )}
@@ -396,7 +402,7 @@ const Book = () => {
           </Box>
         </Box>
 
-        <Recommendations book={book?.id} />
+        <Recommendations book={book} />
       </Container>
     </PageShell>
   );

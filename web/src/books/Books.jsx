@@ -15,7 +15,7 @@ const Books = () => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = React.useState(() => searchParams.get("q") || "");
-  const [sort, setSort] = React.useState("new");
+  const [sort, setSort] = React.useState(() => { const v = searchParams.get("sort"); return ["new", "popular", "rand"].includes(v) ? v : "new"; });
   const [selectedGenres, setSelectedGenres] = React.useState(
     () => (params.table === "genres" && params.id ? new Set([Number(params.id)]) : new Set())
   );
