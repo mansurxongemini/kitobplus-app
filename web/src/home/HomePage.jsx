@@ -213,7 +213,7 @@ const Statement = () => {
   ];
   return (
     <Section labelledBy="kp-about-title" id="about">
-      <Typography id="kp-about-title" component="h2" sx={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>{T("О нас")}</Typography>
+      <Typography id="kp-about-title" component="h2" sx={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0 0 0 0)" }}>{T("О нас")}</Typography>
       <Reveal>
         <Typography component="p" sx={{ fontFamily: kp.fonts.heading, fontWeight: 700, fontSize: "clamp(1.875rem, 1.1rem + 3.2vw, 3.75rem)", lineHeight: 1.12, letterSpacing: "-0.04em", maxWidth: 1080 }}>
           {T("Мы превращаем книгу в то, что можно")} <Accent>{T("услышать")}</Accent> {T("— с экранной читалкой, клавиатурой и наушниками, без мыши и без зрения.")}

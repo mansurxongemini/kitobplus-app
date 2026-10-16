@@ -1,4 +1,3 @@
-import CalendarTodayOutlined from "@mui/icons-material/CalendarTodayOutlined";
 import EditIcon from '@mui/icons-material/Edit';
 import PhoneIcon from '@mui/icons-material/Phone';
 import {
@@ -25,7 +24,6 @@ import dayjs from 'dayjs';
 const EditProfileSection = () => {
   const [isPhoneModalOpened, setIsPhoneModalOpened] = useState(false);
   
-  const handleModalClose = () => {};
 
   const { user, setUser } = useLibrary();
   const [formData, setFormData] = useState({
@@ -72,7 +70,6 @@ const EditProfileSection = () => {
       };
       const response = await request('readers/update', dataToSend);
       if (response.success) {
-        console.log('Профиль обновлен');
         setUser(response.user);
       }
     } catch (error) {

@@ -8,7 +8,7 @@ import { useFormatDuration } from "../format";
 import { Reveal, navigateWithTransition } from "../motion";
 import T from "../../lib/translator";
 
-const srOnly = { position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap" };
+const srOnly = { position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0 0 0 0)", whiteSpace: "nowrap" };
 
 // Карточка книги. Ссылка — на названии; через ::after она растянута на всю карточку,
 // поэтому экранная читалка слышит одну ссылку с названием, а остальное — обычным текстом.

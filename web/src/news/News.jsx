@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, useTheme } from "@mui/material";
+import { Button } from "@mui/material";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import PageShell, { PageHeader } from "../ds/components/PageShell";
 import Container from "../ds/components/Container";
@@ -9,7 +9,6 @@ import useLibrary from "../LibraryContext";
 import T from "../lib/translator";
 
 const News = () => {
-  const { kp } = useTheme();
   const { isAdmin } = useLibrary();
   const [editOpen, setEditOpen] = useState(false);
   const reloadRef = useRef(null);

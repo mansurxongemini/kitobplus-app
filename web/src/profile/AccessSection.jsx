@@ -1,13 +1,8 @@
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import {
   Box,
   Typography,
   Card,
   CardContent,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Button,
   Modal,
   IconButton,

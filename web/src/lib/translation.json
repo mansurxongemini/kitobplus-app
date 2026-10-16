@@ -8,7 +8,7 @@
     "US": "Random audiobook"
   },
   "Последние": {
-    "UZ": "So‘nggi qo‘shilganlar",
+    "UZ": "Soʻnggi qoʻshilganlar",
     "US": "Latest"
   },
   "Новости": {
@@ -84,15 +84,15 @@
     "US": "Address"
   },
   "В регистрации отказано": {
-    "UZ": "Ro'yxatdan o'tish rad etildi",
+    "UZ": "Roʻyxatdan oʻtish rad etildi",
     "US": "Registration denied"
   },
   "Ваш запрос на регистрацию ожидает подтверждения": {
-    "UZ": "Ro'yxatdan o'tish so'rovingizning tasdiqlanishi kutilmoqda",
+    "UZ": "Roʻyxatdan oʻtish soʻrovingizning tasdiqlanishi kutilmoqda",
     "US": "Your registration request is awaiting confirmation"
   },
   "Ваша регистрация успешно подтверждена. Добро пожаловать в библиотеку KitobPlus!": {
-    "UZ": "Ro'yxatdan o'tish so'rovingiz muvaffaqiyatli tasdiqlandi. KitobPlus kutubxonasiga xush kelibsiz!",
+    "UZ": "Roʻyxatdan oʻtish soʻrovingiz muvaffaqiyatli tasdiqlandi. KitobPlus kutubxonasiga xush kelibsiz!",
     "US": "Your registration has been successfully confirmed. Welcome to the Kitob+ library."
   },
   "Введите номер телефона": {
@@ -100,7 +100,7 @@
     "US": "Enter your phone number"
   },
   "Введён некорректный номер телефона": {
-    "UZ": "Telefon raqam noto'g'ri kiritildi",
+    "UZ": "Telefon raqam notoʻgʻri kiritildi",
     "US": "Incorrect phone number entered"
   },
   "Воспроизведение": {
@@ -112,7 +112,7 @@
     "US": "Forward by 30 seconds"
   },
   "Вы действительно хотите выйти? Если затем передумаете - можно будет войти повторно.": {
-    "UZ": "Haqiqatan ham chiqishni xohlaysizmi? Agar fikringizni o'zgartirsangiz, qayta kirishingiz mumkin.",
+    "UZ": "Haqiqatan ham chiqishni xohlaysizmi? Agar fikringizni oʻzgartirsangiz, qayta kirishingiz mumkin.",
     "US": "Do you really want to get out? If you change your mind later, you can log in again."
   },
   "Выбор темы": {
@@ -136,15 +136,15 @@
     "US": "Year"
   },
   "Дата регистрации": {
-    "UZ": "Ro'yxatdan o'tish sanasi",
+    "UZ": "Roʻyxatdan oʻtish sanasi",
     "US": "Date of registration"
   },
   "Дата рождения": {
-    "UZ": "Tug'ilgan sana",
+    "UZ": "Tugʻilgan sana",
     "US": "Date of birth"
   },
   "Дата рождения указана некорректно": {
-    "UZ": "Tug'ilgan sana noto'g'ri kiritildi",
+    "UZ": "Tugʻilgan sana notoʻgʻri kiritildi",
     "US": "The date of birth is incorrect"
   },
   "День": {
@@ -156,27 +156,27 @@
     "US": "Announcer"
   },
   "Для использования закладок необходимо зарегистрироваться": {
-    "UZ": "Xatcho'plardan foydalanish uchun  ro'yxatdan o'tishingiz kerak",
+    "UZ": "Xatchoʻplardan foydalanish uchun  roʻyxatdan oʻtishingiz kerak",
     "US": "To use bookmarks, you need to register"
   },
   "Для использования книжной полки необходимо зарегистрироваться": {
-    "UZ": "Kitob javonidan foydalanish uchun ro'yxatdan o'tishingiz kerak",
+    "UZ": "Kitob javonidan foydalanish uchun roʻyxatdan oʻtishingiz kerak",
     "US": "To use the bookshelf, you need to register"
   },
   "Для получения полного доступа, пожалуйста, зарегистрируйтесь.": {
-    "UZ": "Kutubxona imkoniyatlaridan to'liq foydalanish uchun, iltimos, ro'yxatdan o'ting.",
+    "UZ": "Kutubxona imkoniyatlaridan toʻliq foydalanish uchun, iltimos, roʻyxatdan oʻting.",
     "US": "To get full access, please register."
   },
   "Добавить закладку": {
-    "UZ": "Xatcho'p qo'shish",
+    "UZ": "Xatchoʻp qoʻshish",
     "US": "Add a bookmark"
   },
   "Добавление закладки": {
-    "UZ": "Xatcho'p qo'shish",
+    "UZ": "Xatchoʻp qoʻshish",
     "US": "Adding a bookmark"
   },
   "Добавление на книжную полку": {
-    "UZ": "Kitob javoniga qo'shish",
+    "UZ": "Kitob javoniga qoʻshish",
     "US": "Adding to the bookshelf"
   },
   "Добро пожаловать в библиотеку KitobPlus.": {
@@ -196,7 +196,7 @@
     "US": "Genre"
   },
   "Зарегистрироваться": {
-    "UZ": "Ro'yxatdan o'tish",
+    "UZ": "Roʻyxatdan oʻtish",
     "US": "Register"
   },
   "Издатель": {
@@ -240,7 +240,7 @@
     "US": "Settings"
   },
   "Незарегистрированный пользователь": {
-    "UZ": "Ro'yxatdan o'tmagan foydalanuvchi",
+    "UZ": "Roʻyxatdan oʻtmagan foydalanuvchi",
     "US": "Unregistered user"
   },
   "Нет изображения": {
@@ -256,7 +256,7 @@
     "US": "Description"
   },
   "Остановить": {
-    "UZ": "To'xtatish",
+    "UZ": "Toʻxtatish",
     "US": "Stop"
   },
   "Отладка. Код": {
@@ -296,7 +296,7 @@
     "US": "Pause"
   },
   "Повторная регистрация": {
-    "UZ": "Qayta ro'yxatdan o'tish",
+    "UZ": "Qayta roʻyxatdan oʻtish",
     "US": "Re-registration"
   },
   "Пожалуйста, введите код из SMS": {
@@ -304,11 +304,11 @@
     "US": "Please enter the code from the SMS"
   },
   "Пожалуйста, заполните все поля": {
-    "UZ": "Iltimos, barcha maydonlarni to'ldiring",
+    "UZ": "Iltimos, barcha maydonlarni toʻldiring",
     "US": "Please fill in all fields"
   },
   "Поставить на книжную полку": {
-    "UZ": "Kitob javoniga qo'yish",
+    "UZ": "Kitob javoniga qoʻyish",
     "US": "Put on the bookshelf"
   },
   "Предыдущий": {
@@ -324,11 +324,11 @@
     "US": "Reason for refusal"
   },
   "Проверить статус запроса на регистрацию": {
-    "UZ": "Ro'yxatdan o'tish so'rovining holatini tekshirish",
+    "UZ": "Roʻyxatdan oʻtish soʻrovining holatini tekshirish",
     "US": "Check the status of the registration request"
   },
   "Проверка статуса регистрации": {
-    "UZ": "Ro'yxatdan o'tish holatini tekshirish",
+    "UZ": "Roʻyxatdan oʻtish holatini tekshirish",
     "US": "Checking the registration status"
   },
   "Продолжить": {
@@ -352,15 +352,15 @@
     "US": "Advanced Search"
   },
   "Расширить диапазон скорости воспроизведения": {
-    "UZ": "Ijro etish tezligi ko'lamini kengaytirish",
+    "UZ": "Ijro etish tezligi koʻlamini kengaytirish",
     "US": "Expand the playback speed range"
   },
   "Регистрация": {
-    "UZ": "Ro'yxatdan o'tish",
+    "UZ": "Roʻyxatdan oʻtish",
     "US": "Registration"
   },
   "Регистрация/вход": {
-    "UZ": "Ro'yxatdan o'tish / kirish",
+    "UZ": "Roʻyxatdan oʻtish / kirish",
     "US": "Registration/Login"
   },
   "Вход": {
@@ -384,7 +384,7 @@
     "US": "Passport scan or photo"
   },
   "Скан или фото справки об инвалидности": {
-    "UZ": "Nogironlik to'g'risidagi guvohnomani suratga olish yoki fotonusxasini yuklash",
+    "UZ": "Nogironlik toʻgʻrisidagi guvohnomani suratga olish yoki fotonusxasini yuklash",
     "US": "Scan or photo of disability certificate"
   },
   "Скрыть": {
@@ -408,7 +408,7 @@
     "US": "Remove from bookshelf"
   },
   "Список книг обновлён": {
-    "UZ": "Kitoblar ro'yxati yangilandi",
+    "UZ": "Kitoblar roʻyxati yangilandi",
     "US": "The list of books has been updated"
   },
   "Справка": {
@@ -440,7 +440,7 @@
     "US": "Track"
   },
   "Тёмная": {
-    "UZ": "Qorong'i",
+    "UZ": "Qorongʻi",
     "US": "Dark"
   },
   "Увеличить скорость": {
@@ -452,7 +452,7 @@
     "US": "Rate"
   },
   "Успешно! Дождитесь подтверждения регистрации.": {
-    "UZ": "Muvaffaqiyatli! Ro'yxatdan o'tish tasdiqlanishini kuting.",
+    "UZ": "Muvaffaqiyatli! Roʻyxatdan oʻtish tasdiqlanishini kuting.",
     "US": "Successfully! Wait for the registration confirmation."
   },
   "Успешный вход": {
@@ -460,15 +460,15 @@
     "US": "Successful login"
   },
   "Установка таймера сна": {
-    "UZ": "Uyqu taymerini o'rnatish",
+    "UZ": "Uyqu taymerini oʻrnatish",
     "US": "Setting the sleep timer"
   },
   "Учётные данные": {
-    "UZ": "Hisob ma'lumotlari",
+    "UZ": "Hisob maʼlumotlari",
     "US": "Credentials"
   },
   "ФИО": {
-    "UZ": "To'liq ism",
+    "UZ": "Toʻliq ism",
     "US": "FCs"
   },
   "Фильтр": {
@@ -500,7 +500,7 @@
     "US": "Announcer icon"
   },
   "Читает": {
-    "UZ": "O'qiydi",
+    "UZ": "Oʻqiydi",
     "US": "Announcer"
   },
   "Язык приложения": {
@@ -568,7 +568,7 @@
     "US": "phone number"
   },
   "отключён": {
-    "UZ": "o'chirilgan",
+    "UZ": "oʻchirilgan",
     "US": "disabled"
   },
   "отмена перемотки": {
@@ -644,11 +644,11 @@
     "US": "Downloads"
   },
   "Закладка": {
-    "UZ": "Xatcho'p",
+    "UZ": "Xatchoʻp",
     "US": "Bookmark"
   },
   "Закладки": {
-    "UZ": "Xatcho'plar",
+    "UZ": "Xatchoʻplar",
     "US": "Bookmarks"
   },
   "Закрыть": {
@@ -676,7 +676,7 @@
     "US": "Start playback 5 seconds before the save point"
   },
   "Нет закладок": {
-    "UZ": "Xatcho'plar yo'q",
+    "UZ": "Xatchoʻplar yoʻq",
     "US": "No bookmarks"
   },
   "новизна": {
@@ -704,23 +704,23 @@
     "US": "Updated"
   },
   "Отсортировано по имени": {
-    "UZ": "Nomi bo'yicha tartiblandi",
+    "UZ": "Nomi boʻyicha tartiblandi",
     "US": "Sorted by name"
   },
   "Отсортировано по новизне": {
-    "UZ": "Yangiligi bo'yicha tartiblandi",
+    "UZ": "Yangiligi boʻyicha tartiblandi",
     "US": "Sorted by novelty"
   },
   "Отсортировано по популярности": {
-    "UZ": "Mashhurligi bo'yicha tartiblandi",
+    "UZ": "Mashhurligi boʻyicha tartiblandi",
     "US": "Sorted by popularity"
   },
   "Отсортировано по рекомендациям": {
-    "UZ": "Tavsiyalar bo'yicha tartiblandi",
+    "UZ": "Tavsiyalar boʻyicha tartiblandi",
     "US": "Sorted by recommendations"
   },
   "Пауза/Воспроизведение": {
-    "UZ": "To'xtatish/Ijro etish",
+    "UZ": "Toʻxtatish/Ijro etish",
     "US": "Pause/Playback"
   },
   "Поиск": {
@@ -732,7 +732,7 @@
     "US": "search:"
   },
   "Показать поисковую панель": {
-    "UZ": "Qidiruv panelini ko'rsatish",
+    "UZ": "Qidiruv panelini koʻrsatish",
     "US": "Show the search bar"
   },
   "Популярное": {
@@ -756,11 +756,11 @@
     "US": "past"
   },
   "Предыдущая закладка не найдена": {
-    "UZ": "Avvalgi xatcho'p topilmadi",
+    "UZ": "Avvalgi xatchoʻp topilmadi",
     "US": "Previous bookmark not found"
   },
   "Пусто": {
-    "UZ": "Bo'sh",
+    "UZ": "Boʻsh",
     "US": "Empty"
   },
   "рекомендации": {
@@ -780,27 +780,27 @@
     "US": "Hide the search bar"
   },
   "Следующая закладка не найдена": {
-    "UZ": "Keyingi xatcho'p topilmadi",
+    "UZ": "Keyingi xatchoʻp topilmadi",
     "US": "The next bookmark was not found"
   },
   "Сортировать по названию": {
-    "UZ": "Nomi bo'yicha tartiblash",
+    "UZ": "Nomi boʻyicha tartiblash",
     "US": "Sort by name"
   },
   "Сортировать по новизне": {
-    "UZ": "Yangiligi bo'yicha tartiblash",
+    "UZ": "Yangiligi boʻyicha tartiblash",
     "US": "Sort by novelty"
   },
   "Сортировать по популярности": {
-    "UZ": "Mashhurligi bo'yicha tartiblash",
+    "UZ": "Mashhurligi boʻyicha tartiblash",
     "US": "Sort by popularity"
   },
   "Сортировать по рекомендациям": {
-    "UZ": "Tavsiya etilganligi bo'yicha tartiblash",
+    "UZ": "Tavsiya etilganligi boʻyicha tartiblash",
     "US": "Sort by recommendations"
   },
   "Список обновлён": {
-    "UZ": "Ro'yxat yangilandi",
+    "UZ": "Roʻyxat yangilandi",
     "US": "The list has been updated"
   },
   "Точка начала прослушивания": {
@@ -808,23 +808,23 @@
     "US": "Listening start point"
   },
   "Удалить": {
-    "UZ": "O'chirish",
+    "UZ": "Oʻchirish",
     "US": "Remove"
   },
   "Ваш профиль удалён": {
-    "UZ": "Profilingiz o'chirildi",
+    "UZ": "Profilingiz oʻchirildi",
     "US": "Your profile has been deleted"
   },
   "Ваша регистрация успешно подтверждена. Добро пожаловать в библиотеку Kitob+.": {
-    "UZ": "Sizning ro'yxatdan o'tishingiz muvaffaqiyatli tasdiqlandi. Kitob + kutubxonasiga xush kelibsiz.",
+    "UZ": "Sizning roʻyxatdan oʻtishingiz muvaffaqiyatli tasdiqlandi. Kitob + kutubxonasiga xush kelibsiz.",
     "US": "Your registration has been successfully confirmed. Welcome to the Kitob+ library."
   },
   "Введенный номер не совпадает с номером, используемым при регистрации": {
-    "UZ": "Kiritilgan raqam ro'yxatdan o'tishda ishlatiladigan raqam bilan bir xil emas",
+    "UZ": "Kiritilgan raqam roʻyxatdan oʻtishda ishlatiladigan raqam bilan bir xil emas",
     "US": "The entered number does not match the number used during registration"
   },
   "Введите номер телефона, который вы использовали при регистрации": {
-    "UZ": "Ro'yxatdan o'tishda foydalangan telefon raqamingizni kiriting",
+    "UZ": "Roʻyxatdan oʻtishda foydalangan telefon raqamingizni kiriting",
     "US": "Enter the phone number you used when registering"
   },
   "Внимание!": {
@@ -844,11 +844,11 @@
     "US": "All genres"
   },
   "Выйдя из приложения вы сможете зайти повторно. В случае удаления профиля для входа придётся повторно пройти процедуру регистрации.": {
-    "UZ": "Ilovadan chiqsangiz, qayta kirishingiz mumkin. Agar Profil o'chirilsa, kirish uchun ro'yxatdan o'tish tartibini qayta bajarishingiz kerak bo'ladi.",
+    "UZ": "Ilovadan chiqsangiz, qayta kirishingiz mumkin. Agar Profil oʻchirilsa, kirish uchun roʻyxatdan oʻtish tartibini qayta bajarishingiz kerak boʻladi.",
     "US": "After exiting the application, you will be able to log in again. If you delete the login profile, you will have to re-go through the registration procedure."
   },
   "Выйти/удалить профиль": {
-    "UZ": "Chiqish yoki profilni o'chirish",
+    "UZ": "Chiqish yoki profilni oʻchirish",
     "US": "Log out/Delete profile"
   },
   "Добро пожаловать в библиотеку Kitob+.": {
@@ -864,7 +864,7 @@
     "US": "not marked"
   },
   "Останавливать воспроизведение при выходе из плеера": {
-    "UZ": "Pleyerdan chiqishda ijro etishni to'xtatish",
+    "UZ": "Pleyerdan chiqishda ijro etishni toʻxtatish",
     "US": "Stop playback when exiting the player"
   },
   "отмечено": {
@@ -872,7 +872,7 @@
     "US": "marked"
   },
   "Если вам понравилась эта книга, то рекомендуем": {
-    "UZ": "Agar sizga bu kitob yoqqan bo'lsa, tavsiya qilamiz",
+    "UZ": "Agar sizga bu kitob yoqqan boʻlsa, tavsiya qilamiz",
     "US": "If you liked this book, we recommend"
   },
   "Перед продолжением пожалуйста подтвердите, что вы понимаете риски.": {
@@ -880,19 +880,19 @@
     "US": "Before proceeding, please confirm that you understand the risks."
   },
   "После удаления профиля для повторного входа снова придётся проходить процедуру регистрации.": {
-    "UZ": "Profilni o'chirib tashlaganingizdan so'ng, qayta kirish uchun yana ro'yxatdan o'tish jarayonidan o'tishingiz kerak bo'ladi.",
+    "UZ": "Profilni oʻchirib tashlaganingizdan soʻng, qayta kirish uchun yana roʻyxatdan oʻtish jarayonidan oʻtishingiz kerak boʻladi.",
     "US": "After deleting the profile, you will have to go through the registration procedure again to re-log in."
   },
   "Следующее действия нельзя будет отменить": {
-    "UZ": "Quyidagi amallarni bekor qilib bo'lmaydi",
+    "UZ": "Quyidagi amallarni bekor qilib boʻlmaydi",
     "US": "The following actions cannot be undone"
   },
   "Удаление профиля": {
-    "UZ": "Profilni o'chirish",
+    "UZ": "Profilni oʻchirish",
     "US": "Deleting a profile"
   },
   "Удалить профиль": {
-    "UZ": "Profilni o'chirish",
+    "UZ": "Profilni oʻchirish",
     "US": "Delete Profile"
   },
   "Я понимаю риски": {
@@ -900,7 +900,7 @@
     "US": "I understand the risks"
   },
   "Ваша регистрация успешно подтверждена. Добро пожаловать в библиотеку KitobPlus.": {
-    "UZ": "Ro'yxatdan o'tish so'rovingiz  muvaffaqiyatli tasdiqlandi. Kitob Plus kutubxonasiga xush kelibsiz.",
+    "UZ": "Roʻyxatdan oʻtish soʻrovingiz  muvaffaqiyatli tasdiqlandi. Kitob Plus kutubxonasiga xush kelibsiz.",
     "US": "Your registration has been successfully confirmed. Welcome to the Kitob+ library."
   },
   "Добро пожаловать в библиотеку KitobPlus!": {
@@ -916,11 +916,11 @@
     "US": "Dislike"
   },
   "Установка отметки": {
-    "UZ": "Belgini o'rnatish",
+    "UZ": "Belgini oʻrnatish",
     "US": "Setting the mark"
   },
   "Для использования отметок необходимо зарегистрироваться": {
-    "UZ": "Belgilarni ishlatish uchun siz ro'yxatdan o'tishingiz kerak",
+    "UZ": "Belgilarni ishlatish uchun siz roʻyxatdan oʻtishingiz kerak",
     "US": "To use likes, you need to register"
   },
   "Все новые авторы": {
@@ -964,11 +964,11 @@
     "US": "Support"
   },
   "Добавить комментарий": {
-    "UZ": "Fikr qo'shing",
+    "UZ": "Fikr qoʻshing",
     "US": "Add a comment"
   },
   "Удалить комментарий": {
-    "UZ": "Fikrni o'chirish",
+    "UZ": "Fikrni oʻchirish",
     "US": "Delete comment"
   },
   "Редактировать": {
@@ -1016,11 +1016,11 @@
     "US": "Enable light theme"
   },
   "Включить тёмную тему": {
-    "UZ": "Qorong'i mavzuni yoqish",
+    "UZ": "Qorongʻi mavzuni yoqish",
     "US": "Enable dark theme"
   },
   "Режим для слабовидящих": {
-    "UZ": "Ko'zi ojiz odamlar uchun rejim",
+    "UZ": "Koʻzi ojiz odamlar uchun rejim",
     "US": "Mode for visually impaired"
   },
   "Комментарии": {
@@ -1040,7 +1040,7 @@
     "US": "Online library"
   },
   "для любителей аудиокниг и\nдля Лиц с нарушениями зрения": {
-    "UZ": "va ko‘rish qobiliyati cheklangan\nshaxslar uchun onlayn kutubxona",
+    "UZ": "va koʻrish qobiliyati cheklangan\nshaxslar uchun onlayn kutubxona",
     "US": "for audiobook enthusiasts and\npeople with visual impairments"
   },
   "Слушать": {
@@ -1052,7 +1052,7 @@
     "US": "Recommendations"
   },
   "Перейти к основному содержимому": {
-    "UZ": "Asosiy kontentga o'tish",
+    "UZ": "Asosiy kontentga oʻtish",
     "US": "Skip to main content"
   },
   "Все жанры библиотеки": {
@@ -1064,7 +1064,7 @@
     "US": "All rights reserved"
   },
   "Если вы видите ошибку на сайте, выделите ее и нажмите CTRL + ENTER (⌘ + ENTER)": {
-    "UZ": "Agar saytda xatolik ko'rsangiz, uni belgilang va CTRL + ENTER (⌘ + ENTER) tugmalarini bosing",
+    "UZ": "Agar saytda xatolik koʻrsangiz, uni belgilang va CTRL + ENTER (⌘ + ENTER) tugmalarini bosing",
     "US": "If you see an error on the site, select it and press CTRL + ENTER (⌘ + ENTER)"
   },
   "Подробнее": {
@@ -1108,15 +1108,15 @@
     "US": "Project accountant: Iroda Narzieva"
   },
   "Ваши вопросы и предложения по проекту направляйте на электронный адрес": {
-    "UZ": "Loyiha bo'yicha savol va takliflaringizni elektron manzilga yuboring",
+    "UZ": "Loyiha boʻyicha savol va takliflaringizni elektron manzilga yuboring",
     "US": "Send your questions and suggestions about the project to the email address"
   },
   "или свяжитесь с нами по этому номеру телефона": {
-    "UZ": "yoki biz bilan ushbu telefon raqami orqali bog'laning",
+    "UZ": "yoki biz bilan ushbu telefon raqami orqali bogʻlaning",
     "US": "or contact us at this phone number"
   },
   "Если вы хотите внести свой вклад в реализацию этого проекта, вы можете поддержать нас, используя системы онлайн-платежей Click, Payme или Payze или став волонтером по ссылке": {
-    "UZ": "Agar siz ushbu loyihani amalga oshirishga o'z hissangizni qo'shishni istasangiz, Click, Payme yoki Payze onlayn to'lov tizimlaridan foydalanib yoki havola orqali ko'ngilli bo'lib bizni qo'llab-quvvatlashingiz mumkin",
+    "UZ": "Agar siz ushbu loyihani amalga oshirishga oʻz hissangizni qoʻshishni istasangiz, Click, Payme yoki Payze onlayn toʻlov tizimlaridan foydalanib yoki havola orqali koʻngilli boʻlib bizni qoʻllab-quvvatlashingiz mumkin",
     "US": "If you want to contribute to this project, you can support us using the Click, Payme or Payze online payment systems or by becoming a volunteer via the link"
   },
   "О портале": {
@@ -1128,19 +1128,19 @@
     "US": "Our platform provides free access to an extensive collection of audiobooks for people with visual disabilities. To gain access, it is necessary to confirm the disability status."
   },
   "Также мы предлагаем платную подписку «Премиум-доступ» для всех желающих. Средства от подписок направляются на развитие библиотеки, что позволяет нам расширять каталог и улучшать сервис.": {
-    "UZ": "Shuningdek, biz barcha xohlovchilar uchun \"Premium-kirish\" pullik obunasini taklif qilamiz. Obunalardan tushgan mablag'lar kutubxonani rivojlantirishga yo'naltiriladi, bu bizga katalogni kengaytirish va xizmatni yaxshilash imkonini beradi.",
+    "UZ": "Shuningdek, biz barcha xohlovchilar uchun \"Premium-kirish\" pullik obunasini taklif qilamiz. Obunalardan tushgan mablagʻlar kutubxonani rivojlantirishga yoʻnaltiriladi, bu bizga katalogni kengaytirish va xizmatni yaxshilash imkonini beradi.",
     "US": "We also offer a paid \"Premium Access\" subscription for everyone. Funds from subscriptions are directed to the development of the library, which allows us to expand the catalog and improve the service."
   },
   "Каждый новый пользователь может бесплатно протестировать Премиум-доступ в течение 7 дней после регистрации. Для создания аккаунта требуется только номер телефона.": {
-    "UZ": "Har bir yangi foydalanuvchi ro'yxatdan o'tganidan keyin 7 kun davomida Premium-kirishni bepul sinab ko'rishi mumkin. Hisob yaratish uchun faqat telefon raqami talab qilinadi.",
+    "UZ": "Har bir yangi foydalanuvchi roʻyxatdan oʻtganidan keyin 7 kun davomida Premium-kirishni bepul sinab koʻrishi mumkin. Hisob yaratish uchun faqat telefon raqami talab qilinadi.",
     "US": "Every new user can test Premium Access for free for 7 days after registration. To create an account, only a phone number is required."
   },
   "Наша миссия — сделать знания и литературу доступными для всех, независимо от возможностей здоровья.": {
-    "UZ": "Bizning vazifamiz — sog'liq imkoniyatlaridan qat'i nazar, bilim va adabiyotni hamma uchun ochiq qilishdir.",
+    "UZ": "Bizning vazifamiz — sogʻliq imkoniyatlaridan qatʼi nazar, bilim va adabiyotni hamma uchun ochiq qilishdir.",
     "US": "Our mission is to make knowledge and literature accessible to everyone, regardless of health opportunities."
   },
   "Ваша поддержка позволит нам озвучивать новые книги для инвалидов по зрению": {
-    "UZ": "Sizning qo'llab-quvvatlashingiz bizga ko'rish imkoniyati cheklanganlar uchun yangi kitoblarni ovozlashtirish imkonini beradi",
+    "UZ": "Sizning qoʻllab-quvvatlashingiz bizga koʻrish imkoniyati cheklanganlar uchun yangi kitoblarni ovozlashtirish imkonini beradi",
     "US": "Your support will allow us to voice new books for the visually impaired"
   },
   "Пожертвовать": {
@@ -1148,23 +1148,23 @@
     "US": "Donate"
   },
   "Пройдите регистрацию и получи премиум доступ на семь дней": {
-    "UZ": "Ro'yxatdan o'ting va yetti kunlik premium ruxsatiga ega bo'ling",
+    "UZ": "Roʻyxatdan oʻting va yetti kunlik premium ruxsatiga ega boʻling",
     "US": "Register and get premium access for seven days"
   },
   "7 дней Премиум-доступа — в подарок каждому!": {
-    "UZ": "7 kunlik Premium-kirish — har bir kishiga sovg'a!",
+    "UZ": "7 kunlik Premium-kirish — har bir kishiga sovgʻa!",
     "US": "7 days of Premium access — a gift for everyone!"
   },
   "Хотите попробовать нашу библиотеку? Достаточно указать номер телефона — и вы получите неделю бесплатного доступа ко всем книгам. Никаких платежей — только книги.": {
-    "UZ": "Bizning kutubxonamizni sinab ko'rishni xohlaysizmi? Telefon raqamini ko'rsatish kifoya — va siz bir hafta davomida barcha kitoblarga bepul kirish huquqini olasiz. Hech qanday to'lovlar — faqat kitoblar.",
+    "UZ": "Bizning kutubxonamizni sinab koʻrishni xohlaysizmi? Telefon raqamini koʻrsatish kifoya — va siz bir hafta davomida barcha kitoblarga bepul kirish huquqini olasiz. Hech qanday toʻlovlar — faqat kitoblar.",
     "US": "Want to try our library? Just provide your phone number — and you'll get a week of free access to all books. No payments — just books."
   },
   "Регистрация за 30 секунд.": {
-    "UZ": "30 soniyada ro'yxatdan o'tish.",
+    "UZ": "30 soniyada roʻyxatdan oʻtish.",
     "US": "Registration in 30 seconds."
   },
   "Никаких документов — только ваш телефон. Попробуйте прямо сейчас: нажмите \"Зарегистрироваться\" и слушайте любимые книги уже сегодня!": {
-    "UZ": "Hech qanday hujjatlarsiz — faqat sizning telefoningiz. Hoziroq sinab ko'ring: \"Ro'yxatdan o'tish\" tugmasini bosing va sevimli kitoblaringizni bugunoq tinglang!",
+    "UZ": "Hech qanday hujjatlarsiz — faqat sizning telefoningiz. Hoziroq sinab koʻring: \"Roʻyxatdan oʻtish\" tugmasini bosing va sevimli kitoblaringizni bugunoq tinglang!",
     "US": "No documents — just your phone. Try it right now: click \"Register\" and listen to your favorite books today!"
   },
   "Страница не найдена": {
@@ -1172,7 +1172,7 @@
     "US": "Page not found"
   },
   "Приносим свои извинения, эта ссылка недействительна, но вы можете перейти к другим разделам сайта.": {
-    "UZ": "Kechirasiz, bu havola yaroqsiz, ammo siz saytning boshqa bo'limlariga o'tishingiz mumkin.",
+    "UZ": "Kechirasiz, bu havola yaroqsiz, ammo siz saytning boshqa boʻlimlariga oʻtishingiz mumkin.",
     "US": "We apologize, this link is invalid, but you can go to other sections of the site."
   },
   "Вернуться на главную": {
@@ -1248,7 +1248,7 @@
     "US": "in the platform with"
   },
   "Мои данные": {
-    "UZ": "Mening ma'lumotlarim",
+    "UZ": "Mening maʼlumotlarim",
     "US": "My data"
   },
   "Помощь": {
@@ -1260,7 +1260,7 @@
     "US": "Terms of use"
   },
   "Удалить аватар": {
-    "UZ": "Avatarni o'chirish",
+    "UZ": "Avatarni oʻchirish",
     "US": "Delete avatar"
   },
   "Ник": {
@@ -1284,19 +1284,19 @@
     "US": "Saving..."
   },
   "Связаться с нами": {
-    "UZ": "Biz bilan bog'lanish",
+    "UZ": "Biz bilan bogʻlanish",
     "US": "Contact us"
   },
   "Часто задаваемые вопросы": {
-    "UZ": "Ko'p beriladigan savollar",
+    "UZ": "Koʻp beriladigan savollar",
     "US": "Frequently Asked Questions"
   },
   "Как зарегистрироваться на платформе?": {
-    "UZ": "Platformada qanday ro'yxatdan o'tish mumkin?",
+    "UZ": "Platformada qanday roʻyxatdan oʻtish mumkin?",
     "US": "How to register on the platform?"
   },
   "Для регистрации нажмите кнопку 'Войти' в правом верхнем углу, затем выберите 'Регистрация'. Заполните все необходимые поля и подтвердите свой email адрес.": {
-    "UZ": "Ro'yxatdan o'tish uchun yuqori o'ng burchakdagi 'Kirish' tugmasini bosing, so'ng 'Ro'yxatdan o'tish'ni tanlang. Barcha kerakli maydonlarni to'ldiring va elektron pochta manzilingizni tasdiqlang.",
+    "UZ": "Roʻyxatdan oʻtish uchun yuqori oʻng burchakdagi 'Kirish' tugmasini bosing, soʻng 'Roʻyxatdan oʻtishʼni tanlang. Barcha kerakli maydonlarni toʻldiring va elektron pochta manzilingizni tasdiqlang.",
     "US": "To register, click the 'Login' button in the upper right corner, then select 'Register'. Fill in all the required fields and confirm your email address."
   },
   "Как найти нужную книгу?": {
@@ -1304,7 +1304,7 @@
     "US": "How to find the right book?"
   },
   "Используйте поиск по названию, автору или жанру. Также вы можете воспользоваться фильтрами для более точного поиска.": {
-    "UZ": "Nom, muallif yoki janr bo'yicha qidiring. Aniqroq qidirish uchun filtrlardan ham foydalanishingiz mumkin.",
+    "UZ": "Nom, muallif yoki janr boʻyicha qidiring. Aniqroq qidirish uchun filtrlardan ham foydalanishingiz mumkin.",
     "US": "Use the search by title, author, or genre. You can also use filters for a more precise search."
   },
   "Как слушать аудиокниги?": {
@@ -1312,23 +1312,23 @@
     "US": "How to listen to audiobooks?"
   },
   "Выберите книгу, нажмите кнопку воспроизведения. Вы можете регулировать скорость воспроизведения и ставить закладки.": {
-    "UZ": "Kitobni tanlang, ijro etish tugmasini bosing. Siz ijro etish tezligini sozlashingiz va xatcho'plar qo'yishingiz mumkin.",
+    "UZ": "Kitobni tanlang, ijro etish tugmasini bosing. Siz ijro etish tezligini sozlashingiz va xatchoʻplar qoʻyishingiz mumkin.",
     "US": "Select a book, press the play button. You can adjust the playback speed and set bookmarks."
   },
   "Как добавить книгу в избранное?": {
-    "UZ": "Kitobni sevimlilarga qanday qo'shish mumkin?",
+    "UZ": "Kitobni sevimlilarga qanday qoʻshish mumkin?",
     "US": "How to add a book to favorites?"
   },
   "Нажмите на иконку сердца рядом с названием книги. Все избранные книги будут доступны в вашем профиле.": {
-    "UZ": "Kitob nomi yonidagi yurakcha belgisini bosing. Barcha sevimlilar kitoblari sizning profilingizda mavjud bo'ladi.",
+    "UZ": "Kitob nomi yonidagi yurakcha belgisini bosing. Barcha sevimlilar kitoblari sizning profilingizda mavjud boʻladi.",
     "US": "Click on the heart icon next to the book title. All favorite books will be available in your profile."
   },
   "Проблемы с воспроизведением аудио": {
-    "UZ": "Audio ijro etish bilan bog'liq muammolar",
+    "UZ": "Audio ijro etish bilan bogʻliq muammolar",
     "US": "Problems with audio playback"
   },
   "Проверьте интернет-соединение, обновите браузер или попробуйте другой браузер. Если проблема сохраняется, обратитесь в поддержку.": {
-    "UZ": "Internet aloqangizni tekshiring, brauzeringizni yangilang yoki boshqa brauzerni sinab ko'ring. Agar muammo davom etsa, qo'llab-quvvatlash xizmatiga murojaat qiling.",
+    "UZ": "Internet aloqangizni tekshiring, brauzeringizni yangilang yoki boshqa brauzerni sinab koʻring. Agar muammo davom etsa, qoʻllab-quvvatlash xizmatiga murojaat qiling.",
     "US": "Check your internet connection, update your browser, or try a different browser. If the problem persists, contact support."
   },
   "Общие правила": {
@@ -1364,7 +1364,7 @@
     "US": "Use a strong password"
   },
   "Не передавайте данные аккаунта третьим лицам": {
-    "UZ": "Hisob ma'lumotlarini uchinchi shaxslarga bermang",
+    "UZ": "Hisob maʼlumotlarini uchinchi shaxslarga bermang",
     "US": "Do not share account details with third parties"
   },
   "Регулярно обновляйте пароль": {
@@ -1384,7 +1384,7 @@
     "US": "Content usage"
   },
   "Контент предназначен только для личного использования": {
-    "UZ": "Kontent faqat shaxsiy foydalanish uchun mo'ljallangan",
+    "UZ": "Kontent faqat shaxsiy foydalanish uchun moʻljallangan",
     "US": "Content is for personal use only"
   },
   "Запрещено скачивание и распространение аудиокниг": {
@@ -1404,7 +1404,7 @@
     "US": "Report copyright infringements"
   },
   "При нарушении правил платформы могут быть применены следующие меры": {
-    "UZ": "Platforma qoidalari buzilgan taqdirda quyidagi choralar ko'rilishi mumkin",
+    "UZ": "Platforma qoidalari buzilgan taqdirda quyidagi choralar koʻrilishi mumkin",
     "US": "If the platform rules are violated, the following measures may be applied"
   },
   "Предупреждение пользователя": {
@@ -1420,7 +1420,7 @@
     "US": "Restriction of access to features"
   },
   "Полная блокировка аккаунта": {
-    "UZ": "Hisobni to'liq bloklash",
+    "UZ": "Hisobni toʻliq bloklash",
     "US": "Permanent account ban"
   },
   "Правовые последствия при серьезных нарушениях": {
@@ -1428,11 +1428,11 @@
     "US": "Legal consequences for serious violations"
   },
   "Вопросы по правилам": {
-    "UZ": "Qoidalar bo'yicha savollar",
+    "UZ": "Qoidalar boʻyicha savollar",
     "US": "Questions about the rules"
   },
   "Если у вас есть вопросы по правилам пользования платформой или вы хотите сообщить о нарушении, обратитесь в службу поддержки по адресу": {
-    "UZ": "Agar sizda platformadan foydalanish qoidalari bo'yicha savollaringiz bo'lsa yoki qoidabuzarlik haqida xabar bermoqchi bo'lsangiz, qo'llab-quvvatlash xizmatiga quyidagi manzil orqali murojaat qiling",
+    "UZ": "Agar sizda platformadan foydalanish qoidalari boʻyicha savollaringiz boʻlsa yoki qoidabuzarlik haqida xabar bermoqchi boʻlsangiz, qoʻllab-quvvatlash xizmatiga quyidagi manzil orqali murojaat qiling",
     "US": "If you have questions about the platform's terms of use or want to report a violation, please contact support at"
   },
   "Последствия нарушений": {
@@ -1472,7 +1472,7 @@
     "US": "Menu"
   },
   "Перейти на страницу": {
-    "UZ": "Sahifaga o'tish",
+    "UZ": "Sahifaga oʻtish",
     "US": "Go to page"
   },
   "Предыдущая страница": {
@@ -1516,27 +1516,27 @@
     "US": "KitobPlus logo"
   },
   "Поиск по книгам": {
-    "UZ": "Kitoblar bo'yicha izlash",
+    "UZ": "Kitoblar boʻyicha izlash",
     "US": "Search books"
   },
   "Пробел — воспроизведение или пауза. Стрелки влево и вправо — назад или вперёд на 30 секунд. Стрелки вверх и вниз с Shift, а также клавиши < и > — скорость.": {
-    "UZ": "Bo'sh joy — ijro etish yoki pauza. Chap va o'ng strelkalar — 30 soniya orqaga yoki oldinga. Shift bilan yuqori va pastki strelkalar hamda < va > tugmalari — tezlik.",
+    "UZ": "Boʻsh joy — ijro etish yoki pauza. Chap va oʻng strelkalar — 30 soniya orqaga yoki oldinga. Shift bilan yuqori va pastki strelkalar hamda < va > tugmalari — tezlik.",
     "US": "Space — play or pause. Left and right arrows — back or forward 30 seconds. Shift with up and down arrows, and the < and > keys — speed."
   },
   "Скорость изменена": {
-    "UZ": "Tezlik o'zgartirildi",
+    "UZ": "Tezlik oʻzgartirildi",
     "US": "Speed changed"
   },
   "Закладка добавлена": {
-    "UZ": "Xatcho'p qo'shildi",
+    "UZ": "Xatchoʻp qoʻshildi",
     "US": "Bookmark added"
   },
   "Таймер сна установлен": {
-    "UZ": "Uyqu taymeri o'rnatildi",
+    "UZ": "Uyqu taymeri oʻrnatildi",
     "US": "Sleep timer set"
   },
   "Фрагмент изменён": {
-    "UZ": "Parcha o'zgartirildi",
+    "UZ": "Parcha oʻzgartirildi",
     "US": "Track changed"
   },
   "минута": {
@@ -1556,7 +1556,7 @@
     "US": "Upload a copy of your passport"
   },
   "Загрузите копию справки об инвалидности": {
-    "UZ": "Nogironlik ma'lumotnomasi nusxasini yuklang",
+    "UZ": "Nogironlik maʼlumotnomasi nusxasini yuklang",
     "US": "Upload a copy of your disability certificate"
   },
   "На главную": {
@@ -1604,11 +1604,11 @@
     "US": "People using a tablet"
   },
   "Добавить новость": {
-    "UZ": "Yangilik qo'shish",
+    "UZ": "Yangilik qoʻshish",
     "US": "Add news"
   },
   "Просмотров": {
-    "UZ": "Ko'rishlar",
+    "UZ": "Koʻrishlar",
     "US": "Views"
   },
   "Сочетания клавиш плеера": {
@@ -1636,15 +1636,15 @@
     "US": "404 error"
   },
   "Удалить закладку": {
-    "UZ": "Xatcho'pni o'chirish",
+    "UZ": "Xatchoʻpni oʻchirish",
     "US": "Delete bookmark"
   },
   "Введен некорректный номер телефона": {
-    "UZ": "Telefon raqami noto'g'ri kiritilgan",
+    "UZ": "Telefon raqami notoʻgʻri kiritilgan",
     "US": "Incorrect phone number entered"
   },
   "Ошибка во время работы с закладками": {
-    "UZ": "Xatcho'plar bilan ishlashda xatolik",
+    "UZ": "Xatchoʻplar bilan ishlashda xatolik",
     "US": "Error while working with bookmarks"
   },
   "Текущая страница": {
@@ -1660,15 +1660,15 @@
     "US": "Last page"
   },
   "Загрузка данных новости": {
-    "UZ": "Yangilik ma'lumotlari yuklanmoqda",
+    "UZ": "Yangilik maʼlumotlari yuklanmoqda",
     "US": "Loading news data"
   },
   "Удалить изображение": {
-    "UZ": "Rasmni o'chirish",
+    "UZ": "Rasmni oʻchirish",
     "US": "Delete image"
   },
   "Предпросмотр изображения": {
-    "UZ": "Rasmni oldindan ko'rish",
+    "UZ": "Rasmni oldindan koʻrish",
     "US": "Image preview"
   },
   "Ошибка отправки SMS": {
@@ -1676,11 +1676,11 @@
     "US": "Error sending SMS"
   },
   "Нет текста комментария.": {
-    "UZ": "Izoh matni yo'q.",
+    "UZ": "Izoh matni yoʻq.",
     "US": "No comment text."
   },
   "Дата не указана": {
-    "UZ": "Sana ko'rsatilmagan",
+    "UZ": "Sana koʻrsatilmagan",
     "US": "Date not specified"
   },
   "ч.": {
@@ -2130,5 +2130,109 @@
   "Чтобы открыть профиль, войдите в аккаунт": {
     "UZ": "Profilni ochish uchun hisobingizga kiring",
     "US": "Sign in to open your profile"
+  },
+  "Изображение": {
+    "UZ": "Rasm",
+    "US": "Image"
+  },
+  "Комментарий не может быть пустым": {
+    "UZ": "Izoh boʻsh boʻlishi mumkin emas",
+    "US": "Comment cannot be empty"
+  },
+  "Не удалось обновить комментарий. Попробуйте еще раз.": {
+    "UZ": "Izohni yangilab boʻlmadi. Qaytadan urinib koʻring.",
+    "US": "Could not update the comment. Please try again."
+  },
+  "Вы уверены, что хотите удалить этот комментарий?": {
+    "UZ": "Bu izohni oʻchirishni xohlaysizmi?",
+    "US": "Are you sure you want to delete this comment?"
+  },
+  "Не удалось удалить комментарий. Попробуйте еще раз.": {
+    "UZ": "Izohni oʻchirib boʻlmadi. Qaytadan urinib koʻring.",
+    "US": "Could not delete the comment. Please try again."
+  },
+  "Редактировать комментарий": {
+    "UZ": "Izohni tahrirlash",
+    "US": "Edit comment"
+  },
+  "Отображать списком": {
+    "UZ": "Roʻyxat koʻrinishida",
+    "US": "Show as list"
+  },
+  "Отображать плитками": {
+    "UZ": "Kartochkalar koʻrinishida",
+    "US": "Show as tiles"
+  },
+  "Аудиокниг": {
+    "UZ": "Audiokitoblar",
+    "US": "Audiobooks"
+  },
+  "Отзывов": {
+    "UZ": "Fikrlar",
+    "US": "Reviews"
+  },
+  "Не удалось загрузить данные": {
+    "UZ": "Maʼlumotlarni yuklab boʻlmadi",
+    "US": "Could not load data"
+  },
+  "Ошибка загрузки данных": {
+    "UZ": "Maʼlumotlarni yuklashda xatolik",
+    "US": "Error loading data"
+  },
+  "Написать в поддержку": {
+    "UZ": "Qoʻllab-quvvatlash xizmatiga yozish",
+    "US": "Contact support"
+  },
+  "Ошибка во время сохранения профиля": {
+    "UZ": "Profilni saqlashda xatolik yuz berdi",
+    "US": "Error while saving the profile"
+  },
+  "Изменить номер телефона": {
+    "UZ": "Telefon raqamini oʻzgartirish",
+    "US": "Change phone number"
+  },
+  "Изменение телефона": {
+    "UZ": "Telefon raqamini oʻzgartirish",
+    "US": "Changing phone number"
+  },
+  "Пожалуйста, введите номер телефона на вкладке \"Мои данные\"": {
+    "UZ": "Iltimos, «Mening maʼlumotlarim» boʻlimida telefon raqamingizni kiriting",
+    "US": "Please enter your phone number in the “My data” section"
+  },
+  "Ошибка во время обновления статуса": {
+    "UZ": "Holatni yangilashda xatolik yuz berdi",
+    "US": "Error while updating the status"
+  },
+  "до": {
+    "UZ": "gacha",
+    "US": "until"
+  },
+  "Введит номер телефона": {
+    "UZ": "Telefon raqamini kiriting",
+    "US": "Enter phone number"
+  },
+  "Не удалось определить ID книги": {
+    "UZ": "Kitobni aniqlab boʻlmadi",
+    "US": "Could not identify the book"
+  },
+  "Не удалось добавить комментарий. Попробуйте еще раз.": {
+    "UZ": "Izoh qoʻshib boʻlmadi. Qaytadan urinib koʻring.",
+    "US": "Could not add the comment. Please try again."
+  },
+  "Загрузка…": {
+    "UZ": "Yuklanmoqda…",
+    "US": "Loading…"
+  },
+  "Что-то пошло не так": {
+    "UZ": "Xatolik yuz berdi",
+    "US": "Something went wrong"
+  },
+  "Не удалось загрузить страницу. Попробуйте перезагрузить её. Если ошибка повторяется, вернитесь на главную страницу.": {
+    "UZ": "Sahifani yuklab boʻlmadi. Uni qayta yuklab koʻring. Xatolik takrorlansa, bosh sahifaga qayting.",
+    "US": "The page could not be loaded. Try reloading it. If the error persists, return to the home page."
+  },
+  "Перезагрузить страницу": {
+    "UZ": "Sahifani qayta yuklash",
+    "US": "Reload page"
   }
 }

@@ -18,80 +18,7 @@ import { add, get, remove } from '../lib/news.ts'
 import { useNavigate } from "react-router-dom";
 import T from '../lib/translator';
 
-// --- Mock API Functions (Replace with actual API calls) ---
-const mockNewsDatabase = [
-    {
-        id: 1,
-        subject: 'Первая новость',
-        datetime: '2023-10-26T10:00',
-        body: 'Это текст первой тестовой новости. Она очень важна.',
-        // В реальном приложении здесь мог бы быть URL существующего изображения
-        // imageUrl: 'https://via.placeholder.com/150/FF0000/FFFFFF?Text=News1'
-    },
-    {
-        id: 2,
-        subject: 'Срочное сообщение',
-        datetime: '2023-10-27T14:30',
-        body: 'Внимание! Важная информация для всех пользователей.',
-        // imageUrl: 'https://via.placeholder.com/150/00FF00/FFFFFF?Text=News2'
-    },
-];
-let nextId = 3;
 
-const get_news = (news_id) => {
-    console.log(`API: get_news called for_id: ${news_id}`);
-/*    
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            const newsItem = mockNewsDatabase.find(n => n.id === news_id);
-            if (newsItem) {
-                resolve({ ...newsItem }); // Return a copy
-            } else {
-                reject(new Error('Новость не найдена'));
-            }
-        }, 1000);
-    });
-*/
-};
-
-/*
-const save_news = (newsData, imageFile) => {
-    console.log('API: save_news called with data:', newsData, 'and image file:', imageFile);
-    
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Имитация загрузки файла (если есть)
-            console.log(imageFile);
-
-            if (imageFile) {
-                console.log(`Имитация загрузки ${imageFile.name} на сервер...`);
-                // В реальном приложении здесь был бы fetch/axios для загрузки файла,
-                // который вернул бы URL или ID изображения.
-                // newsData.imageUrl = `https://cdn.example.com/images/${imageFile.name}`; // Пример
-            }
-
-            if (newsData.subject.trim() === "") {
-                return reject(new Error("Заголовок не может быть пустым"));
-            }
-
-            if (newsData.id === 0) { // Создание новой новости
-                const newNews = { ...newsData, id: nextId++ };
-                mockNewsDatabase.push(newNews);
-                resolve(newNews);
-            } else { // Обновление существующей
-                const index = mockNewsDatabase.findIndex(n => n.id === newsData.id);
-                if (index !== -1) {
-                    mockNewsDatabase[index] = { ...mockNewsDatabase[index], ...newsData };
-                    resolve({ ...mockNewsDatabase[index] });
-                } else {
-                    reject(new Error('Новость для обновления не найдена'));
-                }
-            }
-        }, 1500);
-    });
-};
-*/
-// --- End of Mock API Functions ---
 
 const initialNewsState = {
     id: 0,
@@ -158,7 +85,8 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
                 })
                 .finally(() => setLoading(false));
         }
-    }, [open, newsId, resetForm]); // loading в зависимостях, чтобы избежать сброса во время загрузки
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- loading intentionally excluded: adding it would re-run the fetch/reset on every loading toggle
+    }, [open, newsId, resetForm]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -451,7 +379,6 @@ function AppNewsManager() {
     };
     
     const handleSaveSuccess = (savedNews) => {
-        console.log('Новость успешно сохранена/обновлена:', savedNews);
         // Здесь можно обновить список новостей в UI
         // Например, refetch списка или обновление состояния
         // alert(`Новость "${savedNews.subject}" сохранена!`);

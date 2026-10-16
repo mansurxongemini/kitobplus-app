@@ -1,6 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { getCountryCode, request } from './lib/api';
-import { setUser as setLocalUser } from './lib/api';
 
 // Создаем контекст с начальным значением
 const LibraryContext = createContext();
@@ -28,12 +27,11 @@ export function LibraryProvider({ children }) {
 
     request('auth/user', {}).then(_ => {
       if (_.success && _.user) {
-        console.log("Set user");
         setUser(_.user);
         setIsAdmin(_.user['levels_id'] == 1 && _.user['state'] == 2);
       }
-    }).catch(_ => {
-      console.log("Error while get user. Someone unregistered?");
+    }).catch(() => {
+      // Гость без токена — обычная ситуация, не ошибка.
     });
   }, [user]);
 
@@ -43,7 +41,6 @@ export function LibraryProvider({ children }) {
       if (cc == 'us') {
         cc = 'en';
       }
-      console.log("change lang to " + cc);
       document.documentElement.setAttribute('lang', cc);
     }
   }, [countryCode]);

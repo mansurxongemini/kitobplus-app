@@ -124,7 +124,6 @@ export const request = async (endpoint, payload = {}, headers = null, body = nul
             resolve(json);
         })
         .catch(error => {
-            console.log('error: ' + error);
             reject(error);
         });
     });

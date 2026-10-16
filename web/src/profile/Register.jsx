@@ -1,12 +1,8 @@
 import React from 'react';
-import PhoneInput from "react-phone-input-2"
-import 'react-phone-input-2/lib/style.css'
-import { isPossiblePhoneNumber } from 'react-phone-number-input';
 import '../css/form.css';
 import { Button } from '@mui/material';
-import { getUser, logout } from '../lib/api.js';
+import { getUser } from '../lib/api.js';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateField } from '@mui/x-date-pickers';
 import TextField from '@mui/material/TextField';
 import ImageInput from './imageinput';
@@ -19,12 +15,6 @@ import T from '../lib/translator.js'
 
 const Register = ({close}) => {
     const { user } = useLibrary();
-    const [value, setValue] = React.useState()
-    const [isCorrect, setIsCorrect] = React.useState()
-    const [smsSended, setSmsSended] = React.useState(false)
-    const [debugCode, setDebugCode] = React.useState();
-    const [error, setError] = React.useState()
-    const [code, setCode] = React.useState('')
     const image1Ref = React.useRef(null);
     const image2Ref = React.useRef(null);
     const [name, setName] = React.useState(user?.name || '');
@@ -50,11 +40,6 @@ const Register = ({close}) => {
 
     const processRegister = () => {
 /*        
-        console.log(name);
-        console.log(birthday);
-        console.log(address);
-        console.log(image1Ref.current.files.length);
-        console.log(image2Ref.current.files.length);
 */
         if (!name || !name.length || !birthday || !address || !address.length || !image1Ref.current.files.length || !image2Ref.current.files.length) {
             alert(errorMessage);
@@ -67,10 +52,8 @@ const Register = ({close}) => {
     };
 
     const changeBirthday = (_) => {
-        console.log(_);
         if (isNaN(_.$D)) {setBirthday(null); return;}
         const bd = _.$y.toString().padStart(4, '0') + '-' + _.$M.toString().padStart(2, '0') + '-' + _.$D.toString().padStart(2, '0');
-        console.log(bd);
         setBirthday(bd);
     }
 

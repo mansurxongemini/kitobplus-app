@@ -1,13 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import './fonts/PT-Root-UI_Light.css';
-import './fonts/PT-Root-UI_Regular.css';
-import './fonts/PT-Root-UI_Medium.css';
-import './fonts/PT-Root-UI_Bold.css';
-import './fonts/PT-Root-UI_VF.css';
-import './fonts/PT-Mono_Bold.css';
-import './fonts/PT-Mono_Regular.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

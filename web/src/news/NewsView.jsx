@@ -42,6 +42,7 @@ const NewsView = () => {
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load is recreated each render; adding it would refetch on every render
   }, [id]);
 
   const pageTitle = (news && news.subject) || T("Новости");

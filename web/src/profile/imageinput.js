@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import T from '../lib/translator';
 
 const ImageInput = React.forwardRef(function ImageInput(props, ref) {
-    const { title, ...otherProps } = props;
+    const { title } = props;
     const [selectedFile, setSelectedFile] = useState()
     const [preview, setPreview] = useState()
 

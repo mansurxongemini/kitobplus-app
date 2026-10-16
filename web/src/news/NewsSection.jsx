@@ -131,6 +131,7 @@ const NewsSection = ({ title, exclude = 0, per_page = 0, hideHeader = false, onR
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load is recreated each render; adding it would refetch on every render
   }, [per_page, exclude]);
 
   if (onReloadRef) {

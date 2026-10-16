@@ -54,7 +54,6 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
     React.useImperativeHandle(ref, () => ({
         async playit(id) {
             alert('?');
-            console.log(props.playlist[id]);
             playerRef.current.src = '';
             //playerRef.current.src = props.playlist[id];
             try {
@@ -115,23 +114,17 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
 
     const waitForStartPlayer = () => {
         return new Promise((resolve, reject) => {
-            console.log('Checking for startPlayer function, current type:', typeof window.startPlayer);
             
             if (typeof window.startPlayer === 'function') {
-                console.log('startPlayer is already available');
                 resolve();
                 return;
             }
             
-            console.log('startPlayer not available, waiting...');
             let attempts = 0;
             const maxAttempts = 50; // 5 seconds max wait
             const checkInterval = setInterval(() => {
                 attempts++;
-                //console.log(`Attempt ${attempts}/50: startPlayer type is`, typeof window.startPlayer);
-                
                 if (typeof window.startPlayer === 'function') {
-                    console.log('startPlayer became available!');
                     clearInterval(checkInterval);
                     resolve();
                 } else if (attempts >= maxAttempts) {
@@ -149,9 +142,6 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
         playerRef.current.src = '';
 
         setOffset(is_mp3 ? 0 : position);
-        console.log(props.playlist);
-        console.log(trackId);
-        console.log(props.playlist[trackId]);
         if (is_mp3) {
             playerRef.current.src = props.playlist[trackId].url;
         } else {
@@ -180,13 +170,10 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
     }
 
     React.useEffect(() => {
-        console.log(props);
         if (!props.playlist || !props.playlist.length) return;
-        console.log('PlaylistPlayer');
         _playTrack(props.track ? props.track : 0, props.position ? props.position / 1000: 0);
         if (props.rate) {
-            //console.log('setRate to ' + props.rate);
-            //setTimeout(_ => setRate(props.rate), 500);
+            ////setTimeout(_ => setRate(props.rate), 500);
             setRate(props.rate);
         }        
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,10 +184,9 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
             ref={playerRef}
             type={'audio/mpeg'}
             data-is-playing='0'
-            onPlaying={(e) => {console.log('onPlaying'); e.target.setAttribute('is-playing', '0');}}
-            onPause={(e) => {console.log('onPause'); e.target.setAttribute('is-playing', '1');}}
+            onPlaying={(e) => {e.target.setAttribute('is-playing', '0');}}
+            onPause={(e) => {e.target.setAttribute('is-playing', '1');}}
             onCanPlay={(e) => {               
-                console.log('onCanPlay (autoplay = ' + (e.target.getAttribute('autoplay') ? 'true' : 'false') + ')');
                 if (e.target.getAttribute('autoplay') === 'yes') {
                     e.target.setAttribute('autoplay', 'no');
                     if (e.target.getAttribute('autoplay-position') !== 0 && e.target.getAttribute('autoplay-position')) {
@@ -210,13 +196,11 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
                 }
             }}
             onEnded={(e) => {
-                console.log('onEnded');
                 _nextTrack();           
             }}
             onSeeked={(e) =>{
-                console.log('onSeeked');
             }}
-            onSeeking={(e) =>{console.log('onSeeking');}}
+            onSeeking={(e) =>{}}
             onTimeUpdate={(e) => {
                 if (!e.target.paused) {
                     savePlaybackPosition({
