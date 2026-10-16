@@ -532,7 +532,7 @@
     "US": "book"
   },
   "Книги": {
-    "UZ": "Кitoblar",
+    "UZ": "Kitoblar",
     "US": "Books"
   },
   "В начало": {
@@ -1772,7 +1772,7 @@
     "US": "Books you can"
   },
   "услышать": {
-    "UZ": "kitoblar",
+    "UZ": "tinglash",
     "US": "hear"
   },
   "Онлайн-аудиобиблиотека KitobPlus: узбекская и мировая литература в исполнении профессиональных дикторов. Удобно для экранных читалок и управления с клавиатуры.": {
@@ -1942,5 +1942,193 @@
   "книг (число)": {
     "UZ": "ta kitob",
     "US": "books"
+  },
+  "Онлайн-аудиобиблиотека": {
+    "UZ": "Onlayn audiokutubxona",
+    "US": "Online audiobook library"
+  },
+  "теперь": {
+    "UZ": "endi",
+    "US": "you can"
+  },
+  "звучат.": {
+    "UZ": "eshitiladi.",
+    "US": "hear."
+  },
+  "Узбекская и мировая литература в исполнении профессиональных дикторов. Для людей с нарушениями зрения — бесплатно.": {
+    "UZ": "Oʻzbek va jahon adabiyoti professional suxandonlar ijrosida. Koʻrish imkoniyati cheklanganlar uchun — bepul.",
+    "US": "Uzbek and world literature performed by professional narrators. Free for people with visual impairments."
+  },
+  "Послушать 10 секунд": {
+    "UZ": "10 soniya tinglab koʻring",
+    "US": "Listen for 10 seconds"
+  },
+  "Или нажмите пробел": {
+    "UZ": "Yoki Boʻsh joy tugmasini bosing",
+    "US": "Or press Space"
+  },
+  "Слушать полностью": {
+    "UZ": "Toʻliq tinglash",
+    "US": "Listen in full"
+  },
+  "Звучит отрывок": {
+    "UZ": "Parcha yangramoqda",
+    "US": "Playing a sample"
+  },
+  "На этой неделе": {
+    "UZ": "Bu hafta",
+    "US": "This week, listeners"
+  },
+  "с любовью": {
+    "UZ": "sevib",
+    "US": "love"
+  },
+  "слушают": {
+    "UZ": "tinglanmoqda",
+    "US": "these books"
+  },
+  "Мы превращаем книгу в то, что можно": {
+    "UZ": "Biz kitobni ekran oʻquvchi, klaviatura va quloqchin bilan — sichqonchasiz va koʻrmasdan —",
+    "US": "We turn books into something you can"
+  },
+  "— с экранной читалкой, клавиатурой и наушниками, без мыши и без зрения.": {
+    "UZ": "mumkin boʻlgan narsaga aylantiramiz.",
+    "US": "— with a screen reader, keyboard and headphones, without a mouse and without sight."
+  },
+  "работает с экранной читалкой": {
+    "UZ": "ekran oʻquvchi bilan ishlaydi",
+    "US": "works with screen readers"
+  },
+  "0 сум": {
+    "UZ": "0 soʻm",
+    "US": "0 sum"
+  },
+  "для читателей с инвалидностью по зрению": {
+    "UZ": "koʻrish boʻyicha nogironligi boʻlgan kitobxonlar uchun",
+    "US": "for readers with visual disabilities"
+  },
+  "Выберите": {
+    "UZ": "Oʻzingizga mos",
+    "US": "Choose your"
+  },
+  "настроение": {
+    "UZ": "kayfiyat",
+    "US": "mood"
+  },
+  "для всех": {
+    "UZ": "hamma uchun",
+    "US": "for everyone"
+  },
+  "Для людей с инвалидностью по зрению": {
+    "UZ": "Koʻrish boʻyicha nogironligi boʻlgan insonlar uchun",
+    "US": "For people with visual disabilities"
+  },
+  "Удобно": {
+    "UZ": "Koʻrmasdan ham",
+    "US": "Easy to use"
+  },
+  "без зрения": {
+    "UZ": "qulay",
+    "US": "without sight"
+  },
+  "7 дней Премиума": {
+    "UZ": "7 kunlik Premium",
+    "US": "7 days of Premium"
+  },
+  "в подарок": {
+    "UZ": "sovgʻa",
+    "US": "on us"
+  },
+  "Ничего не найдено": {
+    "UZ": "Hech narsa topilmadi",
+    "US": "Nothing found"
+  },
+  "Попробуйте изменить запрос или сбросить фильтры": {
+    "UZ": "Soʻrovni oʻzgartirib koʻring yoki filtrlarni tozalang",
+    "US": "Try changing your query or resetting the filters"
+  },
+  "Сбросить фильтры": {
+    "UZ": "Filtrlarni tozalash",
+    "US": "Reset filters"
+  },
+  "Не удалось загрузить список книг": {
+    "UZ": "Kitoblar roʻyxatini yuklab boʻlmadi",
+    "US": "Failed to load the book list"
+  },
+  "Сортировка книг": {
+    "UZ": "Kitoblarni saralash",
+    "US": "Sort books"
+  },
+  "Сейчас играет": {
+    "UZ": "Hozir ijro etilmoqda",
+    "US": "Now playing"
+  },
+  "Пока нет закладок": {
+    "UZ": "Hali xatchoʻplar yoʻq",
+    "US": "No bookmarks yet"
+  },
+  "Пока нет фрагментов": {
+    "UZ": "Hali boblar yoʻq",
+    "US": "No chapters yet"
+  },
+  "Длительность": {
+    "UZ": "Davomiyligi",
+    "US": "Duration"
+  },
+  "Похожие книги": {
+    "UZ": "Oʻxshash kitoblar",
+    "US": "Similar books"
+  },
+  "Аудиоплеер": {
+    "UZ": "Audio pleyer",
+    "US": "Audio player"
+  },
+  "Главы": {
+    "UZ": "Boblar",
+    "US": "Chapters"
+  },
+  "Разделы книги": {
+    "UZ": "Kitob boʻlimlari",
+    "US": "Book sections"
+  },
+  "Описание пока отсутствует": {
+    "UZ": "Tavsif hali mavjud emas",
+    "US": "No description yet"
+  },
+  "Книга не найдена": {
+    "UZ": "Kitob topilmadi",
+    "US": "Book not found"
+  },
+  "Sign in with Apple": {
+    "UZ": "Apple orqali kirish",
+    "US": "Sign in with Apple"
+  },
+  "Войдите по номеру телефона — это займёт меньше минуты": {
+    "UZ": "Telefon raqamingiz orqali kiring — bu bir daqiqadan kam vaqt oladi",
+    "US": "Sign in with your phone number — it takes less than a minute"
+  },
+  "Подписка и тарифы": {
+    "UZ": "Obuna va tariflar",
+    "US": "Subscription and plans"
+  },
+  "История прослушивания": {
+    "UZ": "Tinglash tarixi",
+    "US": "Listening history"
+  },
+  "Раздел профиля": {
+    "UZ": "Profil boʻlimi",
+    "US": "Profile section"
+  },
+  "Книжная полка пуста": {
+    "UZ": "Kitob javoni boʻsh",
+    "US": "Your bookshelf is empty"
+  },
+  "История прослушивания пуста": {
+    "UZ": "Tinglash tarixi boʻsh",
+    "US": "Listening history is empty"
+  },
+  "Чтобы открыть профиль, войдите в аккаунт": {
+    "UZ": "Profilni ochish uchun hisobingizga kiring",
+    "US": "Sign in to open your profile"
   }
 }

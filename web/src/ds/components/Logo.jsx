@@ -2,18 +2,25 @@ import { Box, useTheme } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import T from "../../lib/translator";
 
-// Знак: раскрытая книга, из которой выходит звуковая волна.
-export const LogoMark = ({ size = 40, inverted = false }) => {
+// Знак: четыре столбика эквалайзера — «книга, которая звучит». Движение отключается при reduced motion.
+export const LogoMark = ({ size = 22, inverted = false, animated = true }) => {
   const { kp } = useTheme();
-  const bg = inverted ? kp.p.onInk : kp.p.primary;
-  const fg = inverted ? kp.p.ink : kp.p.onPrimary;
+  const color = inverted ? kp.p.cyan : kp.p.primary;
+  const heights = [0.45, 1, 0.68, 0.86];
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-      <rect width="40" height="40" rx="12" fill={bg} />
-      <path d="M9 13.5c3.6-1.4 7.2-1 10 1.2v13.8c-2.8-2.2-6.4-2.6-10-1.2V13.5Z" fill={fg} />
-      <path d="M31 13.5c-3.6-1.4-7.2-1-10 1.2v13.8c2.8-2.2 6.4-2.6 10-1.2V13.5Z" fill={fg} opacity=".72" />
-      <path d="M24 9.5c1.4 1 2.3 2.4 2.3 4M27 7c2.3 1.6 3.8 4 3.8 6.6" stroke={kp.p.accent} strokeWidth="2.2" strokeLinecap="round" fill="none" />
-    </svg>
+    <Box aria-hidden="true" sx={{ display: "inline-flex", alignItems: "center", gap: "3px", height: size }}>
+      {heights.map((h, i) => (
+        <Box
+          key={i}
+          sx={{
+            width: Math.max(3, Math.round(size / 7)), height: `${h * 100}%`, borderRadius: 4, bgcolor: color, transformOrigin: "center",
+            animation: animated ? `kpEq 1.1s ease-in-out ${[0, 0.2, 0.4, 0.1][i]}s infinite alternate` : "none",
+            "@keyframes kpEq": { to: { transform: "scaleY(.45)" } },
+            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          }}
+        />
+      ))}
+    </Box>
   );
 };
 
@@ -30,12 +37,8 @@ const Logo = ({ inverted = false, to = "/" }) => {
       }}
     >
       <LogoMark inverted={inverted} />
-      <Box
-        component="span"
-        aria-hidden="true"
-        sx={{ fontFamily: "'Manrope Variable', sans-serif", fontWeight: 800, fontSize: "1.375rem", letterSpacing: "-0.03em" }}
-      >
-        Kitob<Box component="span" sx={{ color: inverted ? kp.p.cyan : kp.p.primary }}>Plus</Box>
+      <Box component="span" aria-hidden="true" sx={{ fontFamily: kp.fonts.heading, fontWeight: 800, fontSize: "1.3125rem", letterSpacing: "-0.04em" }}>
+        KitobPlus
       </Box>
     </Box>
   );

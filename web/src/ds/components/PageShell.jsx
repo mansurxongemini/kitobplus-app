@@ -6,6 +6,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import Container from "./Container";
 import { useRouteA11y } from "../../lib/a11y";
+import { Reveal } from "../motion";
 import T from "../../lib/translator";
 
 // Каркас любой страницы: ссылка «к основному содержимому», шапка, <main>, подвал.
@@ -23,14 +24,14 @@ const PageShell = ({ title, children }) => {
   );
 };
 
-// Шапка внутренней страницы: хлебные крошки, H1, подзаголовок, действия справа.
+// Шапка внутренней страницы: хлебные крошки, крупный H1 (можно с <Accent>), подзаголовок, действия справа.
 export const PageHeader = ({ title, subtitle, crumbs = [], actions, eyebrow }) => {
   const { kp } = useTheme();
   return (
-    <Box sx={{ bgcolor: kp.isContrast ? kp.p.bg : kp.p.surfaceAlt, borderBottom: `1px solid ${kp.p.border}` }}>
-      <Container sx={{ py: { xs: 4, md: 6 } }}>
+    <Box sx={{ borderBottom: `1px solid ${kp.p.border}` }}>
+      <Container sx={{ pt: { xs: 5, md: 9 }, pb: { xs: 5, md: 7 } }}>
         {crumbs.length > 0 && (
-          <Breadcrumbs aria-label={T("Вы находитесь здесь")} separator={<NavigateNextIcon fontSize="small" aria-hidden="true" />} sx={{ mb: 2, "& a, & span": { fontSize: "1rem" } }}>
+          <Breadcrumbs aria-label={T("Вы находитесь здесь")} separator={<NavigateNextIcon fontSize="small" aria-hidden="true" />} sx={{ mb: 3, "& a, & span": { fontSize: "1rem" } }}>
             <Box component={RouterLink} to="/" sx={{ color: kp.p.textSecondary }}>{T("Главная")}</Box>
             {crumbs.map((c, i) =>
               c.to
@@ -39,37 +40,45 @@ export const PageHeader = ({ title, subtitle, crumbs = [], actions, eyebrow }) =
             )}
           </Breadcrumbs>
         )}
-        <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 3 }}>
-          <Box sx={{ maxWidth: 820 }}>
-            {eyebrow && <Typography variant="overline" component="p" sx={{ color: kp.p.primary, mb: 1 }}>{eyebrow}</Typography>}
-            <Typography variant="h1" sx={{ fontSize: "clamp(2rem, 1.5rem + 2.2vw, 3.25rem)" }}>{title}</Typography>
-            {subtitle && <Typography variant="subtitle1" component="p" sx={{ mt: 1.5, color: kp.p.textSecondary }}>{subtitle}</Typography>}
+        <Reveal y={18}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 3 }}>
+            <Box sx={{ maxWidth: 900 }}>
+              {eyebrow && <Typography variant="overline" component="p" sx={{ color: kp.p.textSecondary, mb: 1.5 }}>{eyebrow}</Typography>}
+              <Typography variant="h1">{title}</Typography>
+              {subtitle && <Typography variant="subtitle1" component="p" sx={{ mt: 2, color: kp.p.textSecondary, maxWidth: 640 }}>{subtitle}</Typography>}
+            </Box>
+            {actions && <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>{actions}</Box>}
           </Box>
-          {actions && <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>{actions}</Box>}
-        </Box>
+        </Reveal>
       </Container>
     </Box>
   );
 };
 
-// Заголовок секции с необязательной ссылкой «Все».
+// Заголовок секции (можно с <Accent>) и текстовая ссылка «Все …».
 export const SectionHeader = ({ title, id, subtitle, linkTo, linkLabel, level = "h2" }) => {
   const { kp } = useTheme();
   return (
-    <Box sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 2, mb: { xs: 3, md: 4 }, flexWrap: "wrap" }}>
-      <Box sx={{ maxWidth: 720 }}>
-        <Typography id={id} variant="h2" component={level}>{title}</Typography>
-        {subtitle && <Typography sx={{ mt: 1, color: kp.p.textSecondary }}>{subtitle}</Typography>}
-      </Box>
-      {linkTo && (
-        <Box
-          component={RouterLink} to={linkTo}
-          sx={{ display: "inline-flex", alignItems: "center", gap: 0.5, minHeight: 48, px: 2.25, borderRadius: 999, border: `2px solid ${kp.p.borderStrong}`, color: kp.p.text, fontWeight: 600, textDecoration: "none", "&:hover": { borderColor: kp.p.text } }}
-        >
-          {linkLabel} <NavigateNextIcon aria-hidden="true" />
+    <Reveal y={20}>
+      <Box sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 2, mb: { xs: 4, md: 6 }, flexWrap: "wrap" }}>
+        <Box sx={{ maxWidth: 820 }}>
+          <Typography id={id} variant="h2" component={level}>{title}</Typography>
+          {subtitle && <Typography sx={{ mt: 1.5, color: kp.p.textSecondary, maxWidth: 620 }}>{subtitle}</Typography>}
         </Box>
-      )}
-    </Box>
+        {linkTo && (
+          <Box
+            component={RouterLink} to={linkTo}
+            sx={{
+              display: "inline-flex", alignItems: "center", gap: 0.5, minHeight: 48, color: kp.p.text, fontWeight: 600, fontSize: "1.0625rem",
+              textDecoration: "underline", textDecorationThickness: "1.5px", textUnderlineOffset: "6px",
+              "& svg": { transition: "transform .3s" }, "&:hover svg": { transform: "translateX(4px)" },
+            }}
+          >
+            {linkLabel} <NavigateNextIcon aria-hidden="true" />
+          </Box>
+        )}
+      </Box>
+    </Reveal>
   );
 };
 

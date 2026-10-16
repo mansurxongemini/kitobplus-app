@@ -14,7 +14,7 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
   };
 
   return createTheme({
-    kp: { p, radii, shadows: sh, layout, isContrast, focusRing },
+    kp: { p, radii, shadows: sh, layout, isContrast, focusRing, fonts },
     breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 } },
     shape: { borderRadius: 4 }, // sx borderRadius: N → N × 4px
     palette: {
@@ -40,10 +40,10 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
       htmlFontSize: 16,
       fontSize: 16,
       fontFamily: fonts.body,
-      h1: { fontFamily: fonts.heading, fontWeight: 800, fontSize: "clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem)", lineHeight: 1.06, letterSpacing: "-0.035em" },
-      h2: { fontFamily: fonts.heading, fontWeight: 800, fontSize: "clamp(1.75rem, 1.3rem + 1.9vw, 2.75rem)", lineHeight: 1.12, letterSpacing: "-0.03em" },
-      h3: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem)", lineHeight: 1.2, letterSpacing: "-0.02em" },
-      h4: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "1.25rem", lineHeight: 1.3, letterSpacing: "-0.015em" },
+      h1: { fontFamily: fonts.heading, fontWeight: 800, fontSize: "clamp(2.75rem, 1.4rem + 5vw, 5.5rem)", lineHeight: 0.98, letterSpacing: "-0.05em" },
+      h2: { fontFamily: fonts.heading, fontWeight: 800, fontSize: "clamp(2rem, 1.3rem + 2.8vw, 3.75rem)", lineHeight: 1.02, letterSpacing: "-0.045em" },
+      h3: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem)", lineHeight: 1.18, letterSpacing: "-0.03em" },
+      h4: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "1.25rem", lineHeight: 1.3, letterSpacing: "-0.02em" },
       h5: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "1.125rem", lineHeight: 1.35 },
       h6: { fontFamily: fonts.heading, fontWeight: 700, fontSize: "1rem", lineHeight: 1.4 },
       subtitle1: { fontSize: "1.1875rem", lineHeight: 1.6, fontWeight: 500 },
@@ -67,6 +67,9 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
             MozOsxFontSmoothing: "grayscale",
           },
           "::selection": { background: alpha(p.primary, 0.25) },
+          // Переход «обложка летит»: сама обложка — плавно и чуть дольше, остальная страница — короткий cross-fade.
+          "::view-transition-group(*)": { animationDuration: "0.6s", animationTimingFunction: "cubic-bezier(.2,.8,.2,1)" },
+          "::view-transition-old(root), ::view-transition-new(root)": { animationDuration: "0.32s" },
           "a": { color: p.primary, textUnderlineOffset: "0.2em" },
           ":focus-visible": focusRing,
           // Скрытая подсказка «Перейти к основному содержимому»
@@ -99,12 +102,14 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
           },
           sizeLarge: { minHeight: 56, paddingInline: 28, fontSize: "1.125rem" },
           sizeSmall: { minHeight: 44, paddingInline: 16, fontSize: "1rem" },
+          // Основная кнопка — «чернила» (как в концепции A), синий остаётся акцентом.
           containedPrimary: {
-            "&:hover": { backgroundColor: p.primaryHover, boxShadow: isContrast ? "none" : `0 10px 28px ${alpha(p.primary, 0.35)}` },
+            backgroundColor: p.action, color: p.onAction,
+            "&:hover": { backgroundColor: p.actionHover, transform: isContrast ? "none" : "translateY(-2px)", boxShadow: isContrast ? "none" : `0 14px 30px -12px ${alpha(p.action, 0.55)}` },
           },
           outlined: {
-            borderWidth: 2, borderColor: p.borderStrong, color: p.text,
-            "&:hover": { borderWidth: 2, borderColor: p.text, backgroundColor: alpha(p.text, 0.04) },
+            borderWidth: 1.5, borderColor: isContrast ? p.border : p.action, color: p.text,
+            "&:hover": { borderWidth: 1.5, borderColor: p.action, backgroundColor: alpha(p.text, 0.04), transform: isContrast ? "none" : "translateY(-2px)" },
           },
           text: { color: p.text, "&:hover": { backgroundColor: alpha(p.text, 0.06) } },
         },
@@ -121,7 +126,7 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
           root: {
             borderRadius: radii.lg,
             border: `1px solid ${p.border}`,
-            boxShadow: sh.card,
+            boxShadow: "none",
             backgroundColor: p.surface,
           },
         },

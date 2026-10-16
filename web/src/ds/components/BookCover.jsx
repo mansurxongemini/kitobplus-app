@@ -8,7 +8,7 @@ const pick = (id) => coverGradients[Math.abs(Number(id) || 0) % coverGradients.l
 
 // Обложка книги 2:3. Если картинки нет или она не загрузилась — аккуратная сгенерированная обложка
 // с названием и автором. Обложка декоративная (alt=""), название книги всегда есть в тексте карточки.
-const BookCover = ({ book, sx, rounded = 16, eager = false }) => {
+const BookCover = React.forwardRef(({ book, sx, rounded = 16, eager = false, transitionName, className }, ref) => {
   const { kp } = useTheme();
   const [failed, setFailed] = useState(false);
   const src = coverUrl(getHost(), book);
@@ -16,9 +16,12 @@ const BookCover = ({ book, sx, rounded = 16, eager = false }) => {
 
   return (
     <Box
+      ref={ref}
+      className={className}
+      style={transitionName ? { viewTransitionName: transitionName } : undefined}
       sx={{
         position: "relative", width: "100%", aspectRatio: "2 / 3", borderRadius: `${rounded}px`, overflow: "hidden",
-        bgcolor: kp.p.surfaceSunken, boxShadow: kp.isContrast ? "none" : "0 1px 2px rgba(0,0,0,.08), 0 10px 26px rgba(13,26,32,.16)",
+        bgcolor: kp.p.surfaceSunken, boxShadow: kp.isContrast ? "none" : "0 1px 2px rgba(14,26,43,.08)",
         outline: kp.isContrast ? `2px solid ${kp.p.border}` : "none",
         ...sx,
       }}
@@ -43,7 +46,7 @@ const BookCover = ({ book, sx, rounded = 16, eager = false }) => {
             })}
           </Box>
           <Box>
-            <Box sx={{ fontFamily: "'Manrope Variable', sans-serif", fontWeight: 800, lineHeight: 1.12, fontSize: "clamp(0.95rem, 0.6rem + 1.1vw, 1.35rem)", letterSpacing: "-0.02em", display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+            <Box sx={{ fontFamily: kp.fonts.heading, fontWeight: 800, lineHeight: 1.12, fontSize: "clamp(0.95rem, 0.6rem + 1.1vw, 1.35rem)", letterSpacing: "-0.02em", display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
               {book && book.title}
             </Box>
             {book && book.authors_name && (
@@ -57,6 +60,6 @@ const BookCover = ({ book, sx, rounded = 16, eager = false }) => {
       )}
     </Box>
   );
-};
+});
 
 export default BookCover;

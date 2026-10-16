@@ -5,14 +5,17 @@
 export const palettes = {
   light: {
     mode: "light",
-    bg: "#F7F8FA",          // светлая «бумага» с холодным оттенком
+    bg: "#FBFBF9",          // почти белый, тёплый
     surface: "#FFFFFF",
-    surfaceAlt: "#EEF2F7",
-    surfaceSunken: "#E4E9F0",
-    border: "#DAE0E8",
+    surfaceAlt: "#F3F4F2",
+    surfaceSunken: "#E9EBEE",
+    border: "#E6E8EC",
     borderStrong: "#6E7B8C",  // рамки полей и кнопок (WCAG 1.4.11)
     text: "#0E1A2B",
-    textSecondary: "#465366",
+    textSecondary: "#4A5466",
+    action: "#0E1A2B",      // основные кнопки — «чернила», текст белый 16:1
+    actionHover: "#22324A",
+    onAction: "#FFFFFF",
     primary: "#1D5FA8",     // «Moviy», белый текст 6.4:1
     primaryHover: "#164C88",
     onPrimary: "#FFFFFF",
@@ -40,6 +43,9 @@ export const palettes = {
     borderStrong: "#5F7189",
     text: "#EEF2F8",
     textSecondary: "#A9B6C8",
+    action: "#EEF2F8",
+    actionHover: "#FFFFFF",
+    onAction: "#0A1019",
     primary: "#8CC2F5",
     primaryHover: "#B0D5F8",
     onPrimary: "#061E38",
@@ -68,6 +74,9 @@ export const palettes = {
     borderStrong: "#FFFFFF",
     text: "#FFFFFF",
     textSecondary: "#FFFFFF",
+    action: "#FFE14D",
+    actionHover: "#FFF08A",
+    onAction: "#000000",
     primary: "#FFE14D",
     primaryHover: "#FFF08A",
     onPrimary: "#000000",
@@ -90,8 +99,10 @@ export const palettes = {
 export const radii = { xs: 8, sm: 12, md: 16, lg: 24, xl: 32, pill: 999 };
 
 export const fonts = {
-  heading: "'Manrope Variable', 'Manrope', 'Inter Variable', system-ui, sans-serif",
+  heading: "'Inter Tight Variable', 'Inter Variable', system-ui, sans-serif",
   body: "'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  // Акцентные слова в заголовках (курсив с засечками). Нет кириллицы — для RU берётся системный курсив.
+  serif: "'Instrument Serif', 'Georgia', 'Times New Roman', serif",
 };
 
 // Масштаб текста из панели «Ko'rinish»: html font-size 16px × scale.

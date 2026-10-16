@@ -67,16 +67,16 @@ const SiteHeader = () => {
         component="header"
         sx={{
           position: "sticky", top: 0, zIndex: 1100,
-          bgcolor: kp.isContrast ? kp.p.bg : alpha(kp.p.bg, 0.86),
-          backdropFilter: kp.isContrast ? "none" : "saturate(160%) blur(16px)",
+          bgcolor: kp.isContrast ? kp.p.bg : scrolled ? alpha(kp.p.bg, 0.82) : "transparent",
+          backdropFilter: kp.isContrast || !scrolled ? "none" : "saturate(160%) blur(16px)",
           borderBottom: "1px solid", borderColor: scrolled || kp.isContrast ? kp.p.border : "transparent",
-          transition: "border-color .2s",
+          transition: "border-color .2s, background-color .3s",
         }}
       >
         <Box sx={{ maxWidth: kp.layout.maxWidth + 48, mx: "auto", px: { xs: 2, sm: 3 }, height: kp.layout.headerHeight, display: "flex", alignItems: "center", gap: 2 }}>
           <Logo />
           {isDesktop && (
-            <Box component="nav" aria-label={T("Основное меню")} sx={{ ml: 2, flex: 1, minWidth: 0 }}>
+            <Box component="nav" aria-label={T("Основное меню")} sx={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }}>
               <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "flex", gap: 0.5 }}>
                 {items.filter((it) => it.to !== "/" && it.to !== "/contacts").map((it) => {
                   const active = isActive(pathname, it.to);
@@ -85,12 +85,12 @@ const SiteHeader = () => {
                       <Box
                         component={RouterLink} to={it.to} aria-current={active ? "page" : undefined}
                         sx={{
-                          display: "inline-flex", alignItems: "center", minHeight: 48, px: 1.5, borderRadius: 999, whiteSpace: "nowrap",
-                          fontWeight: 600, fontSize: "1.0625rem", textDecoration: "none",
-                          color: active ? kp.p.text : kp.p.textSecondary,
-                          bgcolor: active ? (kp.isContrast ? "transparent" : kp.p.surfaceAlt) : "transparent",
-                          outline: active && kp.isContrast ? `2px solid ${kp.p.border}` : "none",
-                          "&:hover": { color: kp.p.text, bgcolor: kp.isContrast ? "transparent" : kp.p.surfaceAlt, textDecoration: kp.isContrast ? "underline" : "none" },
+                          position: "relative", display: "inline-flex", alignItems: "center", minHeight: 48, px: 1.5, borderRadius: 999, whiteSpace: "nowrap",
+                          fontWeight: 500, fontSize: "1.0625rem", textDecoration: kp.isContrast && active ? "underline" : "none",
+                          color: active ? kp.p.text : kp.p.textSecondary, transition: "color .2s",
+                          "&::after": { content: '""', position: "absolute", left: "50%", bottom: 4, width: 5, height: 5, borderRadius: "50%", bgcolor: kp.p.primary, transform: `translateX(-50%) scale(${active ? 1 : 0})`, transition: "transform .3s cubic-bezier(.2,.8,.2,1)" },
+                          "&:hover": { color: kp.p.text, textDecoration: kp.isContrast ? "underline" : "none" },
+                          "&:hover::after": { transform: "translateX(-50%) scale(1)" },
                         }}
                       >
                         {it.label}
@@ -141,7 +141,7 @@ const SiteHeader = () => {
                     component={RouterLink} to={it.to} aria-current={active ? "page" : undefined}
                     sx={{
                       display: "flex", alignItems: "center", minHeight: 60, px: 2, borderRadius: 3, textDecoration: "none",
-                      fontFamily: "'Manrope Variable', sans-serif", fontWeight: 700, fontSize: "1.375rem",
+                      fontFamily: kp.fonts.heading, fontWeight: 700, fontSize: "1.5rem", letterSpacing: "-0.03em",
                       color: kp.p.text, bgcolor: active ? kp.p.surfaceAlt : "transparent",
                       borderLeft: active ? `4px solid ${kp.p.primary}` : "4px solid transparent",
                     }}

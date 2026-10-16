@@ -9,7 +9,7 @@ import ContrastIcon from "@mui/icons-material/Contrast";
 import useLibrary from "../../LibraryContext";
 import { setCountryCode as saveCountryCode } from "../../lib/api";
 import { announce } from "../../lib/a11y";
-import T from "../../lib/translator";
+import T, { tr } from "../../lib/translator";
 
 export const LANGUAGES = [
   { code: "UZ", name: "Oʻzbekcha", short: "UZ", lang: "uz" },
@@ -80,14 +80,14 @@ export const DisplaySettingsPanel = () => {
       <Typography id="kp-theme-label" variant="subtitle2" component="p" sx={{ mb: 1 }}>{T("Тема оформления")}</Typography>
       <ToggleButtonGroup
         exclusive value={themeMode} aria-labelledby="kp-theme-label" sx={group}
-        onChange={(e, v) => { if (v) { setThemeMode(v); announce(T("Тема оформления") + ": " + themes.find((t) => t.value === v).label); } }}
+        onChange={(e, v) => { if (v) { setThemeMode(v); announce(tr("Тема оформления") + ": " + themes.find((t) => t.value === v).label); } }}
       >
         {themes.map((t) => <ToggleButton key={t.value} value={t.value}>{t.icon}{t.label}</ToggleButton>)}
       </ToggleButtonGroup>
       <Typography id="kp-size-label" variant="subtitle2" component="p" sx={{ mt: 2.5, mb: 1 }}>{T("Размер текста")}</Typography>
       <ToggleButtonGroup
         exclusive value={textScale} aria-labelledby="kp-size-label" sx={group}
-        onChange={(e, v) => { if (v) { setTextScale(v); announce(T("Размер текста") + ": " + sizes.find((s) => s.value === v).name); } }}
+        onChange={(e, v) => { if (v) { setTextScale(v); announce(tr("Размер текста") + ": " + sizes.find((s) => s.value === v).name); } }}
       >
         {sizes.map((s) => (
           <ToggleButton key={s.value} value={s.value} aria-label={s.name}>

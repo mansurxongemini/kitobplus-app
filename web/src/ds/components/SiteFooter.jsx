@@ -71,8 +71,8 @@ const SiteFooter = () => {
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
             <Column title={T("Связаться с нами")} id="kp-f-contact">
-              <li><FooterLink href="mailto:info@kitobplus.uz"><MailOutline aria-hidden="true" />info@kitobplus.uz</FooterLink></li>
-              <li><FooterLink href="tel:+998908087331"><PhoneOutlined aria-hidden="true" />+998 90 808 73 31</FooterLink></li>
+              <li><FooterLink href="mailto:m.giyosov@sharoitplus.uz"><MailOutline aria-hidden="true" />m.giyosov@sharoitplus.uz</FooterLink></li>
+              <li><FooterLink href="tel:+998977087331"><PhoneOutlined aria-hidden="true" />+998 97 708 73 31</FooterLink></li>
               <li><FooterLink href="https://t.me/kitobplus_uz"><TelegramIcon aria-hidden="true" />{T("Телеграм")}</FooterLink></li>
             </Column>
           </Grid>

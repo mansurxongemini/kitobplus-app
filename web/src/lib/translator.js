@@ -1,21 +1,29 @@
 import translation from './translation.json';
 import useLibrary from '../LibraryContext';
+import { getCountryCode } from './api';
 
 //const translation: any = 
 
+// T — в теле компонента: язык берётся из контекста, поэтому компонент перерисуется при смене языка.
+// В обработчиках событий и эффектах хуки недоступны — там нужен tr(); T в таком месте тоже не падает,
+// а берёт сохранённый язык.
 const T = (verb) => {
-    const {countryCode} = useLibrary();
-
-    //console.log("T(verb...");
-    let result = verb;
+    let countryCode;
     try {
-        result = _T(verb, countryCode);
-    } catch(error) {
-        return verb;
-    };
+        // eslint-disable-next-line react-hooks/rules-of-hooks -- вызов безусловный, try ловит только вызов вне рендера
+        countryCode = useLibrary().countryCode;
+    } catch (error) {
+        countryCode = getCountryCode();
+    }
+    return tr(verb, countryCode);
+};
 
-    //console.log("T(" + (getCountryCode() ?? 'UZ') + ", " + verb + ") = " + result);
-    return result;
+export const tr = (verb, countryCode = getCountryCode()) => {
+    try {
+        return _T(verb, countryCode);
+    } catch (error) {
+        return verb;
+    }
 };
 
 const _T = (verb, countryCode) => {
