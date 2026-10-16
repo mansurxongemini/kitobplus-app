@@ -5,56 +5,56 @@
 export const palettes = {
   light: {
     mode: "light",
-    bg: "#F7F7F3",          // тёплая «бумага»
+    bg: "#F7F8FA",          // светлая «бумага» с холодным оттенком
     surface: "#FFFFFF",
-    surfaceAlt: "#EEF3F1",
-    surfaceSunken: "#E6ECE9",
-    border: "#DCE3E0",
-    borderStrong: "#74827F",  // 3.8:1 — рамки полей и кнопок (WCAG 1.4.11)
-    text: "#0F1E24",        // 16.8:1 на bg
-    textSecondary: "#44555B", // 7.6:1 на bg
-    primary: "#0B6E79",     // белый текст 6.0:1
-    primaryHover: "#075861",
+    surfaceAlt: "#EEF2F7",
+    surfaceSunken: "#E4E9F0",
+    border: "#DAE0E8",
+    borderStrong: "#6E7B8C",  // рамки полей и кнопок (WCAG 1.4.11)
+    text: "#0E1A2B",
+    textSecondary: "#465366",
+    primary: "#1D5FA8",     // «Moviy», белый текст 6.4:1
+    primaryHover: "#164C88",
     onPrimary: "#FFFFFF",
-    primarySoft: "#DDF0EF",
-    onPrimarySoft: "#08515A",
+    primarySoft: "#E1ECF8",
+    onPrimarySoft: "#12406F",
     accent: "#F2B33D",      // шафран, только с тёмным текстом
     onAccent: "#1C1404",
-    ink: "#0D1A20",         // тёмные секции
-    onInk: "#F2F5F3",
-    onInkSecondary: "#B7C6C4",
-    cyan: "#3FC6D6",        // декоративный акцент бренда на тёмном фоне
+    ink: "#0D1726",         // тёмные секции
+    onInk: "#F2F5F9",
+    onInkSecondary: "#B6C2D3",
+    cyan: "#7DB8F2",        // светлый акцент бренда на тёмном фоне
     success: "#1F7A4D",
     error: "#B42318",
-    focus: "#0B6E79",
-    focusHalo: "rgba(11, 110, 121, 0.25)",
-    overlay: "rgba(13, 26, 32, 0.55)",
+    focus: "#1D5FA8",
+    focusHalo: "rgba(29, 95, 168, 0.25)",
+    overlay: "rgba(13, 23, 38, 0.55)",
   },
   dark: {
     mode: "dark",
-    bg: "#0B1215",
-    surface: "#121C20",
-    surfaceAlt: "#18252A",
-    surfaceSunken: "#0E171A",
-    border: "#25343A",
-    borderStrong: "#5E7178",
-    text: "#EEF3F2",        // 16.5:1
-    textSecondary: "#A9B9BD", // 9.4:1
-    primary: "#5CD3DD",
-    primaryHover: "#86E0E7",
-    onPrimary: "#04282C",
-    primarySoft: "#123A40",
-    onPrimarySoft: "#BDEFF2",
+    bg: "#0A1019",
+    surface: "#111A26",
+    surfaceAlt: "#172231",
+    surfaceSunken: "#0D1520",
+    border: "#243246",
+    borderStrong: "#5F7189",
+    text: "#EEF2F8",
+    textSecondary: "#A9B6C8",
+    primary: "#8CC2F5",
+    primaryHover: "#B0D5F8",
+    onPrimary: "#061E38",
+    primarySoft: "#14304F",
+    onPrimarySoft: "#CFE4FB",
     accent: "#F5BE55",
     onAccent: "#1C1404",
-    ink: "#060B0D",
-    onInk: "#EEF3F2",
-    onInkSecondary: "#A9B9BD",
-    cyan: "#5CD3DD",
+    ink: "#060A11",
+    onInk: "#EEF2F8",
+    onInkSecondary: "#A9B6C8",
+    cyan: "#8CC2F5",
     success: "#5DD39E",
     error: "#FF8A80",
-    focus: "#86E0E7",
-    focusHalo: "rgba(134, 224, 231, 0.30)",
+    focus: "#B0D5F8",
+    focusHalo: "rgba(176, 213, 248, 0.30)",
     overlay: "rgba(0, 0, 0, 0.65)",
   },
   // Высокий контраст: чёрный фон, белый текст, жёлтые акценты и рамки вместо теней.
@@ -116,7 +116,7 @@ export const shadows = (p) =>
 
 // Палитра для сгенерированных обложек (когда у книги нет картинки). Все пары проходят 4.5:1.
 export const coverGradients = [
-  ["#0B6E79", "#0D3B47", "#FFFFFF"],
+  ["#1D5FA8", "#0F2F57", "#FFFFFF"],
   ["#7A3E9D", "#3A1F55", "#FFFFFF"],
   ["#B4532A", "#5A2410", "#FFFFFF"],
   ["#1F6F4A", "#0E3524", "#FFFFFF"],
