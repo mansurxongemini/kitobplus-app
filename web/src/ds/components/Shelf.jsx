@@ -42,9 +42,19 @@ const Shelf = ({ id, title, to, books, loading = false, variant = "default", cou
     updateNav();
     const el = listRef.current;
     if (!el) return undefined;
+    // Ширина содержимого меняется и после рендера (появление карточек, шрифты, картинки) — следим за
+    // размерами самих карточек, иначе кнопка «Следующие» могла остаться отключённой при переполнении.
+    const raf = requestAnimationFrame(updateNav);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(updateNav) : null;
+    if (ro) { ro.observe(el); Array.from(el.children).forEach((c) => ro.observe(c)); }
     el.addEventListener("scroll", updateNav, { passive: true });
     window.addEventListener("resize", updateNav);
-    return () => { el.removeEventListener("scroll", updateNav); window.removeEventListener("resize", updateNav); };
+    return () => {
+      cancelAnimationFrame(raf);
+      if (ro) ro.disconnect();
+      el.removeEventListener("scroll", updateNav);
+      window.removeEventListener("resize", updateNav);
+    };
   }, [updateNav, list.length, loading]);
 
   if (!loading && list.length === 0) return null;
