@@ -1,0 +1,12 @@
+{
+    "success": true,
+    "http_code": 200,
+    "response": {
+        "error_code": 0,
+        "error_note": "",
+        "invoice_id": 170621695,
+        "eps_id": "0064"
+    },
+    "raw_response": "{\"error_code\":0,\"error_note\":\"\",\"invoice_id\":170621695,\"eps_id\":\"0064\"}",
+    "error": null
+}

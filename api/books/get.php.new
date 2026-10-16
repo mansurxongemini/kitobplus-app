@@ -1,0 +1,49 @@
+<?php
+        header('Access-Control-Allow-Origin: *');
+        header('Content-Type: application/json; charset=utf-8');
+
+        require_once('../connect2db.php');
+
+        $params = validate(['id'], FALSE, FALSE, FALSE);
+
+        $params['id'] = intval($params['id']);
+
+        //if (!$book = query("select *, name as title from books_view where id = $params[id]")->fetch_assoc()) {
+        $q = "select `b`.`id` AS `id`,(select group_concat(`f`.`seconds` separator ',') from `files` `f` where (`f`.`books_id` = `b`.`id`) order by `f`.`pos`) AS `files`,`b`.`name` AS `title`,`b`.`preview_id` AS `preview_id`,`b`.`url` AS `url`,`b`.`is_readable_from` AS `is_readable_from`,group_concat(distinct `a`.`id` separator ',') AS `authors_id`,group_concat(distinct `d`.`id` separator ',') AS `dictors_id`,group_concat(distinct `g`.`id` separator ',') AS `genres_id`,`pics`.`ext` AS `pics_ext`,`b`.`seconds` AS `seconds`,`b`.`bytes` AS `bytes`,`b`.`publishers_id` AS `publishers_id`,`b`.`folder` AS `folder`,`b`.`imported` AS `imported`,`b`.`adult` AS `adult`,`authors_pics`.`ext` AS `authors_pics_ext`,`dictors_pics`.`ext` AS `dictors_pics_ext`,`genres_pics`.`ext` AS `genres_pics_ext`,sec_to_time(round(`b`.`seconds`,0)) AS `duration`,date_format(`b`.`is_readable_from`,'%d.%m.%Y') AS `is_readable_from_dt`,`p`.`name` AS `publishers_name`,`s`.`name` AS `states_name`,group_concat(distinct `a`.`name` order by `b2a`.`pos` ASC separator ', ') AS `authors_name`,group_concat(distinct `d`.`name` order by `b2d`.`pos` ASC separator ', ') AS `dictors_name`,group_concat(distinct `g`.`name` order by `b2g`.`pos` ASC separator ', ') AS `genres_name`,`b2i`.`states_id` AS `books_states_id`,`b2i`.`inbox_id` AS `inbox_id` from (((((((((((((`books` `b` left join `books2dictors` `b2d` on((`b`.`id` = `b2d`.`books_id`))) left join `dictors` `d` on((`b2d`.`dictors_id` = `d`.`id`))) left join `books2authors` `b2a` on((`b`.`id` = `b2a`.`books_id`))) left join `authors` `a` on((`b2a`.`authors_id` = `a`.`id`))) left join `books2genres` `b2g` on((`b`.`id` = `b2g`.`books_id`))) left join `genres` `g` on((`b2g`.`genres_id` = `g`.`id`))) left join `books2inbox` `b2i` on((`b2i`.`books_id` = `b`.`id`))) left join `states` `s` on((`s`.`id` = `b2i`.`states_id`))) left join `publishers` `p` on((`p`.`id` = `b`.`publishers_id`))) left join `pics` on(((`pics`.`target` = 'books') and (`pics`.`id` = `b`.`id`)))) left join `pics` `authors_pics` on(((`authors_pics`.`target` = 'authors') and (`authors_pics`.`id` = `b2a`.`authors_id`)))) left join `pics` `dictors_pics` on(((`dictors_pics`.`target` = 'dictors') and (`dictors_pics`.`id` = `b2d`.`dictors_id`)))) left join `pics` `genres_pics` on(((`genres_pics`.`target` = 'genres') and (`genres_pics`.`id` = `g`.`id`)))) where b.id = $params[id] group by b.id";
+        if (!$book = query($q)->fetch_assoc()) {
+                exit(json_encode(['success' => false, 'error' => "Record #$params[id] not found!"]));
+        }
+
+        $book['text_available'] = file_exists("/mnt/r66/lib.audiologos.ru/" . sprintf("%05d", $book['id']) . "/text/text.index.json");
+
+        if (array_key_exists('user', $params) && intval($params['user']['id'])) {
+                if ($row = query("select * from playback_positions where users_id = " . $params['user']['id'] . " and books_id = $book[id]")->fetch_assoc()) {
+                        $book['track'] = $row['track'];
+                        $book['position'] = $row['position'];
+                        $book['rate'] = $row['rate'];
+                }
+
+                $book['bookshelf_dt'] = (($row = query("select dt from bookshelfs where users_id = " . $params['user']['id'] . " and books_id = $book[id]")->fetch_assoc()) ? $row['dt'] : NULL);
+
+                $book['bookmarks'] = [];
+                query("select * from bookmarks where users_id = " . $params['user']['id'] . " and books_id = $book[id] order by track, position");
+                while ($row = fetch()) {
+                        $book['bookmarks'][] = [
+                                'track' => intval($row['track']),
+                                'position' => intval($row['position']),
+                                'dt' => $row['dt']
+                        ];
+                }
+
+                $book['like'] = (($row = query("select * from likes where books_id = $params[id] and users_id = " . $params['user']['id'])->fetch_assoc()) ? intval($row['liked']) : 0);
+        }
+
+        $book['authors'] = fetch_all("select a.*,p.ext pics_ext from authors a join books2authors b2a on a.id = b2a.authors_id left join pics p on p.target='authors' and p.id = b2a.authors_id where b2a.books_id = $params[id] order by b2a.pos");
+        $book['dictors'] = fetch_all("select d.*,p.ext pics_ext from dictors d join books2dictors b2d on d.id = b2d.dictors_id left join pics p on p.target='dictors' and p.id = b2d.dictors_id where b2d.books_id = $params[id] order by b2d.pos");
+        $book['genres'] = fetch_all("select g.*,p.ext pics_ext from genres g join books2genres b2g on g.id = b2g.genres_id left join pics p on p.target='genres' and p.id = b2g.genres_id where b2g.books_id = $params[id] order by b2g.pos");
+        
+        if (!$book['annotation'] && ($row = fetch(query("select annotation from books where id = $params[id]")))) {
+                $book['annotation'] = $row['annotation'];
+        }
+
+        exit(json_encode(['success' => true, 'data' => $book]));

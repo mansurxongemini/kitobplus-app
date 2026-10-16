@@ -1,0 +1,32 @@
+# Зависимости: восстанавливаются из composer.json / requirements
+vendor/
+node_modules/
+srv/gemini/lib/
+srv/gemini/bin/
+srv/gemini/include/
+srv/gemini/share/
+__pycache__/
+*.pyc
+
+# Данные и кэш продакшена
+srv/cache/
+srv/results/
+api/auth/logs/
+srv/llamaindex/*.json*
+*.log
+*.sql
+*.sql.gz
+*.mp3
+*.zip
+*.7z
+
+# Секреты: значения подставляются при выкладке, в репозиторий не попадают
+.env
+*.p8
+*firebase-adminsdk*.json
+response.json*
+.htpasswd
+
+# Служебное
+.DS_Store
+._*

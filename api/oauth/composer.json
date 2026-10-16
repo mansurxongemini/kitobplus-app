@@ -1,0 +1,13 @@
+{
+    "name": "root/oauth",
+    "authors": [
+        {
+            "name": "Mikhail Korneev",
+            "email": "mkorneev@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.0",
+        "firebase/php-jwt": "^6.10"
+    }
+}
