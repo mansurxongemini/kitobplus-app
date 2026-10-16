@@ -1,15 +1,17 @@
 <?php
     require_once('../connect2db.php');
+    require_once('../passwords.php');
 
     $params = validateAnon(['email', 'password', 'fcm_token?']);
 
     $email = "'" . escape($params['email']) . "'";
-    $password = "'" . escape($params['password']) . "'";
 
-    query("select * from users where email = $email and password = $password and deleted is null");
-    if (!($user = fetch())) {
+    query("select * from users where email = $email and deleted is null");
+    if (!($user = fetch()) || !kp_password_matches($user['password'], $params['password'])) {
         exit(json_encode(['success' => false, 'error' => 'Пользователь не найден']));
     }
+    kp_password_upgrade($DB, $user['id'], $user['password'], $params['password']);
+    unset($user['password']);
     
     array_map(
         function($_) use (&$user) {$user[$_] = intval($user[$_]);},

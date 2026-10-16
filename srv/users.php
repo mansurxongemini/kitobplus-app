@@ -78,7 +78,6 @@
             'page' => intval($_GET['page']),
             'per_page' => intval($_GET['per_page']),
             'total' => intval($found_rows),
-            'query' => $query_string,
             'filters' => implode("|", $filters),
             'data' => $data,
             'user' => $user,

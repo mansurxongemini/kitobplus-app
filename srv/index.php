@@ -266,7 +266,6 @@
 		'success' => true,
 		'page' => intval($_GET['page']),
 		'total' => intval($found_rows),
-		'query' => $query_string,
 		'filters' => implode("|", $filters),
 		'data' => $data
 	];

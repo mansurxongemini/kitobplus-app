@@ -53,7 +53,6 @@
             'per_page' => intval($_GET['per_page']),
             'total' => intval($found_rows),
             'total_pages' => ceil($found_rows / intval($_GET['per_page'])),
-            'query' => $query_string,
             'filters' => "",
             'data' => $data
         ];

@@ -14,7 +14,7 @@
 | `__KP_SMS_LOGIN__`, `__KP_SMS_PASSWORD__` | учётная запись SMS-шлюза | `api/auth/sendSMS.php`, `scripts/catalog/sms.php` |
 | `__KP_OPERSMS_LOGIN__`, `__KP_OPERSMS_PASSWORD__` | учётная запись старого шлюза opersms.uz (закомментировано) | `scripts/catalog/sms.php` |
 | `__KP_FIXED_CODE_PHONE__`, `__KP_FIXED_CODE__` | номер телефона, для которого код подтверждения задан константой | `api/auth/sms.php` |
-| `__KP_TEST_PHONE_1__` … `__KP_TEST_PHONE_6__` | номера, для которых SMS не отправляется, и номер получателя в тестовых скриптах | `api/auth/sms.php`, `api/auth/test.php`, `scripts/catalog/sms.php` |
+| `__KP_TEST_PHONE_1__` … `__KP_TEST_PHONE_7__` | номера, для которых SMS не отправляется, и номер получателя в тестовых скриптах | `api/auth/sms.php`, `scripts/catalog/sms.php`. `__KP_TEST_PHONE_7__` добавлен 16.10.2026: номер оставался в коде открытым и есть в первом коммите |
 | `__KP_FCM_DEVICE_TOKEN__` | токены устройств в тестовых скриптах рассылки | `srv/push/test.php`, `srv/push/notifications.php` |
 | `__KP_GEMINI_API_KEY__` | ключ Gemini API экспериментального прокси | `srv/embeddings_proxy.py` |
 

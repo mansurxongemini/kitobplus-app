@@ -29,7 +29,7 @@
         return executeHttpRequest("payment/status_by_mti/$service_id/$merchant_trans_id/$dt");
     }
 
-    //var_dump(createInvoice('+998977087331', '100.00', 'kp123541234'));
+    //var_dump(createInvoice('+__KP_TEST_PHONE_7__', '100.00', 'kp123541234'));
     /*{
         "error_code":0,
         "error_note":"",
