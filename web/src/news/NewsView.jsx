@@ -13,6 +13,7 @@ import useLibrary from '../LibraryContext.js';
 import NewsModalGP from './NewsModalGP.jsx';
 import document from "./img/document.png";
 import { getHost } from '../lib/api.js';
+import { useRouteA11y } from '../lib/a11y';
 
 const NewsView = () => {
     const params = useParams();
@@ -27,6 +28,8 @@ const NewsView = () => {
         setEditNews(true);
     }
 
+    useRouteA11y(news?.subject || T('Новости'));
+
     React.useEffect(() => {
         if (!params?.id) return;
         load();
@@ -39,6 +42,7 @@ const NewsView = () => {
     return <>
         <Navigation/>
         {isAdmin && <NewsModalGP newsId={editableNewsId} onClose={() => setEditNews(false)} onSaveSuccess={() => {setEditNews(false); load();}} open={editNews} />}
+        <Box component="main" id="main_content" tabIndex={-1}>
         <Box
             sx={{
                 width: "100%",
@@ -120,12 +124,14 @@ const NewsView = () => {
             <Box
               component="img"
               src={document}
-              alt="Document"
+              alt=""
+              aria-hidden="true"
               sx={{ width: 28, height: 28 }}
             />
             </Box>
             <Typography
               variant="h2"
+              component="h1"
               color="secondary.main"
               sx={{
                 fontFamily: "'PT_Root_UI-Bold',Helvetica",
@@ -167,6 +173,7 @@ const NewsView = () => {
         </Stack>
 
         <NewsSection per_page={4} title={'Другие новости'} exclude={params?.id} />
+        </Box>
         <FooterSection/>
     </>
 }

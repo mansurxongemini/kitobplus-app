@@ -3,12 +3,17 @@ import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Navigation from "../parts/Navigation";
 import FooterSection from "../parts/FooterSection";
 import T from "../lib/translator";
+import { useRouteA11y } from "../lib/a11y";
 
 const Contacts = () => {
+  useRouteA11y(T('Контакты'));
   return (
     <>
       <Navigation />
       <Box
+        component="main"
+        id="main_content"
+        tabIndex={-1}
         sx={{
           bgcolor: "background.default",
           display: "flex",
@@ -24,11 +29,11 @@ const Contacts = () => {
             px: 3,
           }}
         >
-          <Typography variant="h3" sx={{ mb: 3, fontFamily: "'PT_Root_UI-Bold', Helvetica", fontWeight: 700 }}>
+          <Typography variant="h3" component="h1" sx={{ mb: 3, fontFamily: "'PT_Root_UI-Bold', Helvetica", fontWeight: 700 }}>
             {T('Контакты')}
           </Typography>
 
-          <Typography variant="h5" sx={{ mt: 2, mb: 2, fontFamily: "'PT_Root_UI-Bold', Helvetica", fontWeight: 700 }}>
+          <Typography variant="h5" component="h2" sx={{ mt: 2, mb: 2, fontFamily: "'PT_Root_UI-Bold', Helvetica", fontWeight: 700 }}>
             {T('Исполнители проекта')}:
           </Typography>
 

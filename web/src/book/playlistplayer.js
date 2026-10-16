@@ -5,6 +5,7 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
     const playerRef = React.useRef(null);
     const [rate, setRate] = React.useState(1);
     const [offset, setOffset] = React.useState(0);
+    const volumeRef = React.useRef(0.7);
 
     const _nextTrack = () => changeTrack(1);
 
@@ -43,9 +44,11 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
         _playTrack(t - 1, np);
     };
 
-    React.useEffect(() => {        
+    React.useEffect(() => {
+        if (!playerRef.current) return;
         playerRef.current.playbackRate = rate;
         playerRef.current.defaultPaybackRate = rate;
+        playerRef.current.volume = volumeRef.current;
     }, [rate]);
 
     React.useImperativeHandle(ref, () => ({
@@ -90,6 +93,17 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
             r /= 100;
             setRate(r);
             return r;
+        },
+        setRateValue(r) {
+            const v = Math.min(2, Math.max(0.5, Number(r) || 1));
+            setRate(v);
+            return v;
+        },
+        setVolume(v) {
+            const vol = Math.min(1, Math.max(0, Number(v)));
+            volumeRef.current = vol;
+            if (playerRef.current) playerRef.current.volume = vol;
+            return vol;
         },
         currentTrack() {
             return Number(playerRef.current.getAttribute('trackId'));

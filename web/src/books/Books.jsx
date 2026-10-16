@@ -15,6 +15,7 @@ import FooterSection from "../parts/FooterSection";
 import { ThemeProvider } from "../parts/ThemeProvider";
 import BooksSection from "./BooksSeciton";
 import T from "../lib/translator";
+import { useRouteA11y } from "../lib/a11y";
 
 const Books = () => {
   const theme = useTheme();
@@ -27,12 +28,16 @@ const Books = () => {
 
   // Auto-switch to grid view on mobile
   const effectiveViewMode = isMobile ? "grid" : viewMode;
+  useRouteA11y(T('Аудиокниги'));
 
 
   return (
     <ThemeProvider>
       <Navigation mainContent="books_title" />
       <Box
+        component="main"
+        id="main_content"
+        tabIndex={-1}
         sx={{
           bgcolor: "background.default",
           display: "flex",
@@ -135,8 +140,8 @@ const Books = () => {
                 }}
               >
                 <Typography
-                  id="main_content"
                   variant="h2"
+                  component="h1"
                   sx={{
                     fontFamily: "'PT Root UI', Helvetica",
                     fontWeight: 700,

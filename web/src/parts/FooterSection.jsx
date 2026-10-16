@@ -31,10 +31,10 @@ export default function FooterSection() {
 
   // Social media links
   const socialLinks = [
-    { icon: <TelegramIcon />, url: "https://t.me/kitobplus_uz", label: 'LinkedIn' },
-    { icon: <LinkedInIcon />, url: "#", label: 'LinkedIn' },
-    { icon: <FacebookIcon />, url: "#", label: 'Facebook' },
-    { icon: <TwitterIcon />, url: "#", label: 'Twitter' },
+    { icon: <TelegramIcon />, url: "https://t.me/kitobplus_uz", label: T('Телеграм') },
+    { icon: <LinkedInIcon />, url: "#", label: T('Линкедин') },
+    { icon: <FacebookIcon />, url: "#", label: T('Фейсбук') },
+    { icon: <TwitterIcon />, url: "#", label: T('Твиттер') },
   ];
 
   return (
@@ -72,6 +72,7 @@ export default function FooterSection() {
         }}>
             <Box
             component="img"
+            alt=""
             sx={{
                 width: { xs: "26px", md: "39px" },
                 height: { xs: "32px", md: "48px" },
@@ -81,7 +82,7 @@ export default function FooterSection() {
             <Box
             component="img"
             src={darkMode ? group19_dark : group19}
-            alt="Logo"
+            alt={T('Логотип KitobPlus')}
             sx={{ height: { xs: "16px", md: "24px" }, ml: { xs: 1, md: 2 } }}
             />
         </Box>
@@ -114,6 +115,7 @@ export default function FooterSection() {
 
           {/* Navigation Links */}
           <Grid xs={12} md={5}>
+            <nav aria-label={T('Меню')}>
             <Grid container spacing={{ xs: 2, md: 4 }}>
               <Grid xs={6}>
                 {navLinks.slice(0, 2).map((link, index) => (
@@ -168,6 +170,7 @@ export default function FooterSection() {
                 ))}
               </Grid>
             </Grid>
+            </nav>
           </Grid>
 
           {/* Contact Information */}
@@ -227,10 +230,11 @@ export default function FooterSection() {
             </Grid>
 
             <Grid xs={12} md={4} sx={{ order: { xs: 1, md: 2 } }}>
+              <nav aria-label={T('Социальные сети')}>
               <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap">
                 <Link
                   href={"https://apps.apple.com/us/app/kitobplus/id6470842246"}
-                  aria-label={'Приложение под iOS'}
+                  aria-label={T('Приложение под iOS')}
                   sx={{
                     color: "secondary.main",
                     width: 35,
@@ -242,12 +246,12 @@ export default function FooterSection() {
                     bgcolor: "rgba(2, 163, 184, 0.05)",
                   }}
                 >
-                  <img title={'Приложение под iOS'} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/appstore.png"}/>
+                  <img title={T('Приложение под iOS')} alt={T('Приложение под iOS')} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/appstore.png"}/>
                 </Link>
 
                 <Link
                   href={"https://play.google.com/store/apps/details?id=uz.kitobplus.app"}
-                  aria-label={'Приложение под Android'}
+                  aria-label={T('Приложение под Android')}
                   sx={{
                     color: "secondary.main",
                     width: 35,
@@ -259,7 +263,7 @@ export default function FooterSection() {
                     bgcolor: "rgba(2, 163, 184, 0.05)",
                   }}
                 >
-                  <img title={'Приложение под Android'} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/googleplay.png"}/>
+                  <img title={T('Приложение под Android')} alt={T('Приложение под Android')} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/googleplay.png"}/>
                 </Link>
 
                 {socialLinks.map((social, index) => (
@@ -283,6 +287,7 @@ export default function FooterSection() {
                   </Link>
                 ))}
               </Stack>
+              </nav>
             </Grid>
 
             <Grid xs={12} md={4} sx={{ order: { xs: 2, md: 3 } }}>

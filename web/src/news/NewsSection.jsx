@@ -126,7 +126,8 @@ const NewsSection = ({title, exclude = 0, per_page = 0}) => {
             <Box
               component="img"
               src={document}
-              alt="Document"
+              alt=""
+              aria-hidden="true"
               sx={{ width: 28, height: 28 }}
             />
             </Box>

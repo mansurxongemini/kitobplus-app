@@ -1442,5 +1442,209 @@
   "Последнее обновление правил: 15 июня 2024 г.": {
     "UZ": "Qoidalarning soʻnggi yangilanishi: 2024-yil 15-iyun",
     "US": "Last updated: June 15, 2024"
+  },
+  "Позиция воспроизведения": {
+    "UZ": "Ijro pozitsiyasi",
+    "US": "Playback position"
+  },
+  "Громкость": {
+    "UZ": "Ovoz balandligi",
+    "US": "Volume"
+  },
+  "Позиция": {
+    "UZ": "Pozitsiya",
+    "US": "Position"
+  },
+  "Общее время": {
+    "UZ": "Umumiy vaqt",
+    "US": "Total time"
+  },
+  "Открыть меню": {
+    "UZ": "Menyuni ochish",
+    "US": "Open menu"
+  },
+  "Закрыть меню": {
+    "UZ": "Menyuni yopish",
+    "US": "Close menu"
+  },
+  "Меню": {
+    "UZ": "Menyu",
+    "US": "Menu"
+  },
+  "Перейти на страницу": {
+    "UZ": "Sahifaga o'tish",
+    "US": "Go to page"
+  },
+  "Предыдущая страница": {
+    "UZ": "Oldingi sahifa",
+    "US": "Go to previous page"
+  },
+  "Следующая страница": {
+    "UZ": "Keyingi sahifa",
+    "US": "Go to next page"
+  },
+  "Рейтинг": {
+    "UZ": "Reyting",
+    "US": "Rating"
+  },
+  "Слушать: ": {
+    "UZ": "Tinglamoq: ",
+    "US": "Listen: "
+  },
+  "Скорость воспроизведения": {
+    "UZ": "Ijro tezligi",
+    "US": "Playback speed"
+  },
+  "Телеграм": {
+    "UZ": "Telegram",
+    "US": "Telegram"
+  },
+  "Фейсбук": {
+    "UZ": "Feysbuk",
+    "US": "Facebook"
+  },
+  "Твиттер": {
+    "UZ": "Tvitter",
+    "US": "Twitter"
+  },
+  "Линкедин": {
+    "UZ": "LinkedIn",
+    "US": "LinkedIn"
+  },
+  "Логотип KitobPlus": {
+    "UZ": "KitobPlus logotipi",
+    "US": "KitobPlus logo"
+  },
+  "Поиск по книгам": {
+    "UZ": "Kitoblar bo'yicha izlash",
+    "US": "Search books"
+  },
+  "Пробел — воспроизведение или пауза. Стрелки влево и вправо — назад или вперёд на 30 секунд. Стрелки вверх и вниз с Shift, а также клавиши < и > — скорость.": {
+    "UZ": "Bo'sh joy — ijro etish yoki pauza. Chap va o'ng strelkalar — 30 soniya orqaga yoki oldinga. Shift bilan yuqori va pastki strelkalar hamda < va > tugmalari — tezlik.",
+    "US": "Space — play or pause. Left and right arrows — back or forward 30 seconds. Shift with up and down arrows, and the < and > keys — speed."
+  },
+  "Скорость изменена": {
+    "UZ": "Tezlik o'zgartirildi",
+    "US": "Speed changed"
+  },
+  "Закладка добавлена": {
+    "UZ": "Xatcho'p qo'shildi",
+    "US": "Bookmark added"
+  },
+  "Таймер сна установлен": {
+    "UZ": "Uyqu taymeri o'rnatildi",
+    "US": "Sleep timer set"
+  },
+  "Фрагмент изменён": {
+    "UZ": "Parcha o'zgartirildi",
+    "US": "Track changed"
+  },
+  "минута": {
+    "UZ": "daqiqa",
+    "US": "minute"
+  },
+  "секунда": {
+    "UZ": "soniya",
+    "US": "second"
+  },
+  "или": {
+    "UZ": "yoki",
+    "US": "or"
+  },
+  "Загрузите копию паспорта": {
+    "UZ": "Pasport nusxasini yuklang",
+    "US": "Upload a copy of your passport"
+  },
+  "Загрузите копию справки об инвалидности": {
+    "UZ": "Nogironlik ma'lumotnomasi nusxasini yuklang",
+    "US": "Upload a copy of your disability certificate"
+  },
+  "На главную": {
+    "UZ": "Bosh sahifaga",
+    "US": "To home page"
+  },
+  "Фоновая фотография библиотеки": {
+    "UZ": "Kutubxona fon surati",
+    "US": "Library background photo"
+  },
+  "Декоративное изображение": {
+    "UZ": "Dekorativ rasm",
+    "US": "Decorative image"
+  },
+  "Женщина озвучивает аудиокнигу": {
+    "UZ": "Ayol audiokitob ovozlashtirmoqda",
+    "US": "A woman voicing an audiobook"
+  },
+  "Иконка аудиокниг": {
+    "UZ": "Audiokitoblar belgisi",
+    "US": "Audiobooks icon"
+  },
+  "Иконка воспроизведения": {
+    "UZ": "Ijro belgisi",
+    "US": "Play icon"
+  },
+  "Документ": {
+    "UZ": "Hujjat",
+    "US": "Document"
+  },
+  "Категория": {
+    "UZ": "Kategoriya",
+    "US": "Category"
+  },
+  "Стрелка": {
+    "UZ": "Strelka",
+    "US": "Arrow"
+  },
+  "Группа": {
+    "UZ": "Guruh",
+    "US": "Group"
+  },
+  "Люди пользуются планшетом": {
+    "UZ": "Odamlar planshetdan foydalanmoqda",
+    "US": "People using a tablet"
+  },
+  "Добавить новость": {
+    "UZ": "Yangilik qo'shish",
+    "US": "Add news"
+  },
+  "Просмотров": {
+    "UZ": "Ko'rishlar",
+    "US": "Views"
+  },
+  "Сочетания клавиш плеера": {
+    "UZ": "Pleer klaviatura yorliqlari",
+    "US": "Player keyboard shortcuts"
+  },
+  "Социальные сети": {
+    "UZ": "Ijtimoiy tarmoqlar",
+    "US": "Social networks"
+  },
+  "Основная навигация": {
+    "UZ": "Asosiy navigatsiya",
+    "US": "Main navigation"
+  },
+  "Редактировать новость": {
+    "UZ": "Yangilikni tahrirlash",
+    "US": "Edit news"
+  },
+  "Другие новости": {
+    "UZ": "Boshqa yangiliklar",
+    "US": "Other news"
+  },
+  "Ошибка 404": {
+    "UZ": "404 xatolik",
+    "US": "404 error"
+  },
+  "Удалить закладку": {
+    "UZ": "Xatcho'pni o'chirish",
+    "US": "Delete bookmark"
+  },
+  "Введен некорректный номер телефона": {
+    "UZ": "Telefon raqami noto'g'ri kiritilgan",
+    "US": "Incorrect phone number entered"
+  },
+  "Ошибка во время работы с закладками": {
+    "UZ": "Xatcho'plar bilan ishlashda xatolik",
+    "US": "Error while working with bookmarks"
   }
 }

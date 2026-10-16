@@ -9,6 +9,7 @@ import PersonsSection from "./PersonsSection";
 import PersonsViewParams from "./PersonsViewParams";
 import PersonsBreadcrumbs from "./PersonsBreadcrumbs";
 import T from "../lib/translator";
+import { useRouteA11y } from "../lib/a11y";
 
 const Persons = () => {
   const { table } = useParams(); // 'authors' or 'dictors'
@@ -19,11 +20,15 @@ const Persons = () => {
     authors: T("Авторы"),
     dictors: T("Дикторы"),
   };
+  useRouteA11y(tableLabels[table] || T("Персоны"));
 
   return (
     <ThemeProvider>
       <Navigation mainContent="persons_title" />
       <Box
+        component="main"
+        id="main_content"
+        tabIndex={-1}
         sx={{
           bgcolor: "background.default",
           display: "flex",
@@ -56,8 +61,8 @@ const Persons = () => {
                 }}
               >
                 <Typography
-                  id="main_content"
                   variant="h2"
+                  component="h1"
                   sx={{
                     fontFamily: "'PT Root UI', Helvetica",
                     fontWeight: 700,

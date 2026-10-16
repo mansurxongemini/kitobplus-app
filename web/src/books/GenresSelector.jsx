@@ -106,10 +106,12 @@ const GenresSelector = ({selectedGenres, setSelectedGenres}) => {
                                 }}
                             >
                                 <img
+                                    alt=""
+                                    aria-hidden="true"
                                     style={{
                                         width: 32,
                                         height: 32,
-                                        /*filter: 'grayscale(100%) contrast(20) opacity(0.5) '*/                    
+                                        /*filter: 'grayscale(100%) contrast(20) opacity(0.5) '*/
                                     }}
                                     src={getHost() + '/pics/genres.flat/' + genre?.id + '.png'} />
                             </ListItemIcon>

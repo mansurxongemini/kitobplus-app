@@ -23,6 +23,14 @@ import {add as addToBookshelf, remove as removeFromBookshelf} from '../lib/books
 import LikeSection from "./Like.jsx";
 import useLibrary from '../LibraryContext.js';
 import BookBreadcrumbs from './BookBreadcrumbs.jsx';
+import { announce, VisuallyHidden, formatDurationParts } from '../lib/a11y';
+
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+
+const formatAriaTime = (seconds, T_) => {
+  const { m, s } = formatDurationParts(seconds);
+  return m + ' ' + T_('минута') + ' ' + s + ' ' + T_('секунда');
+};
 
 // Mock data for the audio player
 const audioData = {
@@ -40,27 +48,17 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
   const [bookshelfed, setBookshelfed] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
   const [currentTrackPosition, setCurrentTrackPosition] = React.useState(0);
-  
+  const [volume, setVolume] = React.useState(70);
+  const lastPositionStateRef = React.useRef({ position: -1, duration: -1, rate: -1 });
+  const prevTrackRef = React.useRef(null);
+
   const { user } = useLibrary();
   
   React.useImperativeHandle(ref, () => ({
     playTrack: (trackId, position = 0) => playerRef?.current.playTrack(trackId, position)
   }));
 
-  // Обработчик нажатия клавиши Escape для остановки воспроизведения
-  React.useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && isPlaying) {
-        playerRef.current?.playPause();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isPlaying]);
+  // Keyboard shortcuts (incl. Escape) are handled by the player shortcuts effect below.
 
   React.useEffect(() => {
       if (!book || !book?.files) return;
@@ -111,7 +109,115 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       setBookshelfed(_);
       func(book.id).catch(e => {setBookshelfed(!_); alert(e);});
   };
-    
+
+  const seekToPosition = (seconds) => {
+      if (!playlist || !playlist.length || !totalTime) return;
+      const target = Math.min(Math.max(0, seconds), totalTime);
+      let acc = 0;
+      for (let i = 0; i < playlist.length; i++) {
+          const len = playlist[i].length;
+          if (target < acc + len || i === playlist.length - 1) {
+              playerRef.current?.playTrack(i, Math.max(0, target - acc));
+              return;
+          }
+          acc += len;
+      }
+  };
+
+  const changeRate = (dir) => {
+      const idx = SPEEDS.reduce((best, v, i) => Math.abs(v - rate) < Math.abs(SPEEDS[best] - rate) ? i : best, 0);
+      const next = SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, idx + dir))];
+      const r = playerRef.current?.setRateValue ? playerRef.current.setRateValue(next) : next;
+      setRate(r);
+      announce(T('Скорость') + ': ' + r + 'x');
+  };
+
+  const cycleRate = () => {
+      const r = playerRef.current ? playerRef.current.switchRate(rate) : rate;
+      setRate(r);
+      announce(T('Скорость') + ': ' + r + 'x');
+  };
+
+  // Global player shortcuts when focus is not in a text field.
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      const target = event.target;
+      const tag = target && target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target && target.isContentEditable)) return;
+      if (event.key === 'Escape') {
+        if (isPlaying) playerRef.current?.playPause();
+        return;
+      }
+      const onSlider = target && target.closest && target.closest('[role="slider"]');
+      const onInteractive = target && target.closest && target.closest('button, a, [role="button"]');
+      if (event.key === ' ') {
+        if (onInteractive) return; // let the control activate natively
+        event.preventDefault();
+        playerRef.current?.playPause();
+      } else if (event.key === 'ArrowLeft' && !onSlider) {
+        event.preventDefault();
+        playerRef.current?.stepBackward();
+      } else if (event.key === 'ArrowRight' && !onSlider) {
+        event.preventDefault();
+        playerRef.current?.stepForward();
+      } else if ((event.shiftKey && event.key === 'ArrowUp') || event.key === '>') {
+        event.preventDefault();
+        stepRateRef.current(1);
+      } else if ((event.shiftKey && event.key === 'ArrowDown') || event.key === '<') {
+        event.preventDefault();
+        stepRateRef.current(-1);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isPlaying, rate, playlist, totalTime]);
+
+  const stepRateRef = React.useRef(changeRate);
+  stepRateRef.current = changeRate;
+
+  // Announce track changes.
+  React.useEffect(() => {
+    if (prevTrackRef.current !== null && prevTrackRef.current !== currentTrackId) {
+      announce(T('Фрагмент изменён'));
+    }
+    prevTrackRef.current = currentTrackId;
+  }, [currentTrackId]);
+
+  // Media Session API: lock-screen / headphone control for blind users.
+  React.useEffect(() => {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    try {
+      const cover = getHost() + '/pics/' + (book && book.pics_ext ? 'books/' + book.id + '.' + book.pics_ext : 'book.png');
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title: (book && book.title) || 'KitobPlus',
+        artist: (book && (book.authors_name || book.dictors_name)) || '',
+        album: 'KitobPlus',
+        artwork: [{ src: cover, sizes: '512x512', type: 'image/png' }],
+      });
+      navigator.mediaSession.setActionHandler('play', () => playerRef.current?.playPause());
+      navigator.mediaSession.setActionHandler('pause', () => playerRef.current?.playPause());
+      navigator.mediaSession.setActionHandler('seekbackward', () => playerRef.current?.stepBackward());
+      navigator.mediaSession.setActionHandler('seekforward', () => playerRef.current?.stepForward());
+      navigator.mediaSession.setActionHandler('previoustrack', () => playerRef.current?.previosTrack());
+      navigator.mediaSession.setActionHandler('nexttrack', () => playerRef.current?.nextTrack());
+    } catch (e) { /* Media Session not supported — ignore */ }
+  }, [book]);
+
+  // Keep Media Session position state fresh (rounded to whole seconds).
+  React.useEffect(() => {
+    if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
+    if (!totalTime) return;
+    try {
+      const pos = Math.round(currentPosition);
+      const last = lastPositionStateRef.current;
+      if (last.position === pos && last.duration === Math.round(totalTime) && last.rate === rate) return;
+      lastPositionStateRef.current = { position: pos, duration: Math.round(totalTime), rate };
+      if (navigator.mediaSession.setPositionState) {
+        navigator.mediaSession.setPositionState({ duration: Math.round(totalTime), playbackRate: rate, position: Math.min(pos, Math.round(totalTime)) });
+      }
+    } catch (e) { /* ignore */ }
+  }, [currentPosition, totalTime, rate]);
+
 
   return (
     <Box
@@ -126,6 +232,9 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       }}
     >
       <PlaylistPlayer book={book} track={book?.track} position={book?.position} rate={book?.rate} ref={playerRef} playlist={playlist} onProgress={onProgress}/>
+      <VisuallyHidden id="player-shortcuts-hint">
+        {T('Сочетания клавиш плеера') + '. ' + T('Пробел — воспроизведение или пауза. Стрелки влево и вправо — назад или вперёд на 30 секунд. Стрелки вверх и вниз с Shift, а также клавиши < и > — скорость.')}
+      </VisuallyHidden>
       <div style={{
         position: "absolute",
         top: 0,
@@ -151,9 +260,9 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
         <Box sx={{ flex: 1 }}>
           {/* Title */}
           <Typography
-            id="main_content"
             variant="h2"
             component="h1"
+            tabIndex={-1}
             fontWeight="bold"
             color="white"
             sx={{
@@ -167,6 +276,9 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
 
           {/* Audio player controls container */}
           <Box
+            role="region"
+            aria-label={book.title}
+            aria-describedby="player-shortcuts-hint"
             sx={{
               bgcolor: "rgba(255, 255, 255, 0.1)",
               p: { xs: 1.5, md: 2 },
@@ -205,7 +317,7 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
                     }}
                     aria-label={T('Скорость')}
                     title={T('Скорость')}
-                    onClick={_ => setRate(playerRef.current.switchRate(rate))}
+                    onClick={cycleRate}
                   >
                     {rate}X
                   </Button>
@@ -250,7 +362,7 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
                     color: "white",
                   }}
                   onClick={() => playerRef.current.playPause()}
-                  aria-label={T('Пауза/Воспроизведение')}
+                  aria-label={isPlaying ? T('Пауза') : T('Воспроизведение')}
                 >
                   {isPlaying ? (
                     <PauseIcon sx={{ fontSize: { xs: 28, md: 36 } }} />
@@ -298,7 +410,7 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
                   }}
                   aria-label={T('Добавить закладку')}
                   title={T('Добавить закладку')}
-                  onClick={() => addBookmark(currentTrackId, Math.round(currentTrackPosition * 1000))}
+                  onClick={() => { addBookmark(currentTrackId, Math.round(currentTrackPosition * 1000)); announce(T('Закладка добавлена')); }}
                 >
                   {bookmarks?.length > 0 ? (
                     <BookmarkIcon sx={{ color: "white", fontSize: { xs: 20, md: 24 } }} />
@@ -321,9 +433,17 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
                   <Timer value={currentPosition} ariaPrefix={T('Позиция')}/>
                 </Typography>
                 <Slider
-                  aria-hidden="true"
-                  tabIndex={-1}
-                  value={totalTime > 0 ? 100 * currentPosition / totalTime : 0}
+                  aria-label={T('Позиция воспроизведения')}
+                  min={0}
+                  max={Math.max(1, Math.round(totalTime))}
+                  step={5}
+                  value={Math.min(Math.round(currentPosition), Math.max(1, Math.round(totalTime)))}
+                  onChange={(_, v) => seekToPosition(Array.isArray(v) ? v[0] : v)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'PageUp') { e.preventDefault(); seekToPosition(currentPosition + 30); }
+                    if (e.key === 'PageDown') { e.preventDefault(); seekToPosition(currentPosition - 30); }
+                  }}
+                  getAriaValueText={() => formatAriaTime(currentPosition, T) + ' / ' + formatAriaTime(totalTime, T)}
                   sx={{
                     color: "#0288d1",
                     "& .MuiSlider-thumb": {
@@ -363,12 +483,20 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
                 sx={{ display: { xs: "none", sm: "flex" } }}
               >
                 {/* Volume control - hidden on mobile */}
-                <VolumeUpIcon sx={{ color: "white", fontSize: { sm: 20, md: 24 } }} />
+                <VolumeUpIcon aria-hidden="true" sx={{ color: "white", fontSize: { sm: 20, md: 24 } }} />
                 <Slider
-                  tabIndex={-1}
-                  aria-hidden="true"
+                  aria-label={T('Громкость')}
                   size="small"
-                  defaultValue={70}
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={volume}
+                  onChange={(_, v) => {
+                    const nv = Array.isArray(v) ? v[0] : v;
+                    setVolume(nv);
+                    playerRef.current?.setVolume?.(nv / 100);
+                  }}
+                  getAriaValueText={(v) => v + ' %'}
                   sx={{
                     width: { sm: 80, md: 100 },
                     color: "white",

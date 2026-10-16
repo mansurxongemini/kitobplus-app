@@ -14,6 +14,7 @@ import LanguageSelector from './LanguageSelector.jsx';
 import { Link } from "react-router-dom";
 import useLibrary from '../LibraryContext.js';
 import T from "../lib/translator.js";
+import { Announcer } from "../lib/a11y";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
@@ -58,6 +59,7 @@ const Navigation = () => {
 
     return (
         <>
+            <Announcer />
             <AppBar
                 position="relative"
                 color="lightwhite"
@@ -106,6 +108,7 @@ const Navigation = () => {
                     <Box sx={{ display: "flex", alignItems: "center", height: { xs: "32px", md: "48px" } }}>
                         <Box
                             component="img"
+                            alt=""
                             sx={{
                                 width: { xs: "26px", md: "39px" },
                                 height: { xs: "32px", md: "48px" },
@@ -115,13 +118,14 @@ const Navigation = () => {
                         <Box
                             component="img"
                             src={darkMode ? group19_dark : group19}
-                            alt="Logo"
+                            alt={T('Логотип KitobPlus')}
                             sx={{ height: { xs: "16px", md: "24px" }, ml: { xs: 1, md: 2 } }}
                         />
                     </Box>
 
                     {/* Desktop Menu items */}
                     {!isMobile && (
+                        <nav aria-label={T('Меню')}>
                         <Stack direction="row" spacing={{ md: 4, lg: 8 }}>
                             {menuItems.map((item, index) => (
                                 <Link
@@ -140,6 +144,7 @@ const Navigation = () => {
                                 </Link>
                             ))}
                         </Stack>
+                        </nav>
                     )}
 
                     {/* Right side controls */}
@@ -213,6 +218,7 @@ const Navigation = () => {
                     </Box>
 
                     {/* Menu items */}
+                    <nav aria-label={T('Меню')}>
                     <List sx={{ flex: 1 }}>
                         {menuItems.map((item, index) => (
                             <ListItem
@@ -240,6 +246,7 @@ const Navigation = () => {
                             </ListItem>
                         ))}
                     </List>
+                    </nav>
 
                     {/* Bottom controls */}
                     <Box sx={{

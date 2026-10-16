@@ -4,9 +4,15 @@ import { Box, Breadcrumbs, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import NewsSection from './NewsSection'
+import T from '../lib/translator';
+import { useRouteA11y, VisuallyHidden } from '../lib/a11y';
 
-const News = () => <>
+const News = () => {
+    useRouteA11y(T('Новости'));
+    return <>
     <Navigation/>
+    <Box component="main" id="main_content" tabIndex={-1}>
+    <VisuallyHidden component="h1">{T('Новости')}</VisuallyHidden>
     <Box
         sx={{
             width: "100%",
@@ -38,7 +44,7 @@ const News = () => <>
             }}
             to="/"
             >
-            Главная
+            {T('Главная')}
             </Link>
             <Typography
             color="text.secondary"
@@ -49,12 +55,14 @@ const News = () => <>
                 color: '#333'
             }}
             >
-        Новости
+        {T('Новости')}
         </Typography>
     </Breadcrumbs>
     </Box>
     <NewsSection per_page={0}/>
+    </Box>
     <FooterSection/>
 </>
+}
 
 export default News;

@@ -72,8 +72,8 @@ const PersonBanner = ({userData, loading, error, setError}) => {
           }}
         >
           <Typography
-            id="main_content"
             variant="h6"
+            component="h1"
             sx={{
               fontWeight: "bold",
               color: "#F9FAFB", // lightwhite from original

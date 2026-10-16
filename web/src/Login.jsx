@@ -33,11 +33,16 @@ import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import AppleLogin from 'react-apple-login';
 import LoginForm from "./login/LoginForm.jsx";
+import { useRouteA11y } from "./lib/a11y";
 
 const Login = () => {
+  useRouteA11y(T('Регистрация/вход'));
   return (
     //<ThemeProvider>
         <Box
+            component="main"
+            id="main_content"
+            tabIndex={-1}
             display="flex"
             justifyContent="center"
             width="100%"
@@ -70,7 +75,8 @@ const Login = () => {
                 <Box
                     component="img"
                     src={rectangle21815}
-                    alt="Background"
+                    alt=""
+                    aria-hidden="true"
                     sx={{
                         position: "absolute",
                         width: "100%",
@@ -102,6 +108,8 @@ const Login = () => {
                             <Box
                                 component="img"
                                 src={logo_icon}
+                                alt=""
+                                aria-hidden="true"
                                 position="absolute"
                                 width={{ xs: "30px", md: "39px" }}
                                 height={{ xs: "36px", md: "48px" }}
@@ -112,7 +120,7 @@ const Login = () => {
                             <Box
                                 component="img"
                                 src={group19}
-                                alt="Logo"
+                                alt={T('Логотип KitobPlus')}
                                 sx={{
                                     position: "absolute",
                                     width: { xs: "130px", md: "171px" },
@@ -153,7 +161,8 @@ const Login = () => {
                         <Box
                         component="img"
                         src={group110001}
-                        alt="Decorative"
+                        alt=""
+                        aria-hidden="true"
                         sx={{
                             position: "absolute",
                             width: "496px",

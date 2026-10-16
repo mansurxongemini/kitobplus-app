@@ -18,6 +18,7 @@ import BooksSection from "../books/BooksSeciton";
 // Import image
 import Navigation from "../parts/Navigation";
 import { getHost } from "../lib/api";
+import { useRouteA11y } from "../lib/a11y";
 
 const Person = () => {
   const [viewMode, setViewMode] = React.useState("list");
@@ -98,6 +99,8 @@ const Person = () => {
     setPage(value);
   };
 
+  useRouteA11y((userData && userData.name) || T("Аудиокниги"));
+
   return (
     <Box
       sx={{
@@ -117,6 +120,7 @@ const Person = () => {
         }}
       > 
         <Navigation />
+        <Box component="main" id="main_content" tabIndex={-1}>
         <BreadcrumbsSection table={params.table} userData={userData} />
 
         <Box sx={{ mt: 4, mx: 15.5}}>
@@ -177,6 +181,7 @@ const Person = () => {
           </Box>}
           <BooksSection table={params.table} persons_id={params.id} />
 
+        </Box>
         </Box>
         <FooterSection />
       </Container>

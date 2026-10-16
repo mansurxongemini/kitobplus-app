@@ -44,7 +44,7 @@ const FeaturedSection = () => {
         <Box
           component="img"
           src={pexelsKarolinaGrabowska44763661}
-          alt="Женщина в очках озвучивает аудиокнигу сидя за столом в комнате со светлым интерьером."
+          alt={T('Женщина озвучивает аудиокнигу')}
           sx={{
             display: { xs: "none", sm: "block" },
             position: "absolute",
@@ -99,10 +99,11 @@ const FeaturedSection = () => {
               }}
               component="img"
               src={featured_play_icon}
+              alt=""
             />
           </Box>
 
-          {/* Main heading */}
+          {/* Main heading: one h1, subheading as styled span inside */}
           <Typography
             variant="h1"
             color="white"
@@ -118,26 +119,21 @@ const FeaturedSection = () => {
             }}
           >
             {T('Онлайн библиотека')}
-          </Typography>
-
-          {/* Subheading */}
-          <Typography
-            variant="h2"
-            color="white"
-            sx={{
-              position: { xs: "relative", md: "absolute" },
-              width: { xs: "100%", md: "574px" },
-              top: { xs: 0, md: "308px" },
-              left: { xs: 0, md: "129px" },
-              mb: { xs: 4, md: 0 },
-              fontFamily: "'PT_Root_UI-Regular', Helvetica",
-              fontWeight: "normal",
-              fontSize: { xs: "18px", sm: "24px", md: "30px" },
-              lineHeight: { xs: "1.4", md: "39px" },
-              whiteSpace: { xs: "normal", md: "pre-line" },
-            }}
-          >
-            {T('для любителей аудиокниг и\nдля Лиц с нарушениями зрения')}
+            <Typography
+              component="span"
+              color="white"
+              sx={{
+                display: "block",
+                mt: { xs: 0, md: "8px" },
+                fontFamily: "'PT_Root_UI-Regular', Helvetica",
+                fontWeight: "normal",
+                fontSize: { xs: "18px", sm: "24px", md: "30px" },
+                lineHeight: { xs: "1.4", md: "39px" },
+                whiteSpace: { xs: "normal", md: "pre-line" },
+              }}
+            >
+              {T('для любителей аудиокниг и\nдля Лиц с нарушениями зрения')}
+            </Typography>
           </Typography>
 
           {/* Action buttons */}
@@ -151,7 +147,6 @@ const FeaturedSection = () => {
             }}
           >
             <Button
-              id="main_content"
               variant="contained"
               fullWidth={{ xs: true, sm: false }}
               sx={{
@@ -181,6 +176,7 @@ const FeaturedSection = () => {
                     }}
                     component="img"
                     src={audiobooks_icon}
+                    alt=""
                   />
                 </Box>
               }

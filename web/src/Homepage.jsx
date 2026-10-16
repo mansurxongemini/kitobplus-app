@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import React, { useEffect } from "react";
 import NewsSection from "./news/NewsSection";
 import FeaturedSection from "./homepage/FeaturedSection";
+import T from "./lib/translator";
+import { useRouteA11y } from "./lib/a11y";
 import BooksSection from "./homepage/BooksSection";
 import GenresSection from "./homepage/GenresSection";
 import HighlightsSection from "./homepage/HighlightsSection";
@@ -14,6 +16,7 @@ import { useLocation } from "react-router-dom";
 const Homepage = () => {
   const { user } = useLibrary();
   const location = useLocation();
+  useRouteA11y(T('Главная'));
 
   useEffect(() => {
     if (location.hash === "#about") {
@@ -29,8 +32,11 @@ const Homepage = () => {
 
   return (
     <>
-      <Navigation mainContent="booksButton" />    
+      <Navigation mainContent="booksButton" />
         <Box
+          component="main"
+          id="main_content"
+          tabIndex={-1}
           sx={{
             bgcolor: "background.default",
             display: "flex",

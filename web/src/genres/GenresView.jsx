@@ -71,8 +71,8 @@ const GenresView = () => {
     <Box sx={{ width: "100%", py: 4 }}>
       <Box sx={{ maxWidth: 1200, mx: "auto", px: 2 }}>
         <Typography
-          id="main_content"
           variant="h4"
+          component="h1"
           color="secondary.main"
           fontFamily="'PT_Root_UI-Bold',Helvetica"
           fontWeight="bold"

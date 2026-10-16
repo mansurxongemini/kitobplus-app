@@ -18,6 +18,7 @@ import FooterSection from "../parts/FooterSection.jsx";
 import { Link } from "react-router-dom";
 import { add as addCloudBookmark, remove as removeCloudBookmark } from "../lib/bookmarks.ts";
 import Recommendations from "./Recommendations.jsx";
+import { useRouteA11y } from "../lib/a11y";
 //import Comments from './comments.js';
 
 const Book = ({id}) => {
@@ -37,6 +38,7 @@ const Book = ({id}) => {
 
   const addBookmark = (tracks_id, pos) => bookmarkFunc(addCloudBookmark, tracks_id, pos)
   const removeBookmark = (tracks_id, pos) => bookmarkFunc(removeCloudBookmark, tracks_id, pos)
+  useRouteA11y(book && book.title ? book.title : T('Аудиокниги'));
   
   const bookmarkFunc = async (func, tracks_id, pos) => {
     try {
@@ -126,6 +128,9 @@ const Book = ({id}) => {
     <>
       <Navigation />
       <Box
+        component="main"
+        id="main_content"
+        tabIndex={-1}
         sx={{
           bgcolor: theme.palette.background.default,
           display: "flex",
