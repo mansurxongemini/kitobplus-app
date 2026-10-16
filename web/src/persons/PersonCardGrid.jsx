@@ -22,6 +22,7 @@ const PersonCardGrid = ({ person, table }) => {
         stars.push(
           <Box
             key={i}
+            aria-hidden="true"
             sx={{
               width: 24,
               height: 24,
@@ -31,13 +32,14 @@ const PersonCardGrid = ({ person, table }) => {
               justifyContent: "center",
             }}
           >
-            <Star sx={{ width: 16, height: 16 }} />
+            <Star aria-hidden="true" sx={{ width: 16, height: 16 }} />
           </Box>
         );
       } else {
         stars.push(
           <Box
             key={i}
+            aria-hidden="true"
             sx={{
               width: 24,
               height: 24,
@@ -47,7 +49,7 @@ const PersonCardGrid = ({ person, table }) => {
               justifyContent: "center",
             }}
           >
-            <StarOutlined sx={{ width: 16, height: 16 }} />
+            <StarOutlined aria-hidden="true" sx={{ width: 16, height: 16 }} />
           </Box>
         );
       }
@@ -74,7 +76,8 @@ const PersonCardGrid = ({ person, table }) => {
         }}
         role="link"
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
             navigate(`/person/${table}/${person.id}`);
           }
         }}
@@ -82,7 +85,7 @@ const PersonCardGrid = ({ person, table }) => {
       >
         <Avatar
           src={avatarUrl}
-          alt={person.name}
+          alt=""
           sx={{ width: 100, height: 100, mb: 2 }}
         />
 
@@ -123,11 +126,16 @@ const PersonCardGrid = ({ person, table }) => {
           {T("Отзывов")}: {person.comments_count}
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Stack direction="row" spacing={0.5}>
+        <Box
+          role="img"
+          aria-label={T('Рейтинг') + ': 4.5 / 5'}
+          sx={{ display: "flex", alignItems: "center" }}
+        >
+          <Stack direction="row" spacing={0.5} aria-hidden="true">
             {renderRating(4.5)}
           </Stack>
           <Typography
+            aria-hidden="true"
             sx={{
               ml: 1.5,
               fontFamily: "'PT_Root_UI-Bold',Helvetica",

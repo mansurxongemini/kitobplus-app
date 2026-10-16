@@ -16,6 +16,7 @@ import { PhotoCamera, Clear } from '@mui/icons-material'; // Import Clear icon
 import { Stack } from '@mui/material';
 import { add, get, remove } from '../lib/news.ts'
 import { useNavigate } from "react-router-dom";
+import T from '../lib/translator';
 
 // --- Mock API Functions (Replace with actual API calls) ---
 const mockNewsDatabase = [
@@ -271,7 +272,7 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
             <DialogContent dividers ref={dialogContentRef} id={dialogDescriptionId}>
                 {loading && !error && ( // Показываем общий лоадер только если нет ошибки загрузки новости
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 200 }}>
-                        <CircularProgress aria-label="Загрузка данных новости" />
+                        <CircularProgress aria-label={T("Загрузка данных новости")} />
                     </Box>
                 )}
                 {!loading && ( // Показываем контент только если не идет основная загрузка
@@ -291,7 +292,7 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
 
                         <Grid item xs={12}>
                             <Typography variant="subtitle1" component="h3" gutterBottom>
-                                Изображение
+                                {T('Изображение')}
                             </Typography>
                             <input
                                 accept="image/*"
@@ -306,7 +307,7 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
                                 <Button
                                     variant="outlined"
                                     component="span"
-                                    startIcon={<PhotoCamera />}
+                                    startIcon={<PhotoCamera aria-hidden="true" />}
                                     id="image-upload-button-label"
                                     sx={{ mr: 1 }}
                                 >
@@ -320,11 +321,11 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
                                 <Box sx={{ mt: 2, position: 'relative', maxWidth: 200, maxHeight:200, border: '1px solid #ddd' }}>
                                     <img 
                                         src={imagePreviewUrl} 
-                                        alt="Предпросмотр изображения" 
+                                        alt={T("Предпросмотр изображения")} 
                                         style={{ width: '100%', height: 'auto', display: 'block' }} 
                                     />
                                     <IconButton
-                                        aria-label="Удалить изображение"
+                                        aria-label={T("Удалить изображение")}
                                         onClick={handleRemoveImage}
                                         size="small"
                                         sx={{
@@ -337,7 +338,7 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
                                             }
                                         }}
                                     >
-                                        <Clear fontSize="small" />
+                                        <Clear aria-hidden="true" fontSize="small" />
                                     </IconButton>
                                 </Box>
                             )}

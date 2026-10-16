@@ -58,7 +58,7 @@ const PersonCard = ({ person, table }) => {
         >
           <Avatar
             src={avatarUrl}
-            alt={person.name}
+            alt=""
             sx={{
               width: 138,
               height: 138,
@@ -134,8 +134,13 @@ const PersonCard = ({ person, table }) => {
             </Box>
 
             {/* Rating */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              role="img"
+              aria-label={T('Рейтинг') + ': 4.5 / 5'}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <Rating
+                aria-hidden="true"
                 value={4.5}
                 precision={0.1}
                 readOnly
@@ -152,6 +157,7 @@ const PersonCard = ({ person, table }) => {
                 }}
               />
               <Typography
+                aria-hidden="true"
                 sx={{
                   ml: 1,
                   fontWeight: "bold",

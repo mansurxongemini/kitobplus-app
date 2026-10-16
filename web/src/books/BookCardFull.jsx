@@ -221,9 +221,14 @@ const BookCardFull = ({book}) => {
         </Box>
 
         {/* Rating - hide on mobile */}
-        <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "flex-start", ml: 2 }}>
+        <Box
+          role="img"
+          aria-label={T('Рейтинг') + ': ' + (book?.rating || bookData.rating) + ' / 5'}
+          sx={{ display: { xs: "none", sm: "flex" }, alignItems: "flex-start", ml: 2 }}
+        >
           <Rating
-            value={bookData.rating}
+            aria-hidden="true"
+            value={Number(book?.rating) || bookData.rating}
             precision={0.1}
             readOnly
             sx={{
@@ -236,6 +241,7 @@ const BookCardFull = ({book}) => {
             }}
           />
           <Typography
+            aria-hidden="true"
             sx={{
               ml: 1,
               fontWeight: "bold",
@@ -244,7 +250,7 @@ const BookCardFull = ({book}) => {
               fontSize: 16,
             }}
           >
-            {bookData.rating}
+            {book?.rating || bookData.rating}
           </Typography>
         </Box>
 

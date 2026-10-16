@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
-
+import T from '../lib/translator';
 
 const ImageInput = React.forwardRef(function ImageInput(props, ref) {
     const { title, ...otherProps } = props;
@@ -33,7 +32,7 @@ const ImageInput = React.forwardRef(function ImageInput(props, ref) {
             <label>{title}</label>
             <div style={{display: 'flex', height: 48, justifyContent: 'space-between', alignItems: 'center', borderRadius: 6, border: '1px solid lightgray',}}>
                 <input ref={ref} style={{flex: 1}} aria-label={title} type='file' onChange={onSelectFile} />
-                {selectedFile &&  <img style={{height: 48}} src={preview} /> }
+                {selectedFile &&  <img alt={T('Предпросмотр изображения')} style={{height: 48}} src={preview} /> }
             </div>
         </div>
     )

@@ -47,7 +47,8 @@ const GenresSection = () => {
               <Box
                 component="img"
                 src={genres_icon}
-                alt="Category"
+                alt=""
+                aria-hidden="true"
                 sx={{ width: 27, height: 27 }}
               />
             </Box>
@@ -137,7 +138,8 @@ const GenresSection = () => {
                       <Box
                         component="img"
                         src={getHost() + '/pics/genres.flat/' + genre.id + '.png'}
-                        alt={genre.name}
+                        alt=""
+                        aria-hidden="true"
                         sx={{ maxWidth: 64, maxHeight: 64 }}
                       />
                   </Box>
@@ -165,7 +167,8 @@ const GenresSection = () => {
                       {/*<Box
                         component="img"
                         src={group11}
-                        alt="Arrow"
+                        alt=""
+                        aria-hidden="true"
                         sx={{
                           position: "absolute",
                           width: 20,

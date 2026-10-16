@@ -88,7 +88,7 @@ const HighlightsSection = () => {
         <Box
           component="img"
           src={layer2}
-          alt="People using tablet"
+          alt={T('Люди пользуются планшетом')}
           sx={{
             display: { xs: "none", md: "block" },
             width: "590px",

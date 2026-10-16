@@ -19,9 +19,9 @@ export const Comment = ({ book, comment, onCommentUpdated, onCommentDeleted }) =
 
   // Default comment structure if comment prop is not sufficient
   const defaultComment = {
-    users_name: "Аноним",
+    users_name: T("Аноним"),
     created_at: new Date().toISOString(), // Or a default date string
-    comment: "Нет текста комментария.",
+    comment: T("Нет текста комментария."),
     // Add other fields like views, likes if necessary, with default values
     views: 0,
     likes: 0,
@@ -35,13 +35,13 @@ export const Comment = ({ book, comment, onCommentUpdated, onCommentDeleted }) =
 
   // Format date
   const formatDate = (dateString) => {
-    if (!dateString) return "Дата не указана";
+    if (!dateString) return T("Дата не указана");
     const date = new Date(dateString);
     return `${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${date.toLocaleDateString()}`;
   };
 
   const formatUser = (userString) => {
-    if (!userString) return "Аноним";
+    if (!userString) return T("Аноним");
     return userString.replace(/^\S+\s(\S.+)$/, '$1');
   };
 
@@ -247,10 +247,12 @@ export const Comment = ({ book, comment, onCommentUpdated, onCommentDeleted }) =
             </Typography>
 
             <ThumbUpOutlinedIcon
+              aria-hidden="true"
               sx={{ width: 24, height: 24, color: "#949494" }}
             />
 
             <ChatBubbleOutlineIcon
+              aria-hidden="true"
               sx={{ width: 24, height: 24, color: "#949494" }}
             />
 

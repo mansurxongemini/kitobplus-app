@@ -1,7 +1,5 @@
 import EmailIcon from "@mui/icons-material/Email";
 import TelegramIcon from '@mui/icons-material/Telegram';
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import TwitterIcon from "@mui/icons-material/Twitter";
 
@@ -31,10 +29,8 @@ export default function FooterSection() {
 
   // Social media links
   const socialLinks = [
-    { icon: <TelegramIcon />, url: "https://t.me/kitobplus_uz", label: T('Телеграм') },
-    { icon: <LinkedInIcon />, url: "#", label: T('Линкедин') },
-    { icon: <FacebookIcon />, url: "#", label: T('Фейсбук') },
-    { icon: <TwitterIcon />, url: "#", label: T('Твиттер') },
+    { icon: <TelegramIcon aria-hidden="true" />, url: "https://t.me/kitobplus_uz", label: T('Телеграм') },
+    { icon: <TwitterIcon aria-hidden="true" />, url: "#", label: T('Твиттер') },
   ];
 
   return (
@@ -246,7 +242,7 @@ export default function FooterSection() {
                     bgcolor: "rgba(2, 163, 184, 0.05)",
                   }}
                 >
-                  <img title={T('Приложение под iOS')} alt={T('Приложение под iOS')} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/appstore.png"}/>
+                  <img title={T('Приложение под iOS')} alt="" aria-hidden="true" style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/appstore.png"}/>
                 </Link>
 
                 <Link
@@ -263,7 +259,7 @@ export default function FooterSection() {
                     bgcolor: "rgba(2, 163, 184, 0.05)",
                   }}
                 >
-                  <img title={T('Приложение под Android')} alt={T('Приложение под Android')} style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/googleplay.png"}/>
+                  <img title={T('Приложение под Android')} alt="" aria-hidden="true" style={{height: 24,paddingRight: 8}} src={SITE_URL + "/images/googleplay.png"}/>
                 </Link>
 
                 {socialLinks.map((social, index) => (
@@ -309,7 +305,8 @@ export default function FooterSection() {
                     href="https://sharoitplus.uz/"
                   >
                     <img
-                      alt={'Sharoit plus logo'}
+                      alt=""
+                      aria-hidden="true"
                       src={sharoit_logo}
                       style={{width: 32, height: 32}}
                     />

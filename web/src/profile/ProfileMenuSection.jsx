@@ -109,7 +109,7 @@ const ProfileMenuSection = () => {
         >
           <Avatar
             src="/ellipse-15.png"
-            alt="Profile"
+            alt={T('Профиль')}
             sx={{ width: { xs: 80, md: 110 }, height: { xs: 80, md: 110 }, mb: 1 }}
           />
         </Box>

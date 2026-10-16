@@ -269,10 +269,18 @@ const Book = ({id}) => {
                       </Stack>
                     </Stack>
 
-                    <Stack direction="row" spacing={1} sx={{ mt: { xs: 2, md: 3 } }} flexWrap="wrap">
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ mt: { xs: 2, md: 3 } }}
+                      flexWrap="wrap"
+                      role="img"
+                      aria-label={T('Рейтинг') + ': ' + (book?.rating || 4) + ' / 5'}
+                    >
                       {[1, 2, 3, 4].map((star) => (
                         <Box
                           key={star}
+                          aria-hidden="true"
                           sx={{
                             width: { xs: "24px", md: "32px" },
                             height: { xs: "24px", md: "32px" },
@@ -283,11 +291,13 @@ const Book = ({id}) => {
                           }}
                         >
                           <Star
+                            aria-hidden="true"
                             sx={{ color: "white", width: { xs: "16px", md: "22px" }, height: { xs: "16px", md: "21px" } }}
                           />
                         </Box>
                       ))}
                       <Box
+                        aria-hidden="true"
                         sx={{
                           width: { xs: "24px", md: "32px" },
                           height: { xs: "24px", md: "32px" },
@@ -297,9 +307,10 @@ const Book = ({id}) => {
                           justifyContent: "center",
                         }}
                       >
-                        <Star sx={{ color: "white", width: { xs: "16px", md: "22px" }, height: { xs: "16px", md: "21px" } }} />
+                        <Star aria-hidden="true" sx={{ color: "white", width: { xs: "16px", md: "22px" }, height: { xs: "16px", md: "21px" } }} />
                       </Box>
                       <Typography
+                        aria-hidden="true"
                         variant="h5"
                         sx={{
                           color: theme.palette.secondary.main,
@@ -308,7 +319,7 @@ const Book = ({id}) => {
                           fontSize: { xs: "18px", md: "24px" },
                         }}
                       >
-                        {3 + Math.round(Math.random() * 3)}
+                        {book?.rating || 4}
                       </Typography>
                     </Stack>
                   </Stack>

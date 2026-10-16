@@ -45,6 +45,7 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
     const [smsSended, setSmsSended] = React.useState(false)
     const [debugCode, setDebugCode] = React.useState();
     const [error, setError] = React.useState()
+    const [phoneError, setPhoneError] = React.useState('')
     const [code, setCode] = React.useState('')
     React.useEffect((_) => {
         if (value) {
@@ -56,16 +57,20 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
 
     const login = () => {
         if (!isCorrect) {
-            alert(incorrectPhone);
+            setPhoneError(incorrectPhone);
             return;
         }
+        setPhoneError('');
 
         if (!smsSended) {
             sms(value).then(_ => {                
                 console.log(_);
                 setDebugCode(_?.code);
                 setSmsSended(true);
-            }).catch(_ => alert(_));
+            }).catch(err => {
+                const msg = typeof err === 'string' ? err : (err?.message || T('Ошибка отправки SMS'));
+                setPhoneError(msg);
+            });
 
             return;
         }
@@ -84,20 +89,10 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
             } else {
                 window.location = '/';
             }
-/*
-            console.log(_);
-            if (_.user.state === 0) {
-                window.location = '/register';
-            }
-            if (_.user.state === 2) {
-                alert(successMessage);
-                navigate('/');
-            }
-            if (_.user.state === 1 || _.user.state === 3) {
-                navigate('/profile');
-            }
-*/            
-        }).catch(_ => setError(_));
+        }).catch(err => {
+            const msg = typeof err === 'string' ? err : (err?.message || String(err));
+            setError(msg);
+        });
     }, [code]);
 
   const handleSuccess = async (credentialResponse) => {
@@ -193,18 +188,34 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
             <div className='formBody'>
                 <PhoneInput
                     inputProps={{
+                        id: 'login-phone-input',
                         name: 'phone',
                         required: true,
                         autoFocus: true,
+                        autoComplete: 'tel',
+                        inputMode: 'tel',
+                        'aria-invalid': Boolean(phoneError),
+                        'aria-describedby': phoneError ? 'login-phone-error' : undefined,
                         style: {width:'377px'}
                     }}
                     specialLabel={T('Телефон')}
                     placeholder={T('Введите номер телефона')}
                     value={value}
                     disableDropdown={true}
-                    onChange={setValue}
-
+                    onChange={(val) => {
+                        setPhoneError('');
+                        setValue(val);
+                    }}
                 />
+                {phoneError && (
+                    <div
+                        id="login-phone-error"
+                        role="alert"
+                        style={{ color: '#d32f2f', fontSize: '14px', marginTop: '6px', textAlign: 'left' }}
+                    >
+                        {phoneError}
+                    </div>
+                )}
             </div>
             <div className='formFooter'>
                 <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
@@ -241,7 +252,7 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
                             callback={handleAppleResponse}
                             scope="name email"
                             render={(renderProps) => (
-                                <Button startIcon={<AppleIcon/>} sx={{border: 1, width: '100%'}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Sign in with Apple</Button>
+                                <Button startIcon={<AppleIcon aria-hidden="true" />} sx={{border: 1, width: '100%'}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Sign in with Apple</Button>
                             )}
                         />
                     </>}
@@ -253,18 +264,40 @@ const LoginForm = ({title, only_phone = false, callback = null}) => {
                 <div style={{fontWeight: 'bold'}}>+{value}</div>
                 <div>{T('Пожалуйста, введите код из SMS')}</div>
                 <div style={{display: 'flex', justifyContent: 'center', paddingTop: 16, paddingBottom: 16}}>
-                    <input aria-label={T('Пожалуйста, введите код из SMS')} autoFocus={true} style={{fontSize: 32, textAlign: 'center', width: 128, borderRadius: 8, borderWidth: 1, borderColor: 'lightgray'}}
+                    <input
+                        id="sms-code-input"
+                        aria-label={T('Пожалуйста, введите код из SMS')}
+                        autoFocus={true}
+                        autoComplete="one-time-code"
+                        inputMode="numeric"
+                        aria-invalid={Boolean(error)}
+                        aria-describedby={error ? "sms-code-error" : undefined}
+                        style={{
+                            fontSize: 32,
+                            textAlign: 'center',
+                            width: 128,
+                            borderRadius: 8,
+                            borderWidth: 1,
+                            borderColor: error ? '#d32f2f' : 'lightgray'
+                        }}
                         onKeyPress={(event) => {
                             if (!/[0-9]/.test(event.key) || (event.target.value && event.target.value.length >= 4)) {
                                 event.preventDefault();
                             }
                         }}
-                        onChange={e => setCode(e.target.value)}
+                        onChange={e => {
+                            setError(null);
+                            setCode(e.target.value);
+                        }}
                         value={code}
                     />
                 </div>
                 {debugCode ? <div style={{display: 'flex', justifyContent: 'center'}}><span style={{color: 'green'}}>{T('Код')}: {debugCode}</span></div> : <></>}                        
-                {error ? <div style={{display: 'flex', justifyContent: 'center'}}><span style={{color: 'red'}}>{error}</span></div> : <></>}
+                {error ? (
+                    <div id="sms-code-error" role="alert" style={{display: 'flex', justifyContent: 'center'}}>
+                        <span style={{color: '#d32f2f'}}>{typeof error === 'string' ? error : (error?.message || String(error))}</span>
+                    </div>
+                ) : <></>}
             </div>
         </>)
     

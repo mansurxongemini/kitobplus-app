@@ -1646,5 +1646,42 @@
   "Ошибка во время работы с закладками": {
     "UZ": "Xatcho'plar bilan ishlashda xatolik",
     "US": "Error while working with bookmarks"
+  },
+  "Текущая страница": {
+    "UZ": "Joriy sahifa",
+    "US": "Current page"
+  },
+  "Первая страница": {
+    "UZ": "Birinchi sahifa",
+    "US": "First page"
+  },
+  "Последняя страница": {
+    "UZ": "Oxirgi sahifa",
+    "US": "Last page"
+  },
+  "Загрузка данных новости": {
+    "UZ": "Yangilik ma'lumotlari yuklanmoqda",
+    "US": "Loading news data"
+  },
+  "Удалить изображение": {
+    "UZ": "Rasmni o'chirish",
+    "US": "Delete image"
+  },
+  "Предпросмотр изображения": {
+    "UZ": "Rasmni oldindan ko'rish",
+    "US": "Image preview"
+  },
+  "Ошибка отправки SMS": {
+    "UZ": "SMS yuborishda xatolik",
+    "US": "Error sending SMS"
+  },
+  "Нет текста комментария.": {
+    "UZ": "Izoh matni yo'q.",
+    "US": "No comment text."
+  },
+  "Дата не указана": {
+    "UZ": "Sana ko'rsatilmagan",
+    "US": "Date not specified"
   }
 }
+

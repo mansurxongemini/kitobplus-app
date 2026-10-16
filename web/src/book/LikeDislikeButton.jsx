@@ -1,9 +1,11 @@
 import { IconButton, Stack, Typography } from "@mui/material"
 
-const LikeDislikeButton = ({action, active, icon_active, icon_inactive, count}) =>
+const LikeDislikeButton = ({action, active, icon_active, icon_inactive, count, ariaLabel}) =>
 <Stack direction="row" sx={{alignItems: 'center', gap: '8px', pr: 1}}>
     <IconButton
         onClick={action}
+        aria-label={ariaLabel}
+        aria-pressed={!!active}
         sx={{
             width: 40,
             height: 40,

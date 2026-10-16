@@ -2,6 +2,8 @@ import React from 'react'
 import { Box, IconButton, Pagination, PaginationItem, } from "@mui/material";
 import NavigateBefore from "@mui/icons-material/NavigateBefore";
 import NavigateNext from "@mui/icons-material/NavigateNext";
+import T from "../lib/translator";
+import { getPaginationItemAriaLabel } from "../lib/a11y";
 
 const BooksPagination = ({page, setPage, pagesCount}) => {
     const handlePageChange = (event, page) => {
@@ -9,19 +11,23 @@ const BooksPagination = ({page, setPage, pagesCount}) => {
         console.log('Текущая страница:', page);
     };
 
+    const itemAriaLabel = getPaginationItemAriaLabel(T);
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
             <Pagination
                 count={pagesCount}
                 page={page}
                 onChange={handlePageChange}
+                getItemAriaLabel={itemAriaLabel}
                 renderItem={(item) => {
                     if (item.type === "previous") {
                     return (
                         <PaginationItem
                             component={IconButton}
                             {...item}
-                            icon={<NavigateBefore />}
+                            aria-label={itemAriaLabel(item.type, item.page, item.selected)}
+                            icon={<NavigateBefore aria-hidden="true" />}
                         />
                     );
                     }
@@ -30,7 +36,8 @@ const BooksPagination = ({page, setPage, pagesCount}) => {
                         <PaginationItem
                             component={IconButton}
                             {...item}
-                            icon={<NavigateNext />}
+                            aria-label={itemAriaLabel(item.type, item.page, item.selected)}
+                            icon={<NavigateNext aria-hidden="true" />}
                         />
                     );
                     }

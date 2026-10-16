@@ -70,7 +70,8 @@ const Element = () => {
               <Box
                 component="img"
                 src={hf404}
-                alt="404 Error"
+                alt=""
+                aria-hidden="true"
                 sx={{ width: "100%", height: "100%" }}
               />
             </Box>

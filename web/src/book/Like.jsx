@@ -7,6 +7,7 @@ import { Box, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { like as updateLike} from "../lib/like.ts";
 import LikeDislikeButton from "./LikeDislikeButton.jsx";
+import T from "../lib/translator.js";
 
 const LikeSection = ({book}) => {
     const likesCount = parseInt(book?.likes_count) + (parseInt(book?.like) == 1 ? -1 : 0);
@@ -32,16 +33,18 @@ const LikeSection = ({book}) => {
             action={handleLike}
             active={like == 1}
             count={likesCount + (like == 1 ? 1 : 0)}
-            icon_active={<ThumbUpIcon sx={{ width: 26, height: 26 }} />}
-            icon_inactive={<ThumbUpOutlinedIcon sx={{ width: 26, height: 26 }} />}
+            icon_active={<ThumbUpIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
+            icon_inactive={<ThumbUpOutlinedIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
+            ariaLabel={T("Нравится")}
         />
 
         <LikeDislikeButton
             action={handleDislike}
             active={like == -1}
             count={dislikesCount + (like == -1 ? 1 : 0)}
-            icon_active={<ThumbDownIcon sx={{ width: 26, height: 26 }} />}
-            icon_inactive={<ThumbDownOutlinedIcon sx={{ width: 26, height: 26 }} />}
+            icon_active={<ThumbDownIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
+            icon_inactive={<ThumbDownOutlinedIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
+            ariaLabel={T("Не нравится")}
         />
     </Stack>
 };

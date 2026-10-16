@@ -25,15 +25,22 @@ const Filter = ({filter, setFilter}) => {
             onChange={(event, newValue) => setRawFilter(newValue ?? '')}
             inputValue={rawFilter}
             onInputChange={(event, newInputValue, reason) => setRawFilter(newInputValue ?? '')}
+            clearText={T("Очистить")}
+            closeText={T("Закрыть")}
+            openText={T("Открыть")}
             renderInput={(params) => (
             <TextField
                 {...params}
                 placeholder={T("Поиск")}
                 variant="outlined"
+                inputProps={{
+                    ...params.inputProps,
+                    'aria-label': T("Поиск"),
+                }}
                 InputProps={{
                     ...params.InputProps,
                     startAdornment: (
-                        <Search sx={{ color: theme.palette.icon.main, mr: 1 }} />
+                        <Search aria-hidden="true" sx={{ color: theme.palette.icon.main, mr: 1 }} />
                     ),
                 }}
                 sx={{

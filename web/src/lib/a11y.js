@@ -89,3 +89,25 @@ export const useRouteA11y = (title) => {
     return () => window.clearTimeout(t);
   }, [title]);
 };
+
+// Return accessible name for MUI Pagination items given a translator function T.
+export const getPaginationItemAriaLabel = (T) => (type, page, selected) => {
+  if (type === 'page') {
+    return selected
+      ? `${T('Текущая страница')} ${page}`
+      : `${T('Перейти на страницу')} ${page}`;
+  }
+  if (type === 'previous') {
+    return T('Предыдущая страница');
+  }
+  if (type === 'next') {
+    return T('Следующая страница');
+  }
+  if (type === 'first') {
+    return T('Первая страница');
+  }
+  if (type === 'last') {
+    return T('Последняя страница');
+  }
+  return '';
+};

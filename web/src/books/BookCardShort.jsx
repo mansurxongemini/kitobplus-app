@@ -25,6 +25,7 @@ const BookCardShort = ({book, columns = 2}) => {
             stars.push(
             <Box
                 key={i}
+                aria-hidden="true"
                 sx={{
                 width: 24,
                 height: 24,
@@ -34,13 +35,14 @@ const BookCardShort = ({book, columns = 2}) => {
                 justifyContent: "center",
                 }}
             >
-                <Star sx={{ width: 16, height: 16 }} />
+                <Star aria-hidden="true" sx={{ width: 16, height: 16 }} />
             </Box>,
             );
         } else {
             stars.push(
             <Box
                 key={i}
+                aria-hidden="true"
                 sx={{
                 width: 24,
                 height: 24,
@@ -50,7 +52,7 @@ const BookCardShort = ({book, columns = 2}) => {
                 justifyContent: "center",
                 }}
             >
-                <StarOutlined sx={{ width: 16, height: 16 }} />
+                <StarOutlined aria-hidden="true" sx={{ width: 16, height: 16 }} />
             </Box>,
             );
         }
@@ -77,14 +79,19 @@ const BookCardShort = ({book, columns = 2}) => {
                   borderColor: "neutral.100",
                 }}
                 role="link"
-                onKeyDown={(e) => {if (e.key === 'Enter') {navigate("/books/" + book.id)}}}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    navigate("/books/" + book.id);
+                  }
+                }}
               >
                 <Box sx={{ p: 1, flexShrink: 0 }}>
                   <Box
                     aria-hidden={true}
                     component="img"
                     src={getHost() + '/pics/' + (book.pics_ext ? 'books/' + book.id + '.' + book.pics_ext : 'book.png')}
-                    alt={book.title}
+                    alt=""
                     sx={{
                       width: { xs: 90, sm: 100, md: 118 },
                       height: { xs: 135, sm: 150, md: 175 },
@@ -144,16 +151,21 @@ const BookCardShort = ({book, columns = 2}) => {
 
                   {/* Bottom section: Rating and Button */}
                   <Box>
-                    <Box sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: { xs: 1, md: 1.5 },
-                      flexWrap: "wrap",
-                    }}>
-                      <Stack direction="row" spacing={0.5}>
+                    <Box
+                      role="img"
+                      aria-label={T('Рейтинг') + ': ' + (book.rating || 0) + ' / 5'}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mb: { xs: 1, md: 1.5 },
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <Stack direction="row" spacing={0.5} aria-hidden="true">
                         {renderRating(book.rating)}
                       </Stack>
                       <Typography
+                        aria-hidden="true"
                         sx={{
                           ml: 1.5,
                           fontFamily: "'PT_Root_UI-Bold',Helvetica",
@@ -168,7 +180,8 @@ const BookCardShort = ({book, columns = 2}) => {
                     <Button
                     tabIndex={-1}
                     variant={book.active ? "contained" : "text"}
-                    startIcon={<PlayArrow />}
+                    startIcon={<PlayArrow aria-hidden="true" />}
+                    aria-label={T('Слушать') + ': ' + (book.title || '')}
                     sx={{
                       width: "100%",
                       maxWidth: { xs: "100%", md: 211 },

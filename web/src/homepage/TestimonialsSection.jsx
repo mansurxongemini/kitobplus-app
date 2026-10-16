@@ -74,7 +74,8 @@ const TestimonialsSection = () => {
                 top: 0,
                 left: "309px",
               }}
-              alt="Group"
+              alt=""
+              aria-hidden="true"
               src={group19999}
             />
           </Box>
