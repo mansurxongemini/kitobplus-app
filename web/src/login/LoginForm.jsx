@@ -174,7 +174,7 @@ const LoginForm = ({ title, only_phone = false, callback = null }) => {
           {!only_phone && (
             <>
               <Divider sx={{ my: 1 }}>{T("или")}</Divider>
-              <GoogleLogin onSuccess={handleSuccess} onError={handleError} size="large" shape="pill" width="360" />
+              <GoogleLogin onSuccess={handleSuccess} onError={handleError} size="large" shape="pill" />
               <AppleLogin
                 clientId="uz.kitobplus.signin"
                 redirectURI={SITE_URL + "/login"}
