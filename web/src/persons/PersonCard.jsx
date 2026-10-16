@@ -1,226 +1,149 @@
-import Bookmark from "@mui/icons-material/BookmarkOutlined";
-import BookIcon from "@mui/icons-material/MenuBook";
-import CommentIcon from "@mui/icons-material/ChatBubbleOutline";
-import DownloadIcon from "@mui/icons-material/Download";
-import {
-  Avatar,
-  Box,
-  Card,
-  IconButton,
-  Rating,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { Box, Typography, Avatar, useTheme } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import { getHost } from "../lib/api";
 import T from "../lib/translator";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
-const PersonCard = ({ person, table }) => {
-  const navigate = useNavigate();
-  const theme = useTheme();
+export const getInitials = (name) => {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
 
-  const avatarUrl = person.pics_ext
+export const PersonAvatar = ({ person, table, size = 64 }) => {
+  const { kp } = useTheme();
+  const [imgFailed, setImgFailed] = useState(false);
+  const initials = getInitials(person && person.name);
+  const avatarUrl = person && person.pics_ext
     ? `${getHost()}/pics/${table}/${person.id}.${person.pics_ext}`
-    : `${getHost()}/pics/${table === 'authors' ? 'author' : 'dictor'}.png`;
+    : null;
+
+  if (avatarUrl && !imgFailed) {
+    return (
+      <Avatar
+        src={avatarUrl}
+        alt=""
+        onError={() => setImgFailed(true)}
+        sx={{
+          width: size,
+          height: size,
+          border: kp.isContrast ? `2px solid ${kp.p.border}` : `1px solid ${kp.p.border}`,
+        }}
+      />
+    );
+  }
 
   return (
-    <Card
+    <Box
+      aria-hidden="true"
       sx={{
-        minWidth: 785,
-        width: "100%",
-        height: 170,
-        bgcolor: theme.palette.background.paper,
-        position: "relative",
-        p: 2,
-        boxShadow:
-          theme.palette.mode === "dark"
-            ? "0px 4px 24px rgba(0, 0, 0, 0.3)"
-            : "0px 4px 24px rgba(38, 38, 38, 0.07)",
-        border: "1px solid",
-        borderColor: theme.palette.divider,
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        display: "grid",
+        placeItems: "center",
+        bgcolor: kp.isContrast ? "transparent" : kp.p.primarySoft,
+        color: kp.isContrast ? kp.p.primary : kp.p.onPrimarySoft,
+        border: kp.isContrast ? `2px solid ${kp.p.border}` : `1px solid ${kp.p.border}`,
+        fontFamily: "'Manrope Variable', sans-serif",
+        fontWeight: 800,
+        fontSize: size >= 80 ? "1.75rem" : "1.25rem",
+        letterSpacing: "0.02em",
+        flexShrink: 0,
       }}
     >
-      <Box sx={{ display: "flex" }}>
-        {/* Avatar */}
-        <Box
-          sx={{
-            width: 138,
-            height: 138,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={() => navigate(`/person/${table}/${person.id}`)}
-        >
-          <Avatar
-            src={avatarUrl}
-            alt=""
-            sx={{
-              width: 138,
-              height: 138,
-            }}
-          />
-        </Box>
+      {initials}
+    </Box>
+  );
+};
 
-        {/* Person Information */}
-        <Box sx={{ ml: 2, flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-          {/* Name, Stats and Rating Row */}
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-            {/* Name */}
-            <Typography
+const PersonCard = ({ person, table, headingLevel = "h2" }) => {
+  const { kp } = useTheme();
+
+  return (
+    <Box
+      component="article"
+      sx={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        p: 3,
+        borderRadius: 5,
+        bgcolor: kp.p.surface,
+        border: `1px solid ${kp.p.border}`,
+        boxShadow: kp.shadows.card,
+        transition: "box-shadow .25s, transform .25s, border-color .25s",
+        "&:hover": {
+          boxShadow: kp.shadows.raised,
+          transform: kp.isContrast ? "none" : "translateY(-3px)",
+          borderColor: kp.p.primary,
+        },
+        "&:focus-within": {
+          outline: `3px solid ${kp.p.focus}`,
+          outlineOffset: 3,
+        },
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <PersonAvatar person={person} table={table} size={64} />
+        <Box sx={{ minWidth: 0, flex: 1 }}>
+          <Typography
+            component={headingLevel}
+            sx={{
+              fontFamily: "'Manrope Variable', sans-serif",
+              fontWeight: 700,
+              fontSize: "1.125rem",
+              lineHeight: 1.3,
+              m: 0,
+            }}
+          >
+            <Box
+              component={RouterLink}
+              to={`/person/${table}/${person.id}`}
               sx={{
-                fontWeight: "bold",
-                color: theme.palette.text.primary,
-                fontFamily: "'PT_Root_UI-Bold', Helvetica",
-                fontSize: 18,
+                color: kp.p.text,
+                textDecoration: "none",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                "&::after": { content: '""', position: "absolute", inset: 0, zIndex: 1 },
+                "&:focus-visible": { outline: "none", boxShadow: "none" },
+                "&:hover": { textDecoration: kp.isContrast ? "underline" : "none" },
               }}
             >
-              <Link
-                aria-label={person.name}
-                to={`/person/${table}/${person.id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                {person.name}
-              </Link>
+              {person.name}
+            </Box>
+          </Typography>
+          {person.books_count && (
+            <Typography variant="body2" sx={{ color: kp.p.textSecondary, mt: 0.5, fontSize: "0.9375rem" }}>
+              {parseInt(person.books_count, 10).toLocaleString("ru-RU")} {T("книг (число)")}
             </Typography>
-
-            {/* Stats with Icons (centered) */}
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <BookIcon sx={{ width: 18, height: 18, color: theme.palette.text.secondary }} />
-                <Typography
-                  sx={{
-                    color: theme.palette.text.primary,
-                    fontFamily: "'PT_Root_UI-Medium', Helvetica",
-                    fontWeight: 500,
-                    fontSize: 14,
-                  }}
-                >
-                  {person.books_count}
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <CommentIcon sx={{ width: 18, height: 18, color: theme.palette.text.secondary }} />
-                <Typography
-                  sx={{
-                    color: theme.palette.text.primary,
-                    fontFamily: "'PT_Root_UI-Medium', Helvetica",
-                    fontWeight: 500,
-                    fontSize: 14,
-                  }}
-                >
-                  {person.comments_count}
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <DownloadIcon sx={{ width: 18, height: 18, color: theme.palette.text.secondary }} />
-                <Typography
-                  sx={{
-                    color: theme.palette.text.primary,
-                    fontFamily: "'PT_Root_UI-Medium', Helvetica",
-                    fontWeight: 500,
-                    fontSize: 14,
-                  }}
-                >
-                  {person.downloads_count}
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Rating */}
-            <Box
-              role="img"
-              aria-label={T('Рейтинг') + ': 4.5 / 5'}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <Rating
-                aria-hidden="true"
-                value={4.5}
-                precision={0.1}
-                readOnly
-                sx={{
-                  "& .MuiRating-iconFilled": {
-                    color: "#F7C54D",
-                  },
-                  "& .MuiRating-iconEmpty": {
-                    color:
-                      theme.palette.mode === "dark"
-                        ? "rgba(255, 255, 255, 0.3)"
-                        : "#E9E9E9",
-                  },
-                }}
-              />
-              <Typography
-                aria-hidden="true"
-                sx={{
-                  ml: 1,
-                  fontWeight: "bold",
-                  color: theme.palette.text.primary,
-                  fontFamily: "'PT_Root_UI-Bold', Helvetica",
-                  fontSize: 16,
-                }}
-              >
-                4.5
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* Annotation */}
-          {person.annotation && (
-            <Box sx={{ position: "relative" }}>
-              {/* Invisible spacer for text wrapping */}
-              <Box
-                sx={{
-                  float: "right",
-                  width: 60,
-                  height: 60,
-                  shapeOutside: "inset(0 round 50%)",
-                }}
-              />
-              <Typography
-                sx={{
-                  color: theme.palette.text.secondary,
-                  fontFamily: "'PT_Root_UI-Regular', Helvetica",
-                  fontSize: 14,
-                  lineHeight: 1.5,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 4,
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
-                {person.annotation}
-              </Typography>
-            </Box>
           )}
         </Box>
-
-        {/* Bookmark Button */}
-        <IconButton
-          sx={{
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            width: 44,
-            height: 44,
-            color: theme.palette.text.secondary,
-            "&:hover": {
-              color: theme.palette.text.primary,
-            },
-          }}
-          tabIndex={-1}
-        >
-          <Bookmark sx={{ width: 28, height: 28 }} />
-        </IconButton>
       </Box>
-    </Card>
+
+      {person.annotation && (
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 2,
+            color: kp.p.textSecondary,
+            lineHeight: 1.5,
+            fontSize: "0.9375rem",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {String(person.annotation).replace(/<[^>]+>/g, " ").trim()}
+        </Typography>
+      )}
+    </Box>
   );
 };
 

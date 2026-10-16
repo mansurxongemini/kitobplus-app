@@ -1,181 +1,205 @@
-import React from 'react';
-import Navigation from '../parts/Navigation'
-import FooterSection from '../parts/FooterSection'
-import { Box, Breadcrumbs, Typography, Stack, IconButton } from "@mui/material";
-import { Link } from 'react-router-dom';
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import NewsSection from './NewsSection'
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Button, Skeleton, Alert, useTheme } from "@mui/material";
+import ArrowBackRounded from "@mui/icons-material/ArrowBackRounded";
+import ScheduleOutlined from "@mui/icons-material/ScheduleOutlined";
+import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import T from '../lib/translator';
-import { get, add } from '../lib/news.ts';
-import { useParams } from 'react-router-dom';
-import useLibrary from '../LibraryContext.js';
-import NewsModalGP from './NewsModalGP.jsx';
-import document from "./img/document.png";
-import { getHost } from '../lib/api.js';
-import { useRouteA11y } from '../lib/a11y';
+import { useParams, Link as RouterLink } from "react-router-dom";
+import PageShell from "../ds/components/PageShell";
+import Container from "../ds/components/Container";
+import NewsSection from "./NewsSection";
+import NewsModalGP from "./NewsModalGP";
+import useLibrary from "../LibraryContext";
+import { get } from "../lib/news";
+import { getHost } from "../lib/api";
+import T, { tr } from "../lib/translator";
 
 const NewsView = () => {
-    const params = useParams();
-    const [news, setNews] = React.useState();
-    const [error, setError] = React.useState();
-    const { user, isAdmin } = useLibrary();
-    const [editableNewsId, setEditableNewsId] = React.useState();
-    const [editNews, setEditNews] = React.useState(false);
+  const { id } = useParams();
+  const { kp } = useTheme();
+  const { isAdmin } = useLibrary();
+  const [news, setNews] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
 
-    const edit = (id) => {
-        setEditableNewsId(id);
-        setEditNews(true);
-    }
+  const load = () => {
+    if (!id) return;
+    setLoading(true);
+    get(Number(id), true)
+      .then((res) => {
+        if (res && res.data) {
+          setNews(res.data);
+        } else {
+          setError(tr("Ошибка"));
+        }
+      })
+      .catch((err) => {
+        setError(err.message || tr("Ошибка"));
+      })
+      .finally(() => setLoading(false));
+  };
 
-    useRouteA11y(news?.subject || T('Новости'));
+  useEffect(() => {
+    load();
+  }, [id]);
 
-    React.useEffect(() => {
-        if (!params?.id) return;
-        load();
-    }, [params]);
+  const pageTitle = (news && news.subject) || T("Новости");
 
-    const load = () => {
-        get(params?.id, true).then(_ => setNews(_.data));
-    };
-
-    return <>
-        <Navigation/>
-        {isAdmin && <NewsModalGP newsId={editableNewsId} onClose={() => setEditNews(false)} onSaveSuccess={() => {setEditNews(false); load();}} open={editNews} />}
-        <Box component="main" id="main_content" tabIndex={-1}>
-        <Box
+  return (
+    <PageShell title={pageTitle}>
+      <Container sx={{ py: { xs: 4, md: 7 } }}>
+        {/* Back Link "Barcha yangiliklar" */}
+        <Box sx={{ mb: { xs: 3, md: 4 } }}>
+          <Box
+            component={RouterLink}
+            to="/news"
             sx={{
-                width: "100%",
-                height: "44px",
-                position: "relative",
-                top: "12px",
-                bgcolor: "background.paper",
-                borderBottom: 1,
-                borderColor: "divider",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 1,
+              color: kp.p.primary,
+              fontWeight: 600,
+              fontSize: "1rem",
+              textDecoration: "none",
+              borderRadius: 2,
+              "&:hover": { textDecoration: "underline" },
+              "&:focus-visible": { outline: `3px solid ${kp.p.focus}`, outlineOffset: 4 },
             }}
-            >
-            <Breadcrumbs
-                sx={{ position: "relative", top: "6px", left: "32px" }}
-                separator={
-                <KeyboardArrowRight
-                    fontSize="small"
-                    sx={{ color: "text.secondary" }}
-                />
-                }
-            >
-                <Link
-                    color="text.secondary"
-                    style={{
-                        fontFamily: "'PT Root UI', Helvetica",
-                        fontWeight: 500,
-                        fontSize: "16px",
-                        textDecoration: 'none',
-                        color: '#333'
-                    }}
-                    to="/"
-                >
-                    {T('Главная')}
-                </Link>
-                <Link
-                    color="text.secondary"
-                    style={{
-                        fontFamily: "'PT Root UI', Helvetica",
-                        fontWeight: 500,
-                        fontSize: "16px",
-                        textDecoration: 'none',
-                        color: '#333'
-                    }}
-                    to="/news"
-                >
-                    {T('Новости')}
-                </Link>
-                <Typography
-                    color="text.secondary"
-                    sx={{
-                        fontFamily: "'PT Root UI', Helvetica",
-                        fontWeight: 500,
-                        fontSize: "16px",
-                        color: '#333'
-                    }}
-                >
-                {news?.subject}
-                </Typography>
-            </Breadcrumbs>
+          >
+            <ArrowBackRounded aria-hidden="true" sx={{ fontSize: 20 }} />
+            {T("Все новости")}
+          </Box>
         </Box>
-        
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            m: 3
-          }}
-        >
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-            <Box
-              component="img"
-              src={document}
-              alt=""
-              aria-hidden="true"
-              sx={{ width: 28, height: 28 }}
-            />
+
+        {loading ? (
+          <Box sx={{ maxWidth: 720, mx: "auto" }}>
+            <Skeleton width="40%" height={24} sx={{ mb: 2 }} />
+            <Skeleton width="90%" height={56} sx={{ mb: 2 }} />
+            <Skeleton variant="rounded" height={360} sx={{ borderRadius: 5, mb: 4 }} />
+            <Skeleton width="100%" height={24} sx={{ mb: 1 }} />
+            <Skeleton width="100%" height={24} sx={{ mb: 1 }} />
+            <Skeleton width="80%" height={24} />
+          </Box>
+        ) : error ? (
+          <Alert severity="error" role="alert" sx={{ maxWidth: 720, mx: "auto" }}>
+            {error}
+          </Alert>
+        ) : news ? (
+          <Box component="article">
+            {/* Header column max-width 720px */}
+            <Box sx={{ maxWidth: 720, mx: "auto" }}>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: "clamp(2rem, 1.5rem + 2vw, 3rem)",
+                  fontWeight: 800,
+                  lineHeight: 1.25,
+                  letterSpacing: "-0.02em",
+                  m: 0,
+                }}
+              >
+                {news.subject}
+              </Typography>
+
+              <Box
+                sx={{
+                  mt: 2,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 2,
+                  color: kp.p.textSecondary,
+                  fontSize: "0.9375rem",
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
+                    <ScheduleOutlined aria-hidden="true" sx={{ fontSize: 18 }} />
+                    <time dateTime={String(news.datetime || "").replace(" ", "T")}>
+                      {news.datetime_str || news.datetime}
+                    </time>
+                  </Box>
+                  {news.views !== undefined && news.views !== null && (
+                    <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
+                      <VisibilityOutlined aria-hidden="true" sx={{ fontSize: 18 }} />
+                      <span>{news.views}</span>
+                    </Box>
+                  )}
+                </Box>
+
+                {isAdmin && (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<EditNoteIcon />}
+                    onClick={() => setEditOpen(true)}
+                  >
+                    {T("Редактировать новость")}
+                  </Button>
+                )}
+              </Box>
+
+              {news.pics_ext && (
+                <Box
+                  sx={{
+                    mt: 4,
+                    borderRadius: 5,
+                    overflow: "hidden",
+                    bgcolor: kp.p.surfaceSunken,
+                    border: kp.isContrast ? `2px solid ${kp.p.border}` : `1px solid ${kp.p.border}`,
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={`${getHost()}/pics/news/${news.id}.${news.pics_ext}`}
+                    alt=""
+                    sx={{ width: "100%", maxHeight: 460, objectFit: "cover", display: "block" }}
+                  />
+                </Box>
+              )}
+
+              {/* Readable body text column max-width 720px */}
+              <Typography
+                sx={{
+                  mt: 4,
+                  fontSize: { xs: "1.0625rem", md: "1.1875rem" },
+                  lineHeight: 1.75,
+                  color: kp.p.text,
+                  whiteSpace: "pre-line",
+                  wordBreak: "break-word",
+                }}
+              >
+                {news.body}
+              </Typography>
             </Box>
-            <Typography
-              variant="h2"
-              component="h1"
-              color="secondary.main"
-              sx={{
-                fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                fontWeight: "bold",
-              }}
-            >
-              {news?.subject}
-            </Typography>
-            
-            {isAdmin && <IconButton
-              sx={{
-                width: 40,
-                height: 40,
 
-                borderRadius: 1,
-              }}
-              onClick={() => edit(news?.id)}
-              aria-label={T('Редактировать новость')}
-            >
-              <EditNoteIcon sx={{ }} />
-            </IconButton>}
-          </Stack>
-          <Stack direction="row" spacing={2} alignItems="center">
-            {news?.datetime_str}, {T('Просмотров').toLowerCase() + ' ' + news?.views}
-          </Stack>
-        </Box>
-        <Stack direction="row" spacing={2} ml={4} mr={4} style={{flex:1}} >
-            <Box
-                component="img"
-                height="200"                
-                src={getHost() + '/pics/' + (news?.pics_ext ? 'news/' + news?.id + '.' + news?.pics_ext : 'news.png')}
-                alt={news?.subject}
-                sx={{ objectFit: "cover" }}
-                style={{width: '50%'}}
-            />
-            <Typography>
-                {news?.body}
-            </Typography>
-        </Stack>
+            {/* Other news section */}
+            <Box sx={{ mt: { xs: 8, md: 12 }, pt: { xs: 6, md: 8 }, borderTop: `1px solid ${kp.p.border}` }}>
+              <NewsSection
+                title={T("Другие новости")}
+                per_page={3}
+                exclude={Number(id)}
+              />
+            </Box>
+          </Box>
+        ) : null}
+      </Container>
 
-        <NewsSection per_page={4} title={'Другие новости'} exclude={params?.id} />
-        </Box>
-        <FooterSection/>
-    </>
-}
+      {isAdmin && news && (
+        <NewsModalGP
+          newsId={news.id}
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          onSaveSuccess={() => {
+            setEditOpen(false);
+            load();
+          }}
+        />
+      )}
+    </PageShell>
+  );
+};
 
 export default NewsView;

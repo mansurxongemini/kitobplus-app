@@ -1,127 +1,91 @@
-import AccessibilityIcon from "@mui/icons-material/Accessibility";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
 import React from "react";
-import hf404 from "./img/404.png"
-import { ThemeProvider404 } from "./ThemeProvider404";
-import { useNavigate } from "react-router-dom";
-import Navigation from "./parts/Navigation.jsx";
-import FooterSection from "./parts/FooterSection.jsx";
-import T from "./lib/translator.js";
+import { Box, Typography, Button, useTheme } from "@mui/material";
+import HomeRounded from "@mui/icons-material/HomeRounded";
+import AutoStoriesOutlined from "@mui/icons-material/AutoStoriesOutlined";
+import { Link as RouterLink } from "react-router-dom";
+import PageShell from "./ds/components/PageShell";
+import Container from "./ds/components/Container";
+import hf404 from "./img/404.png";
+import T from "./lib/translator";
 
-const Element = () => {
-  const navigate = useNavigate()
-
-  // Navigation menu items
-  const navItems = [
-    { title: "Главная", path: "/" },
-    { title: "О нас", path: "/about" },
-    { title: "Аудиокниги", path: "/audiobooks" },
-    { title: "Гостевая книга", path: "/guestbook" },
-    { title: "Контакты", path: "/contacts" },
-  ];
-
-  // Top bar items
-  const topBarItems = [
-    { title: "Русский", path: "/language", align: "left" },
-    { title: "Книжная полка", path: "/bookshelf", align: "right" },
-    { title: "Вход / Регистрация", path: "/login", align: "right" },
-  ];
+const NotFound = () => {
+  const { kp } = useTheme();
 
   return (
-    <>
-      <Navigation/>    
-      <ThemeProvider404>
-      <Box
+    <PageShell title={T("Страница не найдена")}>
+      <Container
         sx={{
-          bgcolor: "background.default",
+          py: { xs: 8, md: 12 },
           display: "flex",
-          justifyContent: "center",
-          width: "100%",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <Box
+          component="img"
+          src={hf404}
+          alt=""
+          aria-hidden="true"
           sx={{
-            bgcolor: "background.default",
-            position: "relative",
             width: "100%",
-            maxWidth: 1440,
+            maxWidth: 360,
+            height: "auto",
+            mb: 4,
+            filter: kp.isContrast ? "invert(1)" : "none",
+          }}
+        />
+
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: "clamp(2rem, 1.5rem + 2vw, 3rem)",
+            fontWeight: 800,
+            letterSpacing: "-0.02em",
+            mb: 2,
           }}
         >
-          {/* 404 Content */}
-          <Container
-            sx={{
-              pt: 2,
-              pb: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+          {T("Страница не найдена")}
+        </Typography>
+
+        <Typography
+          sx={{
+            color: kp.p.textSecondary,
+            fontSize: { xs: "1.0625rem", md: "1.1875rem" },
+            maxWidth: 580,
+            lineHeight: 1.6,
+            mb: 5,
+          }}
+        >
+          {T(
+            "Приносим свои извинения, эта ссылка недействительна, но вы можете перейти к другим разделам сайта."
+          )}
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
+          <Button
+            component={RouterLink}
+            to="/"
+            variant="contained"
+            size="large"
+            startIcon={<HomeRounded aria-hidden="true" />}
           >
-            <Box sx={{ position: "relative", width: 622, height: 346, mb: 4 }}>
-              {/* 404 with headphones image */}
-              <Box
-                component="img"
-                src={hf404}
-                alt=""
-                aria-hidden="true"
-                sx={{ width: "100%", height: "100%" }}
-              />
-            </Box>
+            {T("Главная")}
+          </Button>
 
-            <Typography
-              variant="h1"
-              sx={{
-                fontFamily: "'PT_Root_UI-Bold', Helvetica",
-                fontWeight: 700,
-                color: "text.primary",
-                textAlign: "center",
-                mb: 2,
-              }}
-            >
-              {T('Страница не найдена')}
-            </Typography>
-
-            <Typography
-              variant="body1"
-              sx={{
-                fontFamily: "'PT_Root_UI-Medium', Helvetica",
-                color: "text.secondary",
-                textAlign: "center",
-                maxWidth: 582,
-                mb: 6,
-              }}
-            >
-              {T('Приносим свои извинения, эта ссылка недействительна, но вы можете перейти к другим разделам сайта.')}
-            </Typography>
-
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                bgcolor: "lightBlue.main",
-                color: "primary.main",
-                width: 277,
-                height: 56,
-              }}
-              onClick={() => navigate('/')}
-            >
-              {T('Вернуться на главную')}
-            </Button>
-          </Container>
+          <Button
+            component={RouterLink}
+            to="/books"
+            variant="outlined"
+            size="large"
+            startIcon={<AutoStoriesOutlined aria-hidden="true" />}
+          >
+            {T("Каталог")}
+          </Button>
         </Box>
-      </Box>
-      </ThemeProvider404>
-      <FooterSection/>
-    </>
+      </Container>
+    </PageShell>
   );
 };
 
-export default Element;
+export default NotFound;

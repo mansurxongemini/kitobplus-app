@@ -3,7 +3,7 @@ import { Box, Grid, Stack, CircularProgress, Typography } from "@mui/material";
 import PersonCard from "./PersonCard";
 import PersonCardGrid from "./PersonCardGrid";
 import { getPersons } from "../lib/persons.ts";
-import T from "../lib/translator";
+import T, { tr } from "../lib/translator";
 import Filter from "../parts/Filter.jsx";
 
 const PersonsSection = ({ table, sort, viewMode}) => {
@@ -23,11 +23,11 @@ const PersonsSection = ({ table, sort, viewMode}) => {
         if (response.success) {
           setPersons(response.data);
         } else {
-          setError(T("Не удалось загрузить данные"));
+          setError(tr("Не удалось загрузить данные"));
         }
       } catch (err) {
         console.error("Error fetching persons:", err);
-        setError(T("Ошибка загрузки данных"));
+        setError(tr("Ошибка загрузки данных"));
       } finally {
         setLoading(false);
       }

@@ -1,234 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Grid, Typography, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { getHost } from '../lib/api';
-import T from '../lib/translator';
+import React, { useState } from "react";
+import { Box, Typography, Skeleton, Alert, useTheme } from "@mui/material";
+import AutoStoriesOutlined from "@mui/icons-material/AutoStoriesOutlined";
+import { Link as RouterLink } from "react-router-dom";
+import useSWR from "swr";
+import Container from "../ds/components/Container";
+import { getHost } from "../lib/api";
+import T from "../lib/translator";
 
-const GenresView = () => {
-  const navigate = useNavigate();
-  const [genres, setGenres] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const fetchJson = (url) => fetch(url).then((r) => r.json());
 
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(getHost() + "/srv/genres.php?sort=popular");
-        const data = await response.json();
-        
-        if (data && data.data) {
-          setGenres(data.data);
-        } else {
-          setError('Не удалось загрузить жанры');
-        }
-      } catch (err) {
-        setError('Ошибка при загрузке жанров: ' + err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGenres();
-  }, []);
-
-  const formatDate = (dateString) => {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('ru-RU');
-    } catch {
-      return dateString;
-    }
-  };
-
-  const formatNumber = (num) => {
-    return parseInt(num).toLocaleString('ru-RU');
-  };
-
-  const navigateToGenre = (genreId) => {
-    navigate(`/person/genres/${genreId}`);
-  };
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ textAlign: 'center', py: 8 }}>
-        <Typography color="error" variant="h6">
-          {error}
-        </Typography>
-      </Box>
-    );
-  }
+const GenreTile = ({ genre }) => {
+  const { kp } = useTheme();
+  const [imgFailed, setImgFailed] = useState(false);
+  const iconSrc = `${getHost()}/pics/genres.flat/${genre.id}.png`;
 
   return (
-    <Box sx={{ width: "100%", py: 4 }}>
-      <Box sx={{ maxWidth: 1200, mx: "auto", px: 2 }}>
+    <Box
+      component={RouterLink}
+      to={`/person/genres/${genre.id}`}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 2,
+        p: 2.5,
+        minHeight: 112,
+        borderRadius: 4,
+        textDecoration: "none",
+        bgcolor: kp.p.surface,
+        border: `1px solid ${kp.p.border}`,
+        color: kp.p.text,
+        boxShadow: kp.shadows.card,
+        transition: "transform .25s, box-shadow .25s, border-color .25s",
+        "&:hover": {
+          transform: kp.isContrast ? "none" : "translateY(-3px)",
+          boxShadow: kp.shadows.raised,
+          borderColor: kp.p.primary,
+        },
+        "&:focus-visible": {
+          outline: `3px solid ${kp.p.focus}`,
+          outlineOffset: 3,
+        },
+      }}
+    >
+      <Box
+        aria-hidden="true"
+        sx={{
+          width: 56,
+          height: 56,
+          borderRadius: 3,
+          display: "grid",
+          placeItems: "center",
+          flexShrink: 0,
+          bgcolor: kp.isContrast ? "transparent" : kp.p.primarySoft,
+          color: kp.p.onPrimarySoft,
+          border: kp.isContrast ? `2px solid ${kp.p.border}` : "none",
+          overflow: "hidden",
+        }}
+      >
+        {!imgFailed ? (
+          <Box
+            component="img"
+            src={iconSrc}
+            alt=""
+            onError={() => setImgFailed(true)}
+            sx={{ width: 34, height: 34, objectFit: "contain", display: "block" }}
+          />
+        ) : (
+          <AutoStoriesOutlined sx={{ fontSize: 28 }} />
+        )}
+      </Box>
+      <Box sx={{ minWidth: 0, flex: 1 }}>
         <Typography
-          variant="h4"
-          component="h1"
-          color="secondary.main"
-          fontFamily="'PT_Root_UI-Bold',Helvetica"
-          fontWeight="bold"
-          mb={4}
-          textAlign="center"
+          component="span"
+          sx={{
+            display: "block",
+            fontFamily: "'Manrope Variable', sans-serif",
+            fontWeight: 700,
+            fontSize: "1.125rem",
+            lineHeight: 1.3,
+            color: kp.p.text,
+          }}
         >
-          {T('Все жанры библиотеки')}
+          {genre.name}
         </Typography>
-
-        <Grid container spacing={3}>
-          {genres.map((genre) => {
-            const ariaLabel = `${genre.name}, ${T('Книг')}: ${formatNumber(genre.books_count)}, ${T('Загрузок')}: ${formatNumber(genre.downloads_count)}. ${T('Обновлено')}: ${formatDate(genre.updated)}`;
-            
-            return (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={genre.id}>
-                <Card
-                  tabIndex={0}
-                  role="button"
-                  aria-label={ariaLabel}
-                  sx={{
-                    height: 280,
-                    bgcolor: "background.paper",
-                    borderRadius: 2,
-                    boxShadow: "0px 4px 24px rgba(38, 38, 38, 0.07)",
-                    border: "1px solid",
-                    borderColor: "neutral.100",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      boxShadow: "0px 8px 32px rgba(38, 38, 38, 0.15)",
-                      transform: "translateY(-2px)",
-                    },
-                    "&:focus": {
-                      outline: "2px solid",
-                      outlineColor: "primary.main",
-                      outlineOffset: "2px",
-                    },
-                    "&:focus-visible": {
-                      outline: "2px solid",
-                      outlineColor: "primary.main",
-                      outlineOffset: "2px",
-                    }
-                  }}
-                  onClick={() => navigateToGenre(genre.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      navigateToGenre(genre.id);
-                    }
-                  }}
-                >
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      p: 2,
-                      height: "100%",
-                    }}
-                  >
-                    {/* Иконка жанра */}
-                    <Box
-                      sx={{
-                        width: 80,
-                        height: 80,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        mb: 1,
-                        borderRadius: 1,
-                        bgcolor: "rgba(2, 163, 184, 0.05)",
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        src={getHost() + '/pics/genres.flat/' + genre.id + '.png'}
-                        alt=""
-                        sx={{ 
-                          maxWidth: 64, 
-                          maxHeight: 64,
-                          objectFit: "contain"
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </Box>
-
-                    {/* Название жанра */}
-                    <Typography
-                      variant="h6"
-                      color="secondary.main"
-                      textAlign="center"
-                      sx={{ 
-                        mb: 1,
-                        fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                        fontWeight: "bold",
-                        fontSize: "18px",
-                        lineHeight: "24px",
-                        minHeight: "48px",
-                        display: "flex",
-                        alignItems: "center"
-                      }}
-                    >
-                      {genre.name}
-                    </Typography>
-
-                    {/* Статистика */}
-                    <Box sx={{ width: "100%", mt: "auto" }}>
-                      <Box sx={{ mb: 1 }}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            fontFamily: "'PT_Root_UI-Medium',Helvetica",
-                            fontSize: "14px",
-                          }}
-                        >
-                          {T('Книг')}: <strong>{formatNumber(genre.books_count)}</strong>
-                        </Typography>
-                      </Box>
-                      
-                      <Box sx={{ mb: 1 }}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            fontFamily: "'PT_Root_UI-Medium',Helvetica",
-                            fontSize: "14px",
-                          }}
-                        >
-                          {T('Загрузок')}: <strong>{formatNumber(genre.downloads_count)}</strong>
-                        </Typography>
-                      </Box>
-
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            fontFamily: "'PT_Root_UI-Medium',Helvetica",
-                            fontSize: "12px",
-                          }}
-                        >
-                          {T('Обновлено')}: {formatDate(genre.updated)}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
+        {genre.books_count && (
+          <Typography
+            variant="body2"
+            sx={{
+              color: kp.p.textSecondary,
+              mt: 0.5,
+              fontSize: "0.9375rem",
+            }}
+          >
+            {parseInt(genre.books_count, 10).toLocaleString("ru-RU")} {T("книг (число)")}
+          </Typography>
+        )}
       </Box>
     </Box>
+  );
+};
+
+const GenresView = () => {
+  const { data, error, isLoading } = useSWR(`${getHost()}/srv/genres.php?sort=popular`, fetchJson);
+  const genres = (data && data.data) || [];
+
+  return (
+    <Container sx={{ py: { xs: 4, md: 6 } }}>
+      {error && (
+        <Alert severity="error" role="alert" sx={{ mb: 4 }}>
+          {T("Ошибка")}
+        </Alert>
+      )}
+      <Box
+        component="ul"
+        aria-label={T("Жанры")}
+        aria-busy={isLoading ? "true" : undefined}
+        sx={{
+          listStyle: "none",
+          m: 0,
+          p: 0,
+          display: "grid",
+          gap: 2.5,
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          },
+        }}
+      >
+        {isLoading
+          ? Array.from({ length: 12 }).map((_, i) => (
+              <li key={i}>
+                <Skeleton variant="rounded" height={112} sx={{ borderRadius: 4 }} />
+              </li>
+            ))
+          : genres.map((genre) => (
+              <li key={genre.id}>
+                <GenreTile genre={genre} />
+              </li>
+            ))}
+      </Box>
+    </Container>
   );
 };
 

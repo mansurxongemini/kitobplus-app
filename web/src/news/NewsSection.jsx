@@ -1,301 +1,182 @@
-import React from 'react';
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArticleIcon from "@mui/icons-material/Article";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Stack,
-  Typography,
-  IconButton
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import T from '../lib/translator';
-import { request, getHost } from '../lib/api';
-import { list } from '../lib/news.ts';
-import useLibrary from '../LibraryContext.js';
-import document from "./img/document.png";
-import NewsModalGP from './NewsModalGP.jsx';
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Skeleton, useTheme } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { list } from "../lib/news";
+import { getHost } from "../lib/api";
+import T from "../lib/translator";
 
-// Since we can't use local imports, we'll use the image paths as they were
-//const document = "/document.png";
-const group3 = "/group-3.png";
-const rectangle2 = "/rectangle-2.png";
-const rectangle22 = "/rectangle-2-2.png";
-const rectangle23 = "/rectangle-2-3.png";
-const rectangle24 = "/rectangle-2-4.png";
+export const NewsCard = ({ item, headingLevel = "h3" }) => {
+  const { kp } = useTheme();
 
-const newsData = [
-  {
-    id: 1,
-    title: "Робин Шарма и «Монах, который продал свой Феррари»",
-    description:
-      "Робин Шарма, в настоящее время, один из лидеров в списке ТОП-бизнес-тренеров мировог...",
-    image: rectangle23,
-    time: "17:23 сегодня",
-    views: "23",
-  },
-  {
-    id: 2,
-    title: "«Он был бы горд»: посмертная книга Брайанта стала бестселл...",
-    description:
-      "Созданная баскетболистом Коби Брайантом книга для детей стала бестселлером спустя неделю по...",
-    image: rectangle22,
-    time: "17:23 сегодня",
-    views: "23",
-  },
-  {
-    id: 3,
-    title: "Михаил Лабковский рассказал про свою новую книгу в новых ...",
-    description:
-      "Психолог Михаил Лабковский абсолютно уверен, что человек может и имеет право быть счаст...",
-    image: rectangle2,
-    time: "17:23 сегодня",
-    views: "23",
-    hasReadMore: true,
-  },
-  {
-    id: 4,
-    title: 'Стало известно, когда выйдет новый роман Пауло Коэльо "Лу...',
-    description:
-      'Новый роман бразильского писателя Пауло Коэльо "Лучник", затрагивающий вопрос осмысл...',
-    image: rectangle24,
-    time: "17:23 сегодня",
-    views: "23",
-  },
-];
+  return (
+    <Box
+      component="article"
+      sx={{
+        position: "relative",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        p: 3.5,
+        borderRadius: 5,
+        bgcolor: kp.p.surface,
+        border: `1px solid ${kp.p.border}`,
+        boxShadow: kp.shadows.card,
+        transition: "box-shadow .25s, transform .25s, border-color .25s",
+        "&:hover": {
+          boxShadow: kp.shadows.raised,
+          transform: kp.isContrast ? "none" : "translateY(-3px)",
+          borderColor: kp.p.primary,
+        },
+        "&:focus-within": {
+          outline: `3px solid ${kp.p.focus}`,
+          outlineOffset: 3,
+        },
+      }}
+    >
+      {item.pics_ext && (
+        <Box
+          sx={{
+            mb: 2.5,
+            borderRadius: 3,
+            overflow: "hidden",
+            height: 180,
+            bgcolor: kp.p.surfaceSunken,
+            border: kp.isContrast ? `1px solid ${kp.p.border}` : "none",
+          }}
+        >
+          <Box
+            component="img"
+            src={`${getHost()}/pics/news/${item.id}.${item.pics_ext}`}
+            alt=""
+            sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            onError={(e) => {
+              e.currentTarget.parentElement.style.display = "none";
+            }}
+          />
+        </Box>
+      )}
 
-const NewsSection = ({title, exclude = 0, per_page = 0}) => {
-  const [news, setNews] = React.useState();
-  const { user, isAdmin } = useLibrary();
-  const [editableNewsId, setEditableNewsId] = React.useState();
-  const [editNews, setEditNews] = React.useState(false);
-  const [currentExclude, setCurrentExclude] = React.useState(null);
+      <Typography component="p" variant="body2" sx={{ color: kp.p.textSecondary, mb: 1.25 }}>
+        <time dateTime={String(item.datetime || "").replace(" ", "T")}>
+          {item.datetime_str || item.datetime}
+        </time>
+      </Typography>
 
-  React.useEffect(() => {    
-    if ((currentExclude && currentExclude != exclude) || news !== undefined || news === null) return;
-    
-    setNews(null);
-    setCurrentExclude(exclude);
+      <Typography
+        component={headingLevel}
+        sx={{
+          fontFamily: "'Manrope Variable', sans-serif",
+          fontWeight: 700,
+          fontSize: "1.25rem",
+          lineHeight: 1.35,
+          letterSpacing: "-0.01em",
+          m: 0,
+        }}
+      >
+        <Box
+          component={RouterLink}
+          to={`/news/${item.id}`}
+          sx={{
+            color: kp.p.text,
+            textDecoration: "none",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            "&::after": { content: '""', position: "absolute", inset: 0, zIndex: 1 },
+            "&:focus-visible": { outline: "none", boxShadow: "none" },
+            "&:hover": { textDecoration: kp.isContrast ? "underline" : "none" },
+          }}
+        >
+          {item.subject}
+        </Box>
+      </Typography>
 
-    console.log("start news loading");
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 1.5,
+          color: kp.p.textSecondary,
+          lineHeight: 1.6,
+          fontSize: "0.9375rem",
+          display: "-webkit-box",
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
+      >
+        {String(item.body || "").replace(/<[^>]+>/g, " ")}
+      </Typography>
+    </Box>
+  );
+};
 
-    list(0, per_page, exclude).then(_ => {
-      console.log("news loaded");
-      console.log(_);
-      if (_.news) {
-        setNews(_.news);
-      }
-    });
-  }, [news, per_page, exclude]);
+const NewsSection = ({ title, exclude = 0, per_page = 0, hideHeader = false, onReloadRef }) => {
+  const [items, setItems] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const edit = (id) => {
-    setEditableNewsId(id);
-    setEditNews(true);
+  const load = () => {
+    setLoading(true);
+    list(0, per_page, exclude)
+      .then((res) => {
+        if (res && res.news) {
+          setItems(res.news);
+        } else {
+          setItems([]);
+        }
+      })
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    load();
+  }, [per_page, exclude]);
+
+  if (onReloadRef) {
+    onReloadRef.current = load;
+  }
+
+  if (!loading && items && items.length === 0) {
+    return null;
   }
 
   return (
-    news && <Box sx={{ width: "100%", py: 8 }}>
-      <Box sx={{ maxWidth: 1193, mx: "auto" }}>
-        {/*isAdmin && <NewsModalDS newsId={editableNewsId} onClose={() => setNews(undefined)} open={editNews} />*/}
-        {isAdmin && <NewsModalGP newsId={editableNewsId} onClose={() => setEditNews(false)} onSaveSuccess={() => {setEditNews(false); setNews(undefined);}} open={editNews} />}
-        {/* Header section */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 5,
-          }}
-        >
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-            <Box
-              component="img"
-              src={document}
-              alt=""
-              aria-hidden="true"
-              sx={{ width: 28, height: 28 }}
-            />
-            </Box>
-            <Typography
-              variant="h2"
-              color="secondary.main"
-              sx={{
-                fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                fontWeight: "bold",
-              }}
-            >
-              {T(title ?? 'Новости')}
-            </Typography>
-            
-            {isAdmin && <IconButton
-              sx={{
-                width: 40,
-                height: 40,
+    <Box sx={{ width: "100%" }}>
+      {!hideHeader && title && (
+        <Typography variant="h2" component="h2" sx={{ mb: 4 }}>
+          {title}
+        </Typography>
+      )}
 
-                borderRadius: 1,
-              }}
-              onClick={() => edit(0)}
-              aria-label={T('Добавить новость')}
-            >
-              <PostAddIcon sx={{ }} />
-            </IconButton>}
-          </Stack>
-          
-          {per_page != 0 && <Link to="/news" style={{color: "inherit", textDecoration: 'none'}}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              href="#"
-            >
-              <Typography
-                color="secondary.main"
-                sx={{
-                  fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                  fontWeight: "bold",
-                }}
-              >
-                {T('Все новости')}
-              </Typography>
-              <ArrowForwardIcon color="secondary" />
-            </Stack>
-          </Link>}
-        </Box>
-
-        {/* News cards */}
-        <Grid container style={{display: 'flex', justifyContent: 'space-between'}} spacing={0}>
-          {news.map((news) => (
-            <Grid item key={news.id} sx={{ width: 276 }}>
-              <Card
-                sx={{
-                  width: 276,
-                  height: 411,
-                  borderRadius: 0,
-                  border: "1px solid",
-                  borderColor: 'transparent',
-                  '&:hover': {
-                    boxShadow: "0px 4px 30px rgba(38, 38, 38, 0.1)",
-                    borderColor: "neutral.100",
-                  }
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="200"
-                  src={getHost() + '/pics/' + (news.pics_ext ? 'news/' + news.id + '.' + news.pics_ext : 'news.png')}
-                  alt={news.subject}
-                  sx={{ objectFit: "cover" }}
-                />
-                <CardContent sx={{ p: 0 }}>
-                  <Box sx={{ px: 1.5 }}>
-                    {/* Time and views */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        mt: 1.5,
-                        mb: 2,
-                      }}
-                    >
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <AccessTimeIcon
-                          sx={{ width: 16, height: 16, color: "neutral.200" }}
-                        />
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            color: "#adacae",
-                            fontFamily: "'PT_Root_UI-Medium',Helvetica",
-                          }}
-                        >
-                          {news.datetime_str}
-                        </Typography>
-                      </Stack>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            color: "#adacae",
-                            fontFamily: "'PT_Root_UI-Medium',Helvetica",
-                          }}
-                        >
-                          {news.views}
-                        </Typography>
-                        <VisibilityIcon
-                          sx={{ width: 16, height: 16, color: "neutral.200" }}
-                        />
-                      </Stack>
-                    </Box>
-
-                    {/* Title */}
-                    <Typography
-                      variant="h5"
-                      color="secondary.main"
-                      sx={{
-                        mb: 1.5,
-                        fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {news.subject}
-                    </Typography>
-
-                    {/* Description */}
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        color: "rgba(38, 38, 38, 0.8)",
-                        fontFamily: "'PT_Root_UI-Regular',Helvetica",
-                      }}
-                    >
-                      {news.body}
-                    </Typography>
-
-                    {/* Read more button for the third card */}
-                    <Link to={"/news/" + news.id} style={{textDecoration: 'none'}} aria-label={news.subject + ', ' + news.datetime_str + ', ' + T('Просмотров') + ' ' + news.views}>
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
-                        sx={{ mt: 2, cursor: "pointer" }}
-                      >
-                        <Typography
-                          variant="subtitle1"
-                          color="primary.main"
-                          sx={{
-                            fontFamily: "'PT_Root_UI-Bold',Helvetica",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {T('Подробнее')}
-                        </Typography>
-                        <ArrowForwardIcon
-                          color="primary"
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      </Stack>
-                    </Link>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+      <Box
+        component="ul"
+        aria-label={title || T("Новости")}
+        aria-busy={loading ? "true" : undefined}
+        sx={{
+          listStyle: "none",
+          m: 0,
+          p: 0,
+          display: "grid",
+          gap: 3,
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+          },
+        }}
+      >
+        {loading
+          ? Array.from({ length: per_page || 6 }).map((_, i) => (
+              <li key={i}>
+                <Skeleton variant="rounded" height={260} sx={{ borderRadius: 5 }} />
+              </li>
+            ))
+          : (items || []).map((item) => (
+              <li key={item.id}>
+                <NewsCard item={item} />
+              </li>
+            ))}
       </Box>
     </Box>
   );

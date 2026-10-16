@@ -1,158 +1,201 @@
-import { Avatar, Box, Divider, Stack, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import personBg from './img/bg.png'
+import React, { useState } from "react";
+import { Box, Typography, Avatar, Skeleton, useTheme } from "@mui/material";
+import AutoStoriesOutlined from "@mui/icons-material/AutoStoriesOutlined";
+import Container from "../ds/components/Container";
+import BreadcrumbsSection from "./BreadcrumbsSection";
+import { getHost } from "../lib/api";
+import { getInitials } from "../persons/PersonCard";
 import T from "../lib/translator";
 
-const PersonBanner = ({userData, loading, error, setError}) => {
+export const GenreHeaderIcon = ({ id }) => {
+  const { kp } = useTheme();
+  const [failed, setFailed] = useState(false);
+  const src = `${getHost()}/pics/genres.flat/${id}.png`;
+
+  return (
+    <Box
+      aria-hidden="true"
+      sx={{
+        width: { xs: 72, md: 88 },
+        height: { xs: 72, md: 88 },
+        borderRadius: 4,
+        display: "grid",
+        placeItems: "center",
+        flexShrink: 0,
+        bgcolor: kp.isContrast ? "transparent" : kp.p.primarySoft,
+        color: kp.isContrast ? kp.p.primary : kp.p.onPrimarySoft,
+        border: kp.isContrast ? `2px solid ${kp.p.border}` : "none",
+        overflow: "hidden",
+      }}
+    >
+      {!failed ? (
+        <Box
+          component="img"
+          src={src}
+          alt=""
+          onError={() => setFailed(true)}
+          sx={{ width: 44, height: 44, objectFit: "contain", display: "block" }}
+        />
+      ) : (
+        <AutoStoriesOutlined sx={{ fontSize: 40 }} />
+      )}
+    </Box>
+  );
+};
+
+export const PersonHeaderAvatar = ({ name, picsExt, table, id }) => {
+  const { kp } = useTheme();
+  const [failed, setFailed] = useState(false);
+  const initials = getInitials(name);
+  const avatarUrl = picsExt ? `${getHost()}/pics/${table}/${id}.${picsExt}` : null;
+
+  if (avatarUrl && !failed) {
+    return (
+      <Avatar
+        src={avatarUrl}
+        alt=""
+        onError={() => setFailed(true)}
+        sx={{
+          width: { xs: 72, md: 88 },
+          height: { xs: 72, md: 88 },
+          border: kp.isContrast ? `2px solid ${kp.p.border}` : `1px solid ${kp.p.border}`,
+          flexShrink: 0,
+        }}
+      />
+    );
+  }
+
+  return (
+    <Box
+      aria-hidden="true"
+      sx={{
+        width: { xs: 72, md: 88 },
+        height: { xs: 72, md: 88 },
+        borderRadius: "50%",
+        display: "grid",
+        placeItems: "center",
+        bgcolor: kp.isContrast ? "transparent" : kp.p.primarySoft,
+        color: kp.isContrast ? kp.p.primary : kp.p.onPrimarySoft,
+        border: kp.isContrast ? `2px solid ${kp.p.border}` : `1px solid ${kp.p.border}`,
+        fontFamily: "'Manrope Variable', sans-serif",
+        fontWeight: 800,
+        fontSize: { xs: "1.75rem", md: "2.25rem" },
+        letterSpacing: "0.02em",
+        flexShrink: 0,
+      }}
+    >
+      {initials}
+    </Box>
+  );
+};
+
+const PersonBanner = ({ userData, table, id, loading }) => {
+  const { kp } = useTheme();
+
   if (loading) {
     return (
       <Box
         sx={{
-          width: "100%",
-          height: 112,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 1,
-          bgcolor: "#f5f5f5",
+          bgcolor: kp.isContrast ? kp.p.bg : kp.p.surfaceAlt,
+          borderBottom: `1px solid ${kp.p.border}`,
+          py: { xs: 4, md: 6 },
         }}
       >
-        <Typography>{T('Загрузка...')}</Typography>
+        <Container>
+          <Skeleton width={200} height={24} sx={{ mb: 2 }} />
+          <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
+            <Skeleton variant="circular" width={88} height={88} />
+            <Box sx={{ flex: 1 }}>
+              <Skeleton width="50%" height={48} />
+              <Skeleton width="30%" height={24} sx={{ mt: 1 }} />
+            </Box>
+          </Box>
+        </Container>
       </Box>
     );
   }
 
-  if (!userData) {
-    return null;
-  }
+  const name = (userData && (userData.name || userData.title)) || "";
+  const booksCount = userData && userData.books_count;
+  const rawAnnotation = (userData && userData.annotation) || "";
+  const annotation = rawAnnotation ? String(rawAnnotation).replace(/<[^>]+>/g, " ").trim() : "";
 
-  console.log(userData);
-  
   return (
     <Box
       sx={{
-        width: "100%",
-        height: 112, // 28*4=112px
-        position: "relative",
-        borderRadius: 1,
-        overflow: "hidden",
-        backgroundImage: `url(${personBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
+        bgcolor: kp.isContrast ? kp.p.bg : kp.p.surfaceAlt,
+        borderBottom: `1px solid ${kp.p.border}`,
+        py: { xs: 4, md: 6 },
       }}
     >
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{
-          height: "100%",
-          position: "relative",
-          zIndex: 1,
-          p: 2,
-        }}
-      >
-        {/* Avatar */}
-        <Avatar
-          src={userData.avatarUrl}
-          alt={userData.name}
-          sx={{
-            width: 76,
-            height: 76,
-            my: "auto",
-          }}
-        />
+      <Container>
+        <BreadcrumbsSection table={table} name={name} />
 
-        {/* User info */}
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            gap: { xs: 2.5, md: 4 },
+            alignItems: "flex-start",
+            flexDirection: { xs: "column", sm: "row" },
           }}
         >
-          <Typography
-            variant="h6"
-            component="h1"
-            sx={{
-              fontWeight: "bold",
-              color: "#F9FAFB", // lightwhite from original
-              fontSize: "1.25rem",
-            }}
-          >
-            {userData.name}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: "#B5C8CC",
-              fontSize: "1rem",
-            }}
-          >
-            {T('в платформе с') + ' ' + userData.joinDate.replace(/\s.+$/, '')}
-          </Typography>
-        </Box>
+          {table === "genres" ? (
+            <GenreHeaderIcon id={id} />
+          ) : (
+            <PersonHeaderAvatar name={name} picsExt={userData?.pics_ext} table={table} id={id} />
+          )}
 
-        {/* Spacer */}
-        <Box sx={{ flexGrow: 1 }} />
-
-        {/* Stats section */}
-        <Stack
-          direction="row"
-          spacing={3}
-          divider={
-            <Divider
-              orientation="vertical"
-              flexItem
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography
+              variant="h1"
               sx={{
-                bgcolor: "rgba(255, 255, 255, 0.1)", // #ffffff1a from original
-                my: 1,
-              }}
-            />
-          }
-          sx={{
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          {userData.stats.map((stat, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minWidth: 125,
+                fontSize: "clamp(2rem, 1.5rem + 2.2vw, 3rem)",
+                fontWeight: 800,
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                m: 0,
               }}
             >
+              {name}
+            </Typography>
+
+            {booksCount !== undefined && booksCount !== null && (
+              <Box sx={{ mt: 1.5, display: "flex", flexWrap: "wrap", gap: 1 }}>
+                <Box
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    px: 1.75,
+                    py: 0.5,
+                    borderRadius: 999,
+                    bgcolor: kp.isContrast ? "transparent" : kp.p.primarySoft,
+                    color: kp.isContrast ? kp.p.primary : kp.p.onPrimarySoft,
+                    border: kp.isContrast ? `2px solid ${kp.p.border}` : "none",
+                    fontWeight: 600,
+                    fontSize: "0.9375rem",
+                  }}
+                >
+                  {parseInt(booksCount, 10).toLocaleString("ru-RU")} {T("книг (число)")}
+                </Box>
+              </Box>
+            )}
+
+            {annotation && (
               <Typography
-                variant="body2"
                 sx={{
-                  color: "rgba(255, 255, 255, 0.7)", // #ffffffb2 from original
-                  fontSize: "1rem",
-                  fontWeight: 500,
-                  textAlign: "center",
+                  mt: 2,
+                  color: kp.p.textSecondary,
+                  maxWidth: 760,
+                  fontSize: { xs: "1rem", md: "1.0625rem" },
+                  lineHeight: 1.6,
                 }}
               >
-                {stat.label}
+                {annotation}
               </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  color: "#F9FAFB", // lightwhite from original
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  mt: 0.5,
-                }}
-              >
-                {stat.value}
-              </Typography>
-            </Box>
-          ))}
-        </Stack>
-      </Stack>
+            )}
+          </Box>
+        </Box>
+      </Container>
     </Box>
   );
 };

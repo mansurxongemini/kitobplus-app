@@ -1,89 +1,43 @@
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { Box, Breadcrumbs, Paper, Typography } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Breadcrumbs, Box, useTheme } from "@mui/material";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { Link as RouterLink } from "react-router-dom";
 import T from "../lib/translator";
 
-const BreadcrumbsSection = ({table, userData}) => {
-  const tables = {
-    'authors': 'Авторы',
-    'dictors': 'Дикторы',
-    'genres': 'Жанры',
-  };
-
-  const breadcrumbsData = [
-    { label: T("Главная"), link: "/", active: false },
-    { label: T(tables[table]), link: `/persons/${table}`, active: false },
-    { label: userData?.name, link: "#", active: true },
-  ];
+const BreadcrumbsSection = ({ table, name }) => {
+  const { kp } = useTheme();
+  const parentLink = table === "genres" ? "/genres" : `/persons/${table}`;
+  const parentLabel =
+    table === "genres"
+      ? T("Жанры")
+      : table === "dictors"
+      ? T("Дикторы")
+      : T("Авторы");
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        width: "100%",
-        height: "43px",
-        boxShadow: "inset 0px -1px 0px #ecf1f5",
-        borderRadius: 0,
-      }}
+    <Breadcrumbs
+      aria-label={T("Вы находитесь здесь")}
+      separator={<NavigateNextIcon fontSize="small" aria-hidden="true" />}
+      sx={{ mb: 3, "& a, & span": { fontSize: "1rem" } }}
     >
       <Box
-        sx={{
-          paddingLeft: "122px",
-          paddingTop: "12px",
-          height: "100%",
-        }}
+        component={RouterLink}
+        to="/"
+        sx={{ color: kp.p.textSecondary, textDecoration: "none", "&:hover": { color: kp.p.text } }}
       >
-        <Breadcrumbs
-          separator={
-            <NavigateNextIcon
-              fontSize="small"
-              sx={{
-                color: "text.secondary",
-                opacity: 0.4,
-                width: "10px",
-                height: "19px",
-              }}
-            />
-          }
-          aria-label="breadcrumb"
-        >
-          {breadcrumbsData.map((item, index) => (
-            item.active ? (
-              <Typography
-                key={index}
-                sx={{
-                  fontFamily: "'PT Root UI', Helvetica, Arial, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "16px",
-                  color: "text.secondary",
-                }}
-              >
-                {item.label}
-              </Typography>
-            ) : (
-              <Typography
-                key={index}
-                component={Link}
-                to={item.link}
-                sx={{
-                  fontFamily: "'PT Root UI', Helvetica, Arial, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "16px",
-                  color: "text.secondary",
-                  textDecoration: "none",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                {item.label}
-              </Typography>
-            )
-          ))}
-        </Breadcrumbs>
+        {T("Главная")}
       </Box>
-    </Paper>
+      <Box
+        component={RouterLink}
+        to={parentLink}
+        sx={{ color: kp.p.textSecondary, textDecoration: "none", "&:hover": { color: kp.p.text } }}
+      >
+        {parentLabel}
+      </Box>
+      <Box component="span" aria-current="page" sx={{ color: kp.p.text, fontWeight: 600 }}>
+        {name}
+      </Box>
+    </Breadcrumbs>
   );
 };
 

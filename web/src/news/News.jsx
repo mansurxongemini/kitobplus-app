@@ -1,68 +1,53 @@
-import Navigation from '../parts/Navigation'
-import FooterSection from '../parts/FooterSection'
-import { Box, Breadcrumbs, Typography } from "@mui/material";
-import { Link } from 'react-router-dom';
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import NewsSection from './NewsSection'
-import T from '../lib/translator';
-import { useRouteA11y, VisuallyHidden } from '../lib/a11y';
+import React, { useState, useRef } from "react";
+import { Button, useTheme } from "@mui/material";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import PageShell, { PageHeader } from "../ds/components/PageShell";
+import Container from "../ds/components/Container";
+import NewsSection from "./NewsSection";
+import NewsModalGP from "./NewsModalGP";
+import useLibrary from "../LibraryContext";
+import T from "../lib/translator";
 
 const News = () => {
-    useRouteA11y(T('Новости'));
-    return <>
-    <Navigation/>
-    <Box component="main" id="main_content" tabIndex={-1}>
-    <VisuallyHidden component="h1">{T('Новости')}</VisuallyHidden>
-    <Box
-        sx={{
-            width: "100%",
-            height: "44px",
-            position: "relative",
-            top: "12px",
-            bgcolor: "background.paper",
-            borderBottom: 1,
-            borderColor: "divider",
-        }}
-        >
-        <Breadcrumbs
-            sx={{ position: "relative", top: "6px", left: "32px" }}
-            separator={
-            <KeyboardArrowRight
-                fontSize="small"
-                sx={{ color: "text.secondary" }}
-            />
-            }
-        >
-            <Link
-            color="text.secondary"
-            style={{
-                fontFamily: "'PT Root UI', Helvetica",
-                fontWeight: 500,
-                fontSize: "16px",
-                textDecoration: 'none',
-                color: '#333'
-            }}
-            to="/"
-            >
-            {T('Главная')}
-            </Link>
-            <Typography
-            color="text.secondary"
-            sx={{
-                fontFamily: "'PT Root UI', Helvetica",
-                fontWeight: 500,
-                fontSize: "16px",
-                color: '#333'
-            }}
-            >
-        {T('Новости')}
-        </Typography>
-    </Breadcrumbs>
-    </Box>
-    <NewsSection per_page={0}/>
-    </Box>
-    <FooterSection/>
-</>
-}
+  const { kp } = useTheme();
+  const { isAdmin } = useLibrary();
+  const [editOpen, setEditOpen] = useState(false);
+  const reloadRef = useRef(null);
+
+  const actions = isAdmin ? (
+    <Button
+      variant="contained"
+      size="medium"
+      startIcon={<PostAddIcon />}
+      onClick={() => setEditOpen(true)}
+    >
+      {T("Добавить новость")}
+    </Button>
+  ) : null;
+
+  return (
+    <PageShell title={T("Новости")}>
+      <PageHeader
+        title={T("Новости")}
+        crumbs={[{ label: T("Новости") }]}
+        actions={actions}
+      />
+      <Container sx={{ py: { xs: 5, md: 8 } }}>
+        <NewsSection per_page={0} onReloadRef={reloadRef} />
+      </Container>
+      {isAdmin && (
+        <NewsModalGP
+          newsId={0}
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          onSaveSuccess={() => {
+            setEditOpen(false);
+            if (reloadRef.current) reloadRef.current();
+          }}
+        />
+      )}
+    </PageShell>
+  );
+};
 
 export default News;
