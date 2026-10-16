@@ -70,18 +70,16 @@ const RulesSection = () => {
       sx={{
         bgcolor: "background.paper",
         border: 1,
-        borderColor: "neutral.100",
-        boxShadow: "0px 4px 24px rgba(38, 38, 38, 0.07)",
+        borderColor: "divider",
+        borderRadius: 6,
         p: 3,
         width: "100%",
       }}
     >
       <Typography
-        variant="h2"
+        variant="h3" component="h2"
         sx={{
-          fontFamily: "'PT_Root_UI-Bold',Helvetica",
           fontWeight: "bold",
-          color: "secondary.main",
           mb: 3,
         }}
       >
@@ -95,18 +93,16 @@ const RulesSection = () => {
           sx={{
             mb: 3,
             border: 1,
-            borderColor: "neutral.100",
+            borderColor: "divider",
           }}
         >
           <CardContent>
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               {section.icon}
               <Typography
-                variant="h6"
+                variant="h4" component="h3"
                 sx={{
-                  fontFamily: "'PT_Root_UI-Bold',Helvetica",
                   fontWeight: "bold",
-                  color: "secondary.main",
                   ml: 1,
                 }}
               >
@@ -120,8 +116,7 @@ const RulesSection = () => {
                     primary={
                       <Typography
                         sx={{
-                          fontFamily: "'PT_Root_UI-Regular',Helvetica",
-                          fontSize: "14px",
+                          fontSize: "1rem",
                           color: "text.primary",
                           lineHeight: 1.6,
                         }}
@@ -145,16 +140,14 @@ const RulesSection = () => {
           mb: 3,
           border: 1,
           borderColor: "warning.main",
-          bgcolor: "rgba(255, 152, 0, 0.05)",
         }}
       >
         <CardContent>
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Warning color="warning" />
             <Typography
-              variant="h6"
+              variant="h4" component="h3"
               sx={{
-                fontFamily: "'PT_Root_UI-Bold',Helvetica",
                 fontWeight: "bold",
                 color: "warning.main",
                 ml: 1,
@@ -165,8 +158,7 @@ const RulesSection = () => {
           </Box>
           <Typography
             sx={{
-              fontFamily: "'PT_Root_UI-Regular',Helvetica",
-              fontSize: "14px",
+              fontSize: "1rem",
               color: "text.secondary",
               mb: 2,
               lineHeight: 1.6,
@@ -183,8 +175,7 @@ const RulesSection = () => {
                 color="warning"
                 size="small"
                 sx={{
-                  fontFamily: "'PT_Root_UI-Regular',Helvetica",
-                  fontSize: "12px",
+                  fontSize: "0.9375rem",
                 }}
               />
             ))}
@@ -193,14 +184,12 @@ const RulesSection = () => {
       </Card>
 
       {/* Контактная информация */}
-      <Card sx={{ border: 1, borderColor: "neutral.100" }}>
+      <Card sx={{ border: 1, borderColor: "divider" }}>
         <CardContent>
           <Typography
-            variant="h6"
+            variant="h4" component="h3"
             sx={{
-              fontFamily: "'PT_Root_UI-Bold',Helvetica",
               fontWeight: "bold",
-              color: "secondary.main",
               mb: 2,
             }}
           >
@@ -208,8 +197,7 @@ const RulesSection = () => {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'PT_Root_UI-Regular',Helvetica",
-              fontSize: "14px",
+              fontSize: "1rem",
               color: "text.secondary",
               lineHeight: 1.6,
             }}
@@ -232,8 +220,7 @@ const RulesSection = () => {
       <Box sx={{ mt: 3, textAlign: "center" }}>
         <Typography
           sx={{
-            fontFamily: "'PT_Root_UI-Regular',Helvetica",
-            fontSize: "12px",
+            fontSize: "0.9375rem",
             color: "text.secondary",
           }}
         >

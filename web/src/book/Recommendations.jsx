@@ -1,96 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Grid, useTheme } from '@mui/material';
-import BookCardShort from '../books/BookCardShort.jsx';
-import { getHost } from '../lib/api.js';
-import T from '../lib/translator.js';
+import React, { useState, useEffect } from "react";
+import { Box, Skeleton } from "@mui/material";
+import { BookGrid } from "../ds/components/BookCard";
+import { SectionHeader } from "../ds/components/PageShell";
+import { getHost } from "../lib/api.js";
+import T from "../lib/translator.js";
 
 const Recommendations = ({ book }) => {
-  const theme = useTheme();
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [recommendations, setRecommendations] = useState(null);
 
   useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (!book) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const response = await fetch(getHost() + `/srv/books.php?recommendations=${book}`);
-        const data = await response.json();
-        
-        if (data && data.success && Array.isArray(data.data)) {
-          // Берем только первые 3 книги
-          setRecommendations(data.data.slice(0, 3));
-        } else {
-          setRecommendations([]);
+    if (!book) {
+      setRecommendations([]);
+      return;
+    }
+    let cancelled = false;
+    setRecommendations(null);
+    fetch(getHost() + `/srv/books.php?recommendations=${book}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!cancelled) {
+          setRecommendations(data && data.success && Array.isArray(data.data) ? data.data.slice(0, 6) : []);
         }
-      } catch (error) {
-        console.error('Error fetching recommendations:', error);
-        setRecommendations([]);
-      } finally {
-        setLoading(false);
-      }
+      })
+      .catch(() => {
+        if (!cancelled) setRecommendations([]);
+      });
+    return () => {
+      cancelled = true;
     };
-
-    fetchRecommendations();
   }, [book]);
 
-  if (loading) {
-    return (
-      <Box sx={{ mt: 4, ml: 3, mr: 3 }}>
-        <Typography
-          variant="h5"
-          sx={{
-            color: theme.palette.secondary.main,
-            fontWeight: 700,
-            fontSize: "30px",
-            mb: 3,
-          }}
-        >
-          {T('Рекомендации')}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            color: theme.palette.text.secondary,
-            fontSize: "18px",
-          }}
-        >
-          {T('Загрузка...')}
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (!recommendations || recommendations.length === 0) {
-    return null;
-  }
+  if (recommendations !== null && recommendations.length === 0) return null;
 
   return (
-    <Box sx={{ mt: 4, ml: 3, mr: 3 }}>
-      <Typography
-        variant="h5"
-        sx={{
-          color: theme.palette.secondary.main,
-          fontWeight: 700,
-          fontSize: "30px",
-          mb: 3,
-        }}
-      >
-        {T('Рекомендации')}
-      </Typography>
-      
-      <Grid container spacing={3}>
-        {recommendations.map((recommendedBook) => (
-          <BookCardShort 
-            key={recommendedBook.id} 
-            book={recommendedBook} 
-          />
-        ))}
-      </Grid>
+    <Box component="section" aria-labelledby="book-similar-title" aria-busy={recommendations === null ? "true" : undefined} sx={{ mt: { xs: 6, md: 9 } }}>
+      <SectionHeader
+        id="book-similar-title"
+        title={T("Похожие книги")}
+        linkTo="/books"
+        linkLabel={T("Все книги")}
+      />
+      {recommendations === null ? (
+        <Box aria-hidden="true" sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "repeat(2, 1fr)", md: "repeat(6, 1fr)" } }}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} variant="rounded" height={280} sx={{ borderRadius: 4 }} />
+          ))}
+        </Box>
+      ) : (
+        <BookGrid books={recommendations} columns={{ xs: 2, sm: 3, md: 4, lg: 6 }} label={T("Похожие книги")} />
+      )}
     </Box>
   );
 };

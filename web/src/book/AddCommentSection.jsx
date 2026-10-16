@@ -1,44 +1,40 @@
 import ChatIcon from "@mui/icons-material/Chat";
-import { Box, Button, Typography, TextField, Stack } from "@mui/material"; // Added TextField, Stack
+import { Box, Button, Typography, TextField, Stack } from "@mui/material";
 import React, { useState } from "react";
-import { add as addComment } from '../lib/comments.ts'; // Import addComment
-import T from '../lib/translator.js';
+import { add as addComment } from "../lib/comments.ts";
+import T, { tr } from "../lib/translator.js";
 
+// "Add comment" block. Same API calls and flow as before, restyled to the
+// design system: visible label, described-by error, large targets.
 const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
   const [newComment, setNewComment] = useState("");
   const [showInput, setShowInput] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const textFieldRef = React.useRef(null);
+  const fieldId = React.useId();
+  const errorId = `${fieldId}-error`;
 
   const handleAddComment = async () => {
     if (!newComment.trim()) {
-      setError(T("Комментарий не может быть пустым"));
+      setError(tr("Комментарий не может быть пустым"));
       return;
     }
     if (!bookId) {
-        setError(T("Не удалось определить ID книги"));
-        return;
+      setError(tr("Не удалось определить ID книги"));
+      return;
     }
     setIsSubmitting(true);
     setError("");
     try {
-      // Assuming the 'add' function in comments.ts takes (id, books_id, comment)
-      // and the first 'id' parameter might be user_id or null if not needed for adding.
-      // For now, let's assume it's not strictly needed or handled by the backend if null.
-      // You might need to adjust this based on your actual API requirements for 'id'.
-      // If 'id' refers to a comment ID for replies, this structure needs more thought.
-      // If 'id' is user_id, it should be fetched from auth context or similar.
-      // For simplicity, passing 0 or null if the backend can infer user.
-      await addComment(0, bookId, newComment); // Passing 0 as a placeholder for the first 'id'
+      await addComment(0, bookId, newComment);
       setNewComment("");
       setShowInput(false);
       if (onCommentAdded) {
         onCommentAdded();
       }
     } catch (err) {
-      console.error("Failed to add comment:", err);
-      setError(T("Не удалось добавить комментарий. Попробуйте еще раз."));
+      setError(tr("Не удалось добавить комментарий. Попробуйте еще раз."));
     } finally {
       setIsSubmitting(false);
     }
@@ -52,17 +48,18 @@ const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
-          mb: 2
+          mb: 2,
+          gap: 2,
+          flexWrap: "wrap",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h2" color="secondary" sx={{ fontWeight: 700 }}>
-            {T('Комментарии')}
+          <Typography variant="h3" component="h3">
+            {T("Комментарии")}
           </Typography>
-
-          <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
-            <ChatIcon fontSize="small" sx={{ color: "#949494", mr: 0.5 }} />
-            <Typography variant="caption" sx={{ color: "#949494" }}>
+          <Box sx={{ display: "flex", alignItems: "center", ml: 2, color: "text.secondary" }}>
+            <ChatIcon fontSize="small" aria-hidden="true" sx={{ mr: 0.5 }} />
+            <Typography variant="body2" aria-label={`${T("Комментарии")}: ${commentsCount || 0}`}>
               {commentsCount || 0}
             </Typography>
           </Box>
@@ -71,25 +68,15 @@ const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
         {!showInput && (
           <Button
             variant="contained"
-            disableElevation
+            size="large"
             onClick={() => {
               setShowInput(true);
               setTimeout(() => {
                 textFieldRef.current?.focus();
               }, 0);
             }}
-            sx={{
-              bgcolor: "#e6f6f8",
-              color: "primary.main",
-              fontWeight: 700,
-              px: 4,
-              py: 1.5,
-              "&:hover": {
-                bgcolor: "#d9f0f3",
-              },
-            }}
           >
-            {T('Комментировать')}
+            {T("Комментировать")}
           </Button>
         )}
       </Box>
@@ -97,6 +84,7 @@ const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
       {showInput && (
         <Stack spacing={2} sx={{ mt: 2 }}>
           <TextField
+            id={fieldId}
             inputRef={textFieldRef}
             label={T("Ваш комментарий")}
             multiline
@@ -107,31 +95,22 @@ const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
             fullWidth
             error={!!error}
             helperText={error}
+            aria-describedby={error ? errorId : undefined}
+            FormHelperTextProps={{ id: error ? errorId : undefined }}
+            disabled={isSubmitting}
           />
-          <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Stack direction="row" spacing={2} justifyContent="flex-end" flexWrap="wrap">
             <Button
               variant="contained"
-              disableElevation
+              size="large"
               onClick={handleAddComment}
               disabled={isSubmitting || !newComment.trim()}
-              sx={{
-                bgcolor: "#e6f6f8",
-                color: "primary.main",
-                fontWeight: 700,
-                px: 4,
-                py: 1.5,
-                "&:hover": {
-                  bgcolor: "#d9f0f3",
-                },
-                "&.Mui-disabled": {
-                  bgcolor: "#f0f0f0",
-                  color: "#b0b0b0",
-                },
-              }}
             >
-              {isSubmitting ? T('Отправка...') : T('Отправить')}
+              {isSubmitting ? T("Отправка...") : T("Отправить")}
             </Button>
             <Button
+              variant="outlined"
+              size="large"
               onClick={() => {
                 setShowInput(false);
                 setError("");
@@ -139,7 +118,7 @@ const AddCommentSection = ({ bookId, onCommentAdded, commentsCount }) => {
               }}
               disabled={isSubmitting}
             >
-              {T('Отмена')}
+              {T("Отмена")}
             </Button>
           </Stack>
         </Stack>

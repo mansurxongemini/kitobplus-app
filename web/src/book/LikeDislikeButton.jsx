@@ -1,29 +1,41 @@
-import { IconButton, Stack, Typography } from "@mui/material"
+import { Stack, Typography, useTheme, Button } from "@mui/material";
 
-const LikeDislikeButton = ({action, active, icon_active, icon_inactive, count, ariaLabel}) =>
-<Stack direction="row" sx={{alignItems: 'center', gap: '8px', pr: 1}}>
-    <IconButton
+// Like / dislike toggle: icon always paired with a visible text label and the
+// pressed state (aria-pressed), never colour alone.
+const LikeDislikeButton = ({ action, active, icon_active, icon_inactive, count, ariaLabel }) => {
+  const { kp } = useTheme();
+  return (
+    <Stack direction="row" sx={{ alignItems: "center", gap: 1 }}>
+      <Button
         onClick={action}
         aria-label={ariaLabel}
         aria-pressed={!!active}
+        variant={active ? "contained" : "outlined"}
+        size="large"
+        startIcon={active ? icon_active : icon_inactive}
         sx={{
-            width: 40,
-            height: 40,
-            bgcolor: "rgba(0, 0, 0, 0.3)",
-            borderRadius: 1,
-            color: "white",
-            '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.4)' },
+          minHeight: 56,
+          ...(!active && {
+            borderWidth: 2,
+            borderColor: kp.p.borderStrong,
+            color: kp.p.text,
+            "&:hover": { borderWidth: 2, borderColor: kp.p.text },
+          }),
         }}
-    >
-        {active ? icon_active : icon_inactive}
-    </IconButton>
-    {count > 0 && <Typography
-        style={{
-            fontFamily: "'PT_Root_UI-Bold', Helvetica",
-            color: 'white'
-        }}>1</Typography>}
-</Stack>
-
-
+      >
+        {ariaLabel}
+        {count > 0 && (
+          <Typography
+            component="span"
+            aria-hidden="true"
+            sx={{ ml: 0.5, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}
+          >
+            {count}
+          </Typography>
+        )}
+      </Button>
+    </Stack>
+  );
+};
 
 export default LikeDislikeButton;

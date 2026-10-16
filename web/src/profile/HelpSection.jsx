@@ -53,18 +53,16 @@ const HelpSection = () => {
       sx={{
         bgcolor: "background.paper",
         border: 1,
-        borderColor: "neutral.100",
-        boxShadow: "0px 4px 24px rgba(38, 38, 38, 0.07)",
+        borderColor: "divider",
+        borderRadius: 6,
         p: 3,
         width: "100%",
       }}
     >
       <Typography
-        variant="h2"
+        variant="h3" component="h2"
         sx={{
-          fontFamily: "'PT_Root_UI-Bold',Helvetica",
           fontWeight: "bold",
-          color: "secondary.main",
           mb: 3,
         }}
       >
@@ -72,14 +70,12 @@ const HelpSection = () => {
       </Typography>
 
       {/* Контактная информация */}
-      <Card sx={{ mb: 3, border: 1, borderColor: "neutral.100" }}>
+      <Card sx={{ mb: 3, border: 1, borderColor: "divider" }}>
         <CardContent>
           <Typography
-            variant="h6"
+            variant="h4" component="h3"
             sx={{
-              fontFamily: "'PT_Root_UI-Bold',Helvetica",
               fontWeight: "bold",
-              color: "secondary.main",
               mb: 2,
             }}
           >
@@ -94,11 +90,9 @@ const HelpSection = () => {
                 primary="Email"
                 secondary="info@kitobplus.uz"
                 primaryTypographyProps={{
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
                 }}
                 secondaryTypographyProps={{
-                  fontFamily: "'PT_Root_UI-Regular',Helvetica",
                 }}
               />
             </ListItem>
@@ -110,11 +104,9 @@ const HelpSection = () => {
                 primary={T("Телефон")}
                 secondary="+998 (90) 808-73-31"
                 primaryTypographyProps={{
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
                 }}
                 secondaryTypographyProps={{
-                  fontFamily: "'PT_Root_UI-Regular',Helvetica",
                 }}
               />
             </ListItem>
@@ -124,11 +116,9 @@ const HelpSection = () => {
 
       {/* Часто задаваемые вопросы */}
       <Typography
-        variant="h6"
+        variant="h4" component="h3"
         sx={{
-          fontFamily: "'PT_Root_UI-Bold',Helvetica",
           fontWeight: "bold",
-          color: "secondary.main",
           mb: 2,
         }}
       >
@@ -141,7 +131,7 @@ const HelpSection = () => {
           sx={{
             mb: 1,
             border: 1,
-            borderColor: "neutral.100",
+            borderColor: "divider",
             "&:before": {
               display: "none",
             },
@@ -151,18 +141,14 @@ const HelpSection = () => {
             expandIcon={<ExpandMoreIcon />}
             sx={{
               bgcolor: "background.paper",
-              "&:hover": {
-                bgcolor: "rgba(0, 0, 0, 0.04)",
-              },
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <HelpOutline sx={{ mr: 1, color: "primary.main" }} />
               <Typography
                 sx={{
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
-                  fontSize: "16px",
+                  fontSize: "1.0625rem",
                 }}
               >
                 {faq.question}
@@ -172,8 +158,7 @@ const HelpSection = () => {
           <AccordionDetails>
             <Typography
               sx={{
-                fontFamily: "'PT_Root_UI-Regular',Helvetica",
-                fontSize: "14px",
+                fontSize: "1rem",
                 color: "text.secondary",
                 lineHeight: 1.6,
               }}
@@ -192,9 +177,8 @@ const HelpSection = () => {
           sx={{
             width: 250,
             height: 44,
-            fontFamily: "'PT_Root_UI-Bold',Helvetica",
             fontWeight: "bold",
-            fontSize: "16px",
+            fontSize: "1.0625rem",
           }}
         >
           {T('Написать в поддержку')}

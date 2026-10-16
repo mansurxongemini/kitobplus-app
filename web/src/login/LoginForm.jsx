@@ -1,306 +1,257 @@
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
+import AppleIcon from "@mui/icons-material/Apple";
 import React, { useState } from "react";
-//import { ThemeProvider } from './login/ThemeProvider';
 import { request } from "../lib/api";
 import { clearToken } from "../lib/api";
-import AppleIcon from '@mui/icons-material/Apple';
-import { Link } from "react-router-dom";
-// Import images
-import group110001 from "./img/group-1-10001.png"
-import logo_icon from "./img/logo_icon.png"
-import group19 from "./img/group19.png"
-import rectangle21815 from "./img/rectangle-21815.png"
-import PhoneInput from "react-phone-input-2"
-import 'react-phone-input-2/lib/style.css'
-import { getMode } from '../lib/api'
-import { isPossiblePhoneNumber } from 'react-phone-number-input'
-import '../css/form.css';
-import { sms, verify } from '../lib/auth.ts'
-import T from '../lib/translator.js'
-import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
-import AppleLogin from 'react-apple-login';
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
+import "../css/form.css";
+import { sms, verify } from "../lib/auth.ts";
+import T, { tr } from "../lib/translator.js";
+import { GoogleLogin } from "@react-oauth/google";
+import AppleLogin from "react-apple-login";
 import useLibrary from "../LibraryContext.js";
-import {SITE_URL} from "../lib/config";
+import { SITE_URL } from "../lib/config";
 
-const LoginForm = ({title, only_phone = false, callback = null}) => {
-    const {user, setUser} = useLibrary();
-    const navigate = useNavigate();
-    const successMessage = T('Добро пожаловать в библиотеку Kitob+.');
-    const incorrectPhone = T('Введен некорректный номер телефона');
-    const [value, setValue] = React.useState(user?.phone)
-    const [isCorrect, setIsCorrect] = React.useState()
-    const [smsSended, setSmsSended] = React.useState(false)
-    const [debugCode, setDebugCode] = React.useState();
-    const [error, setError] = React.useState()
-    const [phoneError, setPhoneError] = React.useState('')
-    const [code, setCode] = React.useState('')
-    React.useEffect((_) => {
-        if (value) {
-            setIsCorrect(isPossiblePhoneNumber('+' + value));
-        } else {
-            setIsCorrect(false);
-        }
-    }, [value]);
+// Phone → SMS-code login plus Google/Apple OAuth. Behaviour and API calls are
+// unchanged; only the presentation follows the design system.
+const LoginForm = ({ title, only_phone = false, callback = null }) => {
+  const { kp } = useTheme();
+  const { user, setUser } = useLibrary();
+  const incorrectPhone = T("Введен некорректный номер телефона");
+  const [value, setValue] = useState(user?.phone);
+  const [isCorrect, setIsCorrect] = useState();
+  const [smsSended, setSmsSended] = useState(false);
+  const [debugCode, setDebugCode] = useState();
+  const [error, setError] = useState();
+  const [phoneError, setPhoneError] = useState("");
+  const [code, setCode] = useState("");
+  const codeId = React.useId();
 
-    const login = () => {
-        if (!isCorrect) {
-            setPhoneError(incorrectPhone);
-            return;
-        }
-        setPhoneError('');
+  React.useEffect(() => {
+    if (value) {
+      setIsCorrect(isPossiblePhoneNumber("+" + value));
+    } else {
+      setIsCorrect(false);
+    }
+  }, [value]);
 
-        if (!smsSended) {
-            sms(value).then(_ => {                
-                console.log(_);
-                setDebugCode(_?.code);
-                setSmsSended(true);
-            }).catch(err => {
-                const msg = typeof err === 'string' ? err : (err?.message || T('Ошибка отправки SMS'));
-                setPhoneError(msg);
-            });
+  const login = () => {
+    if (!isCorrect) {
+      setPhoneError(incorrectPhone);
+      return;
+    }
+    setPhoneError("");
 
-            return;
-        }
-    };
-
-    React.useEffect(() => {
-        if (!code || code.length !== 4) {
-            return;
-        }
-
-        verify(value, code).then(_ => {
-            //console.log(_);
-            if (callback) {
-                setUser(_.user);
-                callback();
-            } else {
-                window.location = '/';
-            }
-        }).catch(err => {
-            const msg = typeof err === 'string' ? err : (err?.message || String(err));
-            setError(msg);
+    if (!smsSended) {
+      sms(value)
+        .then((_) => {
+          setDebugCode(_?.code);
+          setSmsSended(true);
+        })
+        .catch((err) => {
+          const msg = typeof err === "string" ? err : err?.message || tr("Ошибка отправки SMS");
+          setPhoneError(msg);
         });
-    }, [code]);
+      return;
+    }
+  };
+
+  React.useEffect(() => {
+    if (!code || code.length !== 4) {
+      return;
+    }
+    verify(value, code)
+      .then((_) => {
+        if (callback) {
+          setUser(_.user);
+          callback();
+        } else {
+          window.location = "/";
+        }
+      })
+      .catch((err) => {
+        const msg = typeof err === "string" ? err : err?.message || String(err);
+        setError(msg);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
 
   const handleSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
-    //const decoded = jwtDecode(credentialResponse.credential);
-    //console.log(decoded);    
-    //console.log(credentialResponse);
     const idToken = credentialResponse.credential;
-
     try {
-      // Отправляем токен на бэкенд для верификации
       clearToken();
-      const response = await request('oauth/google', {google_token: idToken});
-      console.log(response);
+      const response = await request("oauth/google", { google_token: idToken });
       window.location = "/";
-/*
-      const response = await fetch(SITE_URL + '/api/oauth/google.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: idToken }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Token verification failed');
-      }
-
-      const data = await response.json();
-      console.log('Backend response:', data);
-*/
-      // Если бэкенд подтвердил токен, управляем состоянием входа на фронтенде
-      //const userProfile = jwtDecode(idToken); // Декодируем для получения данных на фронтенде
-      //login(userProfile);
+      void response;
     } catch (error) {
-      console.error('Error:', error);
-      alert('Не удалось осуществить вход Google Sign in');
-      // Обработка ошибки входа
+      alert("Не удалось осуществить вход Google Sign in");
     }
   };
 
   const handleError = () => {
-    alert('Google Sign In failed');
+    alert("Google Sign In failed");
   };
-
 
   const handleAppleResponse = (response) => {
     if (response.error) {
-      console.error('Apple login error', response.error);
       return;
     }
-
-    console.log('Apple Response:', response);
-    // `response` будет содержать `authorization.code` и `authorization.id_token`
-    // Также может содержать `user` объект с именем и email при ПЕРВОМ входе
-    
-    // Отправляем `response.authorization.id_token` и `response.authorization.code` на бэкенд для верификации
     verifyBackend(response.authorization);
   };
 
   const verifyBackend = async (authorization) => {
     try {
       clearToken();
-      const response = await request('oauth/apple', {authorization: authorization});
-      console.log(response);
+      const response = await request("oauth/apple", { authorization: authorization });
       window.location = "/";
-
-/*
-      const res = await fetch(SITE_URL + '/api/oauth/apple.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ authorization }),
-      });
-      
-      if (!res.ok) {
-        throw new Error('Backend verification failed');
-      }
-
-      const data = await res.json();
-      console.log('Backend response:', data);
-      // Логика входа на фронтенде (например, через AuthContext)
-*/
+      void response;
     } catch (error) {
-      console.error('Error during backend verification:', error);
       alert("Ошибка входа с помощью Apple ID");
     }
   };
 
-    return !smsSended ? (<>
-            <div className='formHeader'>
-                <h1>{title}</h1>
-            </div>
-            <div className='formBody'>
-                <PhoneInput
-                    inputProps={{
-                        id: 'login-phone-input',
-                        name: 'phone',
-                        required: true,
-                        autoFocus: true,
-                        autoComplete: 'tel',
-                        inputMode: 'tel',
-                        'aria-invalid': Boolean(phoneError),
-                        'aria-describedby': phoneError ? 'login-phone-error' : undefined,
-                        style: {width:'377px'}
-                    }}
-                    specialLabel={T('Телефон')}
-                    placeholder={T('Введите номер телефона')}
-                    value={value}
-                    disableDropdown={true}
-                    onChange={(val) => {
-                        setPhoneError('');
-                        setValue(val);
-                    }}
-                />
-                {phoneError && (
-                    <div
-                        id="login-phone-error"
-                        role="alert"
-                        style={{ color: '#d32f2f', fontSize: '14px', marginTop: '6px', textAlign: 'left' }}
-                    >
-                        {phoneError}
-                    </div>
+  if (!smsSended) {
+    return (
+      <Box>
+        {title && (
+          <Typography variant="h2" component="h2" sx={{ fontSize: "1.5rem", mb: 2.5 }}>
+            {title}
+          </Typography>
+        )}
+        <Typography component="label" htmlFor="login-phone-input" sx={{ display: "block", fontWeight: 600, mb: 1 }}>
+          {T("Телефон")}
+        </Typography>
+        <Box
+          sx={{
+            "& .react-tel-input": { height: "auto" },
+            "& .react-tel-input .form-control": {
+              flex: "none",
+              width: "100%", height: 56, fontSize: "1.125rem", fontFamily: "inherit", color: kp.p.text,
+              bgcolor: kp.p.surface, border: `1.5px solid ${kp.p.borderStrong}`, borderRadius: "14px", pl: "56px",
+            },
+            "& .react-tel-input .form-control:focus": { borderColor: kp.p.primary, boxShadow: `0 0 0 3px ${kp.p.focus}`, outline: "none" },
+            "& .react-tel-input .flag-dropdown": { bgcolor: "transparent", border: 0, borderRadius: "14px 0 0 14px" },
+            "& .react-tel-input .selected-flag": { width: 48, pl: "16px", bgcolor: "transparent !important" },
+            "& .react-tel-input .special-label": { display: "none" },
+          }}
+        >
+        <PhoneInput
+          inputProps={{
+            id: "login-phone-input",
+            name: "phone",
+            required: true,
+            autoFocus: true,
+            autoComplete: "tel",
+            inputMode: "tel",
+            "aria-invalid": Boolean(phoneError),
+            "aria-describedby": phoneError ? "login-phone-error" : undefined,
+          }}
+          specialLabel={T("Телефон")}
+          placeholder={T("Введите номер телефона")}
+          value={value}
+          disableDropdown={true}
+          onChange={(val) => {
+            setPhoneError("");
+            setValue(val);
+          }}
+        />
+        </Box>
+        {phoneError && (
+          <Box
+            id="login-phone-error"
+            role="alert"
+            sx={{ color: kp.p.error, fontSize: "0.9375rem", mt: 1 }}
+          >
+            {phoneError}
+          </Box>
+        )}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mt: 2.5 }}>
+          <Button variant="contained" size="large" fullWidth onClick={login}>
+            {T("Продолжить")}
+          </Button>
+          {!only_phone && (
+            <>
+              <Divider sx={{ my: 1 }}>{T("или")}</Divider>
+              <GoogleLogin onSuccess={handleSuccess} onError={handleError} size="large" shape="pill" width="360" />
+              <AppleLogin
+                clientId="uz.kitobplus.signin"
+                redirectURI={SITE_URL + "/login"}
+                responseType="code id_token"
+                responseMode="form_post"
+                usePopup={true}
+                callback={handleAppleResponse}
+                scope="name email"
+                render={(renderProps) => (
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    startIcon={<AppleIcon aria-hidden="true" />}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+                  >
+                    {T("Sign in with Apple")}
+                  </Button>
                 )}
-            </div>
-            <div className='formFooter'>
-                <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
-                    <Button style={{width: '100%', color: 'white', height: '36px'}} variant="contained" color='primary' onClick={login}>{T('Продолжить')}</Button>
-                    
-                    {!only_phone && <>
-                        <div style={{
-                            padding: 4, 
-                            textAlign: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px'
-                        }}>
-                            <div style={{
-                                flex: 1,
-                                height: '1px',
-                                backgroundColor: '#ccc'
-                            }}></div>
-                            <span>{T('или')}</span>
-                            <div style={{
-                                flex: 1,
-                                height: '1px',
-                                backgroundColor: '#ccc'
-                            }}></div>
-                        </div>
-                        <GoogleLogin onSuccess={handleSuccess} onError={handleError}/>                       
-                        
-                        <AppleLogin
-                            clientId="uz.kitobplus.signin" // Ваш Service ID
-                            redirectURI={SITE_URL + "/login"} // Ваш Redirect URI
-                            responseType="code id_token"
-                            responseMode="form_post"
-                            usePopup={true} // Рекомендуется для лучшего UX
-                            callback={handleAppleResponse}
-                            scope="name email"
-                            render={(renderProps) => (
-                                <Button startIcon={<AppleIcon aria-hidden="true" />} sx={{border: 1, width: '100%'}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Sign in with Apple</Button>
-                            )}
-                        />
-                    </>}
-                </div>
-            </div>
-        </>) : (<>
-            <div className='formBody'>
-                <div>{T('Мы отправили SMS с кодом на номер')}</div>
-                <div style={{fontWeight: 'bold'}}>+{value}</div>
-                <div>{T('Пожалуйста, введите код из SMS')}</div>
-                <div style={{display: 'flex', justifyContent: 'center', paddingTop: 16, paddingBottom: 16}}>
-                    <input
-                        id="sms-code-input"
-                        aria-label={T('Пожалуйста, введите код из SMS')}
-                        autoFocus={true}
-                        autoComplete="one-time-code"
-                        inputMode="numeric"
-                        aria-invalid={Boolean(error)}
-                        aria-describedby={error ? "sms-code-error" : undefined}
-                        style={{
-                            fontSize: 32,
-                            textAlign: 'center',
-                            width: 128,
-                            borderRadius: 8,
-                            borderWidth: 1,
-                            borderColor: error ? '#d32f2f' : 'lightgray'
-                        }}
-                        onKeyPress={(event) => {
-                            if (!/[0-9]/.test(event.key) || (event.target.value && event.target.value.length >= 4)) {
-                                event.preventDefault();
-                            }
-                        }}
-                        onChange={e => {
-                            setError(null);
-                            setCode(e.target.value);
-                        }}
-                        value={code}
-                    />
-                </div>
-                {debugCode ? <div style={{display: 'flex', justifyContent: 'center'}}><span style={{color: 'green'}}>{T('Код')}: {debugCode}</span></div> : <></>}                        
-                {error ? (
-                    <div id="sms-code-error" role="alert" style={{display: 'flex', justifyContent: 'center'}}>
-                        <span style={{color: '#d32f2f'}}>{typeof error === 'string' ? error : (error?.message || String(error))}</span>
-                    </div>
-                ) : <></>}
-            </div>
-        </>)
-    
-}
+              />
+            </>
+          )}
+        </Box>
+      </Box>
+    );
+  }
+
+  return (
+    <Box>
+      <Typography>{T("Мы отправили SMS с кодом на номер")}</Typography>
+      <Typography sx={{ fontWeight: 700 }}>+{value}</Typography>
+      <Typography component="label" htmlFor={codeId} sx={{ display: "block", mt: 1 }}>
+        {T("Пожалуйста, введите код из SMS")}
+      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+        <TextField
+          id={codeId}
+          autoFocus={true}
+          autoComplete="one-time-code"
+          value={code}
+          onChange={(e) => {
+            setError(null);
+            setCode(e.target.value);
+          }}
+          onKeyPress={(event) => {
+            if (!/[0-9]/.test(event.key) || (event.target.value && event.target.value.length >= 4)) {
+              event.preventDefault();
+            }
+          }}
+          error={Boolean(error)}
+          helperText={error}
+          inputProps={{ inputMode: "numeric", maxLength: 4, "aria-describedby": error ? "sms-code-error" : undefined }}
+          FormHelperTextProps={{ id: error ? "sms-code-error" : undefined }}
+          sx={{
+            width: 160,
+            "& .MuiOutlinedInput-input": { fontSize: "2rem", textAlign: "center", letterSpacing: "0.5rem" },
+          }}
+        />
+      </Box>
+      {debugCode ? (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography sx={{ color: kp.p.success }}>
+            {T("Код")}: {debugCode}
+          </Typography>
+        </Box>
+      ) : null}
+      {error ? (
+        <Box id="sms-code-error" role="alert" sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography sx={{ color: kp.p.error }}>
+            {typeof error === "string" ? error : error?.message || String(error)}
+          </Typography>
+        </Box>
+      ) : null}
+    </Box>
+  );
+};
 
 export default LoginForm;

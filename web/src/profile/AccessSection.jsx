@@ -17,7 +17,7 @@ import PlanButton from "./PlanButton.jsx";
 import useLibrary from "../LibraryContext";
 import { pay } from '../lib/auth.ts';
 import Register from './Register.jsx';
-import T from '../lib/translator.js';
+import T, { tr } from '../lib/translator.js';
 import CachedIcon from '@mui/icons-material/Cached';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import { request } from '../lib/api.js';
@@ -90,7 +90,7 @@ const AccessSection = () => {
         setUser(response.user);
       }
     } catch(e) {
-      alert(T('Ошибка во время обновления статуса'));
+      alert(tr('Ошибка во время обновления статуса'));
     } finally {
       setRefreshing(false);
     }
@@ -101,19 +101,17 @@ const AccessSection = () => {
       sx={{
         bgcolor: "background.paper",
         border: 1,
-        borderColor: "neutral.100",
-        boxShadow: "0px 4px 24px rgba(38, 38, 38, 0.07)",
+        borderColor: "divider",
+        borderRadius: 6,
         p: 3,
         width: "100%",
         flex: 1,
       }}
     >
       <Typography
-        variant="h2"
+        variant="h3" component="h2"
         sx={{
-          fontFamily: "'PT_Root_UI-Bold',Helvetica",
           fontWeight: "bold",
-          color: "secondary.main",
           mb: 3,
         }}
       >
@@ -121,7 +119,7 @@ const AccessSection = () => {
       </Typography>
 
       {/* Контактная информация */}
-      <Card sx={{ mb: 3, border: 0, borderColor: "neutral.100" }}>
+      <Card sx={{ mb: 3, border: 0, borderColor: "divider" }}>
         <CardContent>
           {T('Ваш уровень доступа')}: <b>{T(user?.plans_name)}</b>{(user?.plans_id == 1 || user?.plans_id == 3) ? " " + T("до") + " " + user?.plan_end_str : ""}
         </CardContent>
@@ -129,7 +127,7 @@ const AccessSection = () => {
 
       {/* Кнопка оплаты для пользователей с plans_id 0 или 1 */}
       {(user?.plans_id === 0 || user?.plans_id === 1 || (user?.plans_id === 3 && user?.can_top_up != 0)) && (
-        <Card sx={{ mb: 3, border: 0, borderColor: "neutral.100" }}>
+        <Card sx={{ mb: 3, border: 0, borderColor: "divider" }}>
           <CardContent>
             <Typography variant="body1" sx={{ mb: 2 }}>
              {T('Получите доступ ко всем аудиокнигам')}

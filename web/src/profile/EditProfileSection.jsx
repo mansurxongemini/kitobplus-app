@@ -15,7 +15,7 @@ import {
 import React, { useState, useEffect } from "react";
 import useLibrary from "../LibraryContext";
 import { request } from "../lib/api";
-import T from "../lib/translator";
+import T, { tr } from "../lib/translator";
 import LoginForm from "../login/LoginForm";
 import { DateField } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -77,7 +77,7 @@ const EditProfileSection = () => {
       }
     } catch (error) {
       console.error('Ошибка при сохранении профиля:', error);
-      alert(T('Ошибка во время сохранения профиля'));
+      alert(tr('Ошибка во время сохранения профиля'));
     } finally {
       setLoading(false);
     }
@@ -88,20 +88,17 @@ const EditProfileSection = () => {
         sx={{
           bgcolor: "background.paper",
           border: 1,
-          borderColor: "neutral.100",
-          boxShadow: "0px 4px 24px rgba(38, 38, 38, 0.07)",
+          borderColor: "divider",
+          borderRadius: 6,
           p: { xs: 2, md: 3 },
           width: "100%",
         }}
       >
         <Typography
-          variant="h2"
+          variant="h3" component="h2"
           sx={{
-            fontFamily: "'PT_Root_UI-Bold',Helvetica",
             fontWeight: "bold",
-            color: "secondary.main",
             mb: 2,
-            fontSize: { xs: "24px", md: "30px" },
           }}
         >
           {T('Мои данные')}:
@@ -122,7 +119,6 @@ const EditProfileSection = () => {
           />
           <Typography
             sx={{
-              fontFamily: "'PT_Root_UI-Regular',Helvetica",
               color: "text.secondary",
               fontSize: { xs: "14px", md: "16px" },
             }}
@@ -137,7 +133,6 @@ const EditProfileSection = () => {
               <PhoneIcon sx={{color: 'gray'}}/>
               <Typography
                 sx={{
-                  fontFamily: "'PT_Root_UI-Regular',Helvetica",
                   color: "text.primary",
                   fontSize: "18px",
                   fontWeight: 'bold'
@@ -164,10 +159,8 @@ const EditProfileSection = () => {
               variant="outlined"
               InputProps={{
                 sx: {
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
                   fontSize: { xs: "16px", md: "18px" },
-                  color: "secondary.main",
                   borderColor: "primary.main",
                 },
               }}
@@ -181,10 +174,8 @@ const EditProfileSection = () => {
               onChange={(e) => handleInputChange('nickname', e.target.value)}
               InputProps={{
                 sx: {
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
                   fontSize: { xs: "16px", md: "18px" },
-                  color: "secondary.main",
                   borderColor: "primary.main",
                 },
               }}
@@ -207,7 +198,6 @@ const EditProfileSection = () => {
             label={
               <Typography
                 sx={{
-                  fontFamily: "'PT_Root_UI-Medium',Helvetica",
                   fontWeight: "medium",
                   color: "text.secondary",
                   fontSize: "18px",
@@ -230,10 +220,8 @@ const EditProfileSection = () => {
                       style={{paddingTop: 8}}
                       InputProps={{
                         sx: {
-                          fontFamily: "'PT_Root_UI-Medium',Helvetica",
                           fontWeight: "medium",
                           fontSize: "18px",
-                          color: "secondary.main",
                           borderColor: "primary.main",
                         },
                       }}
@@ -247,10 +235,8 @@ const EditProfileSection = () => {
                 variant="outlined"
                 InputProps={{
                   sx: {
-                    fontFamily: "'PT_Root_UI-Medium',Helvetica",
                     fontWeight: "medium",
                     fontSize: "18px",
-                    color: "secondary.main",
                     borderColor: "primary.main",
                   },
                 }}
@@ -274,7 +260,6 @@ const EditProfileSection = () => {
               label={
                 <Typography
                   sx={{
-                    fontFamily: "'PT_Root_UI-Medium',Helvetica",
                     fontWeight: "medium",
                     color: "text.secondary",
                     fontSize: "18px",
@@ -293,9 +278,8 @@ const EditProfileSection = () => {
               sx={{
                 width: 211,
                 height: 44,
-                fontFamily: "'PT_Root_UI-Bold',Helvetica",
                 fontWeight: "bold",
-                fontSize: "16px",
+                fontSize: "1.0625rem",
               }}
             >
               {loading ? T("Сохранение...") : T("Сохранить")}

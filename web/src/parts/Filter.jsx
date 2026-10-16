@@ -1,72 +1,73 @@
-import React from 'react'
-import { Autocomplete, TextField, useTheme } from "@mui/material"
+import React from "react";
+import { Box, TextField, Typography, InputAdornment, useTheme } from "@mui/material";
 import Search from "@mui/icons-material/Search";
-import { useDebounce } from 'use-debounce';
-import useLibrary from '../LibraryContext';
-import T from '../lib/translator';
+import { useDebounce } from "use-debounce";
+import T from "../lib/translator";
 
-const Filter = ({filter, setFilter}) => {
-    const theme = useTheme();
-    const [rawFilter, setRawFilter] = React.useState('');
-    const [ searchRequest ] = useDebounce(rawFilter, 1000);
-    const {darkMode} = useLibrary();
+// Large labeled search field with debounced updates.
+// Supports the new {value, onChange} contract and the legacy {filter, setFilter}
+// contract used by persons/PersonsSection.jsx.
+const Filter = ({ filter, setFilter, value, onChange }) => {
+  const { kp } = useTheme();
+  const controlled = value !== undefined ? value : filter;
+  const emit = onChange ?? setFilter ?? (() => {});
+  const [raw, setRaw] = React.useState(controlled ?? "");
+  const [debounced] = useDebounce(raw, 500);
+  const lastEmitted = React.useRef(controlled ?? "");
+  const emitRef = React.useRef(emit);
+  emitRef.current = emit;
+  const fieldId = React.useId();
 
-    React.useEffect(() => {
-        console.log(searchRequest)
-        setFilter(searchRequest)
-    }, [setFilter, searchRequest])
+  React.useEffect(() => {
+    if (debounced !== lastEmitted.current) {
+      lastEmitted.current = debounced;
+      emitRef.current(debounced);
+    }
+  }, [debounced]);
 
-    return (
-        <Autocomplete
-            freeSolo
-            options={[]}
-            defaultValue={filter}
-            value={rawFilter}
-            onChange={(event, newValue) => setRawFilter(newValue ?? '')}
-            inputValue={rawFilter}
-            onInputChange={(event, newInputValue, reason) => setRawFilter(newInputValue ?? '')}
-            clearText={T("Очистить")}
-            closeText={T("Закрыть")}
-            openText={T("Открыть")}
-            renderInput={(params) => (
-            <TextField
-                {...params}
-                placeholder={T("Поиск")}
-                variant="outlined"
-                inputProps={{
-                    ...params.inputProps,
-                    'aria-label': T("Поиск"),
-                }}
-                InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                        <Search aria-hidden="true" sx={{ color: theme.palette.icon.main, mr: 1 }} />
-                    ),
-                }}
-                sx={{
-                    minWidth: "785px",
-                    width: "100%",
-                    mb: 2,
-                    "& .MuiOutlinedInput-root": {
-                        height: "40px",
-                        bgcolor: darkMode ? "#202020" : theme.palette.background.paper,
-                        borderRadius: "6px",
-                        "& fieldset": {
-                            borderColor: theme.palette.lightfirst.main,
-                        },
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                        color: theme.palette.text.secondary,
-                        fontFamily: theme.typography.fontFamily,
-                        fontWeight: 700,
-                        fontSize: "14px",
-                        opacity: 0.6,
-                    },
-                }}
-            />
-            )}
-        />
-    )
-}
+  // Follow external resets (e.g. the "reset filters" button).
+  React.useEffect(() => {
+    const next = controlled ?? "";
+    if (next !== raw && next !== lastEmitted.current) {
+      lastEmitted.current = next;
+      setRaw(next);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlled]);
 
-export default Filter
+  return (
+    <Box
+      component="form"
+      role="search"
+      aria-label={T("Поиск")}
+      onSubmit={(e) => e.preventDefault()}
+      sx={{ width: "100%" }}
+    >
+      <Typography
+        component="label"
+        htmlFor={fieldId}
+        sx={{ display: "block", fontWeight: 600, mb: 1, fontSize: "1.0625rem" }}
+      >
+        {T("Найдите книгу, автора или диктора")}
+      </Typography>
+      <TextField
+        id={fieldId}
+        type="search"
+        fullWidth
+        value={raw}
+        onChange={(e) => setRaw(e.target.value)}
+        placeholder={T("Например, «O‘tkan kunlar»")}
+        autoComplete="off"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search aria-hidden="true" sx={{ color: kp.p.textSecondary }} />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Box>
+  );
+};
+
+export default Filter;

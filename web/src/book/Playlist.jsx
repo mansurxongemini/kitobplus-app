@@ -2,230 +2,174 @@ import Pause from "@mui/icons-material/Pause";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import Bookmark from "@mui/icons-material/Bookmark";
 import Delete from "@mui/icons-material/Delete";
+import GraphicEqRounded from "@mui/icons-material/GraphicEqRounded";
 import {
   Box,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  Paper,
   Typography,
   useTheme,
   IconButton,
 } from "@mui/material";
 import React from "react";
 import Timer from "./timer";
-import DarkTimer from "./dark_timer";
 import T from "../lib/translator";
-import useLibrary from "../LibraryContext";
 
-const Playlist = ({data, isPlaying, currentTrackId, playTrack, type = "playlist", playlist, removeBookmark}) => {
-  const theme = useTheme();
-  const {darkMode} = useLibrary();
+// Chapters / bookmarks list. Every row is a real button; the currently playing
+// chapter is marked with an icon AND the text "Hozir ijro etilmoqda", never by
+// colour alone.
+const Playlist = ({ data, isPlaying, currentTrackId, playTrack, type = "playlist", playlist, removeBookmark }) => {
+  const { kp } = useTheme();
 
   const getTrackOffset = (trackId) => {
-    if (!playlist) {return 0;}
+    if (!playlist) {
+      return 0;
+    }
     let trackOffset = 0;
     for (let i = 0; i < trackId; i++) {
       trackOffset += playlist[i].length;
     }
-    console.log("getTrackOffset(" + trackId + ") => " + trackOffset);
     return trackOffset;
   };
-    
+
   const handleTrackClick = (index) => {
     if (type === "playlist") {
       playTrack(index);
-      console.log(`Track ${index + 1} clicked`);
     } else if (type === "bookmarks") {
-      // Для закладок - переходим к позиции в треке
       const bookmark = data[index];
       if (bookmark && playTrack) {
         playTrack(bookmark.track, bookmark.position / 1000);
       }
-      console.log(`Bookmark ${index + 1} clicked`);
     }
   };
 
   const handleRemoveBookmark = (e, item, index) => {
-    e.stopPropagation(); // Предотвращаем срабатывание клика по элементу списка
+    e.stopPropagation();
     if (removeBookmark && type === "bookmarks") {
       removeBookmark(item.track, item.position);
-      console.log(`Removing bookmark ${index + 1}, track: ${item.track}, position: ${item.position}`);
     }
   };
 
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  const formatClock = (seconds) => {
+    const s = Math.max(0, Math.round(Number(seconds) || 0));
+    const mins = Math.floor(s / 60);
+    const secs = s % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
+
+  const isCurrent = (index) => type === "playlist" && index === currentTrackId && isPlaying;
 
   const getItemLabel = (item, index) => {
     if (type === "bookmarks") {
-      const absolutePosition = Math.round(getTrackOffset(item.track) + (item.position / 1000));
-      return `${T('Закладка')} ${index + 1}, ${T('Фрагмент')} ${item.track + 1}, ${formatTime(Math.round(absolutePosition))}`;
+      const absolutePosition = Math.round(getTrackOffset(item.track) + item.position / 1000);
+      return `${T("Закладка")} ${index + 1}, ${T("Фрагмент")} ${item.track + 1}, ${formatClock(absolutePosition)}`;
     }
-    return `${T('Фрагмент')} ${index + 1}, ${item.duration || ''}`;
-  };
-
-  const getItemTitle = (item, index) => {
-    if (type === "bookmarks") {
-      return `${T('Закладка')} ${index + 1}`;
-    }
-    return `${T('Фрагмент')} ${index + 1}`;
+    return `${T("Фрагмент")} ${index + 1}${isCurrent(index) ? `, ${T("Сейчас играет")}` : ""}`;
   };
 
   const getItemTime = (item) => {
-    let value = 0;
     if (type === "bookmarks") {
-      // Для закладок используем DarkTimer с абсолютной позицией
-      value = getTrackOffset(item.track) + (item.position / 1000);
-    } else {
-      value = item.length;
+      return getTrackOffset(item.track) + item.position / 1000;
     }
-
-    return darkMode ? <Timer value={value} /> : <DarkTimer value={value} />;
+    return item.length;
   };
 
-  const getIcon = (item, index) => {
-    if (type === "bookmarks") {
-      return (
-        <Bookmark sx={{ 
-          color: theme.palette.lightwhite.main, 
-          width: 32, 
-          height: 32, 
-          backgroundColor: theme.palette.icon.main, 
-          borderRadius: '50%',
-          padding: '4px'
-        }} />
-      );
-    }
-    
-    return (index == currentTrackId && isPlaying) ? (
-      <Pause sx={{ 
-        color: theme.palette.lightwhite.main, 
-        width: 32, 
-        height: 32, 
-        backgroundColor: theme.palette.icon.main, 
-        borderRadius: '50%',
-        padding: '4px'
-      }} />
-    ) : (
-      <PlayArrow sx={{ 
-        color: theme.palette.lightwhite.main, 
-        width: 32, 
-        height: 32, 
-        backgroundColor: theme.palette.icon.main, 
-        borderRadius: '50%',
-        padding: '4px'
-      }} />
+  const labelId = React.useId();
+  if (!data || data.length === 0) {
+    return (
+      <Typography sx={{ py: 3, px: 1, color: kp.p.textSecondary }}>
+        {type === "bookmarks" ? T("Пока нет закладок") : T("Пока нет фрагментов")}
+      </Typography>
     );
-  };
+  }
 
   return (
-    <Box sx={{ 
-      width: 377, 
-      bgcolor: theme.palette.lightfirst.main,
-      maxHeight: 400,
-      overflow: 'hidden'
-    }}>
-      <Box sx={{ 
-        p: 0.5,
-        maxHeight: 400,
-        overflowY: 'auto'
-      }}>
-        <List disablePadding>
-          {data && data.map((item, index) => (
-            <ListItem
-              tabIndex={0}
-              key={index}
-              component={Paper}
-              elevation={0}
-              onClick={() => handleTrackClick(index)}
-              role="listitem"
-              aria-label={getItemLabel(item, index)}
-              label={getItemLabel(item, index)}
-              onKeyDown={(e) => {if (e.key === 'Enter') handleTrackClick(index)}}
-              sx={{
-                height: 50,
-                mb: 0.5,
-                p: 0,
-                borderRadius: 0.5,
-                overflow: "hidden",
-                bgcolor: (type === "playlist" && index == currentTrackId && isPlaying)
-                  ? theme.palette.action.hover
-                  : "transparent",
-                "&:hover": {
-                  bgcolor: darkMode ? "#646464" : theme.palette.background.paper,
-                  cursor: "pointer",
-                },
-              }}
-            >
-              <Box
+    <Box sx={{ width: "100%", maxHeight: 420, overflowY: "auto" }} role="group" aria-labelledby={labelId}>
+      <Typography id={labelId} variant="caption" sx={{ display: "block", px: 1, pb: 1, color: kp.p.textSecondary }}>
+        {type === "bookmarks"
+          ? `${T("Закладки")}: ${data.length}`
+          : `${T("Фрагмент")}: ${data.length}`}
+      </Typography>
+      <List disablePadding sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+        {data.map((item, index) => {
+          const current = isCurrent(index);
+          return (
+            <ListItem key={index} disablePadding disableGutters>
+              <ListItemButton
+                onClick={() => handleTrackClick(index)}
+                aria-label={getItemLabel(item, index)}
+                aria-current={current ? "true" : undefined}
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  px: 2,
+                  minHeight: 56,
+                  borderRadius: 3,
+                  px: 1.5,
+                  bgcolor: current ? kp.p.primarySoft : "transparent",
+                  border: current ? `2px solid ${kp.p.primary}` : "2px solid transparent",
+                  "&:hover": { bgcolor: current ? kp.p.primarySoft : kp.p.surfaceAlt },
                 }}
               >
-                <ListItemIcon sx={{}}>
-                  {getIcon(item, index)}
+                <ListItemIcon sx={{ minWidth: 48 }}>
+                  {type === "bookmarks" ? (
+                    <Bookmark aria-hidden="true" sx={{ color: kp.p.primary }} />
+                  ) : current ? (
+                    <GraphicEqRounded aria-hidden="true" sx={{ color: kp.p.primary }} />
+                  ) : (
+                    <PlayArrow aria-hidden="true" sx={{ color: kp.p.textSecondary }} />
+                  )}
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontWeight: "bold",
-                        color: theme.palette.text.primary,
-                        fontSize: 16,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        maxWidth: 226,
-                        fontFamily: theme.typography.fontFamily,
-                      }}
-                    >
-                      {getItemTitle(item, index)}
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                      <Typography component="span" sx={{ fontWeight: 700 }}>
+                        {type === "bookmarks" ? `${T("Закладка")} ${index + 1}` : `${T("Фрагмент")} ${index + 1}`}
+                      </Typography>
+                      {current && (
+                        <Typography
+                          component="span"
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 0.5,
+                            fontSize: "0.875rem",
+                            fontWeight: 700,
+                            color: kp.p.onPrimarySoft,
+                            bgcolor: kp.p.primary,
+                            px: 1.25,
+                            py: 0.25,
+                            borderRadius: 999,
+                          }}
+                        >
+                          <Pause aria-hidden="true" sx={{ fontSize: 16 }} />
+                          {T("Сейчас играет")}
+                        </Typography>
+                      )}
+                    </Box>
+                  }
+                  secondary={
+                    <Typography component="span" variant="body2" sx={{ color: kp.p.textSecondary }}>
+                      <Timer value={getItemTime(item)} ariaPrefix={T("Длительность")} />
                     </Typography>
                   }
-                  sx={{ margin: 0, ml: 0 }}
                 />
-                <Typography
-                  variant="body1"
-                  sx={{
-                    whiteSpace: "nowrap",
-                    textAlign: "right",
-                    ml: "auto",
-                  }}
-                  style={{textAlign: 'right' }}
-                >
-                  {getItemTime(item)}
-                </Typography>
                 {type === "bookmarks" && (
                   <IconButton
-                    size="small"
+                    size="large"
+                    edge="end"
                     onClick={(e) => handleRemoveBookmark(e, item, index)}
-                    sx={{
-                      ml: 1,
-                      color: theme.palette.text.secondary,
-                      "&:hover": {
-                        color: theme.palette.error.main,
-                        backgroundColor: theme.palette.error.light + "20",
-                      },
-                    }}
-                    aria-label={`${T('Удалить закладку')} ${index + 1}`}
+                    aria-label={`${T("Удалить закладку")} ${index + 1}`}
+                    sx={{ width: 48, height: 48 }}
                   >
-                    <Delete fontSize="small" />
+                    <Delete />
                   </IconButton>
                 )}
-              </Box>
+              </ListItemButton>
             </ListItem>
-          ))}
-        </List>
-      </Box>
+          );
+        })}
+      </List>
     </Box>
   );
 };

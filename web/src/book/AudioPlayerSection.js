@@ -1,28 +1,19 @@
-import NotBookmarkedIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkedIcon from "@mui/icons-material/BookmarkAdded";
 import BookmarkIcon from "@mui/icons-material/BookmarkAdd";
 import EmptyBookmarkIcon from "@mui/icons-material/BookmarkAddOutlined";
-import NotBookshelfedIcon from "@mui/icons-material/BookOutlined";
-import BookshelfedIcon from "@mui/icons-material/Book";
-import DownloadIcon from "@mui/icons-material/Download";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import Replay30Icon from "@mui/icons-material/Replay30"; // Placeholder for Replay15Icon
-import Forward30Icon from "@mui/icons-material/Forward30"; // Placeholder for Forward15Icon
+import Replay30Icon from "@mui/icons-material/Replay30";
+import Forward30Icon from "@mui/icons-material/Forward30";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import { Box, IconButton, Slider, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Slider, Stack, Typography, useTheme } from "@mui/material";
 import React from "react";
-import { getHost, registered, getUser } from '../lib/api';
+import { getHost } from '../lib/api';
 import PlaylistPlayer from './playlistplayer';
-import T from '../lib/translator';
-import {Button} from "@mui/material";
+import T, { tr } from '../lib/translator';
 import Timer from './timer';
-import {add as addToBookshelf, remove as removeFromBookshelf} from '../lib/bookshelf.ts';
-import LikeSection from "./Like.jsx";
 import useLibrary from '../LibraryContext.js';
-import BookBreadcrumbs from './BookBreadcrumbs.jsx';
 import { announce, VisuallyHidden, formatDurationParts } from '../lib/a11y';
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
@@ -32,28 +23,25 @@ const formatAriaTime = (seconds, T_) => {
   return m + ' ' + T_('минута') + ' ' + s + ' ' + T_('секунда');
 };
 
-// Mock data for the audio player
-const audioData = {
-  title: "Гарри Поттер: Узник Азкабана",
-  currentTime: "02:15",
-  totalTime: "01:02:15",
-  progress: 24, // percentage of progress
+// Цифры таймера: старый index.css красит span.timerNum белым — возвращаем цвет и шрифт темы.
+const timerSx = {
+  minWidth: "fit-content", fontVariantNumeric: "tabular-nums",
+  "& span.timerNum, & span.timerSep": { color: "inherit", fontFamily: "inherit", fontSize: "inherit", fontWeight: "inherit" },
 };
 
 const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBookmarks, addBookmark, removeBookmark, setPlaylist, isPlaying, setIsPlaying, currentTrackId, setCurrentTrackId}, ref) => {
+  const { kp } = useTheme();
   const playerRef = React.useRef(null);
   const [currentPosition, setCurrentPosition] = React.useState(0);
   const [totalTime, setTotalTime] = React.useState(0);
   const [rate, setRate] = React.useState(1);
-  const [bookshelfed, setBookshelfed] = React.useState(false);
-  const [progress, setProgress] = React.useState(0);
   const [currentTrackPosition, setCurrentTrackPosition] = React.useState(0);
   const [volume, setVolume] = React.useState(70);
   const lastPositionStateRef = React.useRef({ position: -1, duration: -1, rate: -1 });
   const prevTrackRef = React.useRef(null);
 
   const { user } = useLibrary();
-  
+
   React.useImperativeHandle(ref, () => ({
     playTrack: (trackId, position = 0) => playerRef?.current.playTrack(trackId, position)
   }));
@@ -63,15 +51,14 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
   React.useEffect(() => {
       if (!book || !book?.files) return;
 
-      // Проверяем статус пользователя из контекста, а не только из localStorage
       const isUserRegistered = user && user.state === 2;
-      
-      const files = isUserRegistered ? 
+
+      const files = isUserRegistered ?
               book.files.split(',').map((_, i) => {return {'url': getHost() + '/drm/xstream.php?books_id=' + book.id + '&tracks_id=' + (i + 1), 'length': parseFloat(_)};})
           :
               [{url: getHost() + '/books/' + book.id.toString().padStart(5, '0') + '.mp3', length: 180}]
       ;
-      
+
       if (book?.rate) {
           setRate(Number(book.rate));
       }
@@ -79,12 +66,8 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       setPlaylist(files);
       setTotalTime(files.reduce((sum, item) => sum + item.length, 0));
 
-      console.log("Bookshelf");
-      console.log(book.bookshelf_dt);
-
-      setBookshelfed(book?.bookshelf_dt !== null && book?.bookshelf_dt !== undefined);
       setBookmarks(book?.bookmarks ? book.bookmarks : []);
-  }, [book, user, setPlaylist]);
+  }, [book, user, setPlaylist, setBookmarks]);
 
   const getTrackOffset = (trackId) => {
       if (!playlist) return 0;
@@ -92,9 +75,8 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       for (let i = 0; i < trackId; i++) {
           trackOffset += playlist[i].length;
       }
-      //console.log("getTrackOffset(" + trackId + ") => " + trackOffset);
       return trackOffset;
-  }
+  };
   const onProgress = (playing, trackId, trackPosition) => {
       setIsPlaying(playing);
       setCurrentTrackId(trackId);
@@ -102,12 +84,6 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
 
       let trackOffset = getTrackOffset(trackId);
       setCurrentPosition(trackOffset + trackPosition);
-  };
-
-  const saveBookshelfed = (_) => {
-      const func = (_ ? addToBookshelf : removeFromBookshelf);
-      setBookshelfed(_);
-      func(book.id).catch(e => {setBookshelfed(!_); alert(e);});
   };
 
   const seekToPosition = (seconds) => {
@@ -129,13 +105,13 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       const next = SPEEDS[Math.min(SPEEDS.length - 1, Math.max(0, idx + dir))];
       const r = playerRef.current?.setRateValue ? playerRef.current.setRateValue(next) : next;
       setRate(r);
-      announce(T('Скорость') + ': ' + r + 'x');
+      announce(tr('Скорость') + ': ' + r + 'x');
   };
 
   const cycleRate = () => {
       const r = playerRef.current ? playerRef.current.switchRate(rate) : rate;
       setRate(r);
-      announce(T('Скорость') + ': ' + r + 'x');
+      announce(tr('Скорость') + ': ' + r + 'x');
   };
 
   // Global player shortcuts when focus is not in a text field.
@@ -178,7 +154,7 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
   // Announce track changes.
   React.useEffect(() => {
     if (prevTrackRef.current !== null && prevTrackRef.current !== currentTrackId) {
-      announce(T('Фрагмент изменён'));
+      announce(tr('Фрагмент изменён'));
     }
     prevTrackRef.current = currentTrackId;
   }, [currentTrackId]);
@@ -218,313 +194,188 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
     } catch (e) { /* ignore */ }
   }, [currentPosition, totalTime, rate]);
 
+  const playLabel = isPlaying ? T('Пауза') : T('Воспроизведение');
 
   return (
-    <Box
-      sx={{
-        height: { xs: "auto", md: 340 },
-        minHeight: { xs: 400, sm: 500, md: 340 },
-        width: "100%",
-        position: "relative",
-        backgroundImage: "url(" + getHost() + '/pics/' + (book.pics_ext ? 'books/' + book.id + '.' + book.pics_ext : 'book.png') + ")",
-        backgroundSize: "cover",
-        backgroundPosition: "50% 50%",
-      }}
+    <Card
+      role="region"
+      aria-label={book && book.title ? `${T('Слушать')}: ${book.title}` : T('Аудиоплеер')}
+      aria-describedby="player-shortcuts-hint"
+      sx={{ p: { xs: 2.5, md: 4 }, borderRadius: 6, boxShadow: kp.shadows.raised }}
     >
       <PlaylistPlayer book={book} track={book?.track} position={book?.position} rate={book?.rate} ref={playerRef} playlist={playlist} onProgress={onProgress}/>
       <VisuallyHidden id="player-shortcuts-hint">
         {T('Сочетания клавиш плеера') + '. ' + T('Пробел — воспроизведение или пауза. Стрелки влево и вправо — назад или вперёд на 30 секунд. Стрелки вверх и вниз с Shift, а также клавиши < и > — скорость.')}
       </VisuallyHidden>
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: "rgba(2, 73, 89, 0.75)",
-        backdropFilter: "blur(6px)",
-      }} />
-      {/* Navigation breadcrumbs */}
-      <BookBreadcrumbs book={book} />
 
-      <Box sx={{
-        display: "flex",
-        flexDirection: "column",
-        p: { xs: 2, sm: 3 },
-        pl: { xs: 2, sm: 3, md: 50 },
-        pr: { xs: 2, sm: 3, md: 4 },
-        pt: { xs: 10, md: 3 }
-      }} style={{position: 'absolute', width: '100%', top: 30, left: 0, zIndex: 1, boxSizing: 'border-box'}}>
-        {/* Book cover image */}
-
-        <Box sx={{ flex: 1 }}>
-          {/* Title */}
-          <Typography
-            variant="h2"
-            component="h1"
-            tabIndex={-1}
-            fontWeight="bold"
-            color="white"
-            sx={{
-              mb: { xs: 2, md: 3 },
-              fontSize: { xs: "24px", sm: "28px", md: "30px" },
-              lineHeight: { xs: "1.3", md: "39px" }
-            }}
-          >
-            {book.title}
-          </Typography>
-
-          {/* Audio player controls container */}
-          <Box
-            role="region"
-            aria-label={book.title}
-            aria-describedby="player-shortcuts-hint"
-            sx={{
-              bgcolor: "rgba(255, 255, 255, 0.1)",
-              p: { xs: 1.5, md: 2 },
-              borderRadius: 1,
-              width: "100%",
-              maxWidth: "100%"
-            }}
-          >
-            {/* Top row with speed, rewind, play, forward, download controls */}
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{ mb: 1, gap: { xs: 0.5, sm: 1 } }}
-            >
-              {/* Left controls */}
-              <Stack direction="row" spacing={{ xs: 0.5, sm: 1, md: 2 }}>
-                <Box
-                  sx={{
-                    width: { xs: 36, md: 40 },
-                    height: { xs: 36, md: 40 },
-                    bgcolor: "rgba(0, 0, 0, 0.3)",
-                    borderRadius: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button
-                    sx={{
-                      color: "white",
-                      fontWeight: "bold",
-                      minWidth: 0,
-                      fontSize: { xs: "12px", md: "14px" },
-                      p: 0.5
-                    }}
-                    aria-label={T('Скорость')}
-                    title={T('Скорость')}
-                    onClick={cycleRate}
-                  >
-                    {rate}X
-                  </Button>
-                </Box>
-
-                <IconButton
-                  sx={{
-                    width: { xs: 36, md: 40 },
-                    height: { xs: 36, md: 40 },
-                    bgcolor: "rgba(0, 0, 0, 0.3)",
-                    borderRadius: 1,
-                    p: { xs: 0.5, md: 1 }
-                  }}
-                  onClick={() => playerRef.current.stepBackward()}
-                  aria-label={T('Назад на 30 секунд')}
-                  title={T('Назад на 30 секунд')}
-                >
-                  <Replay30Icon sx={{ color: "white", fontSize: { xs: 20, md: 24 } }} />
-                </IconButton>
-              </Stack>
-
-              {/* Center play controls */}
-              <Stack direction="row" spacing={{ xs: 0.5, sm: 1, md: 2 }} alignItems="center">
-                <IconButton
-                  onClick={() => playerRef.current.previosTrack()}
-                  aria-label={T('Предыдущий фрагмент')}
-                  color="inherit"
-                  sx={{
-                    color: "white",
-                    display: { xs: "none", sm: "flex" },
-                    p: { xs: 0.5, md: 1 }
-                  }}
-                >
-                  <SkipPreviousIcon sx={{ fontSize: { sm: 24, md: 28 } }} />
-                </IconButton>
-                <IconButton
-                  sx={{
-                    width: { xs: 48, md: 60 },
-                    height: { xs: 48, md: 60 },
-                    border: "2px solid white",
-                    borderRadius: "50%",
-                    color: "white",
-                  }}
-                  onClick={() => playerRef.current.playPause()}
-                  aria-label={isPlaying ? T('Пауза') : T('Воспроизведение')}
-                >
-                  {isPlaying ? (
-                    <PauseIcon sx={{ fontSize: { xs: 28, md: 36 } }} />
-                  ) : (
-                    <PlayArrowIcon sx={{ fontSize: { xs: 28, md: 36 } }} />
-                  )}
-                </IconButton>
-                <IconButton
-                  onClick={() => playerRef.current.nextTrack()}
-                  aria-label={T('Следующий фрагмент')}
-                  color="inherit"
-                  sx={{
-                    color: "white",
-                    display: { xs: "none", sm: "flex" },
-                    p: { xs: 0.5, md: 1 }
-                  }}
-                >
-                  <SkipNextIcon sx={{ fontSize: { sm: 24, md: 28 } }} />
-                </IconButton>
-              </Stack>
-
-              {/* Right controls */}
-              <Stack direction="row" spacing={{ xs: 0.5, sm: 1, md: 2 }}>
-                <IconButton
-                  sx={{
-                    width: { xs: 36, md: 40 },
-                    height: { xs: 36, md: 40 },
-                    bgcolor: "rgba(0, 0, 0, 0.3)",
-                    borderRadius: 1,
-                    p: { xs: 0.5, md: 1 }
-                  }}
-                  onClick={() => playerRef.current.stepForward()}
-                  aria-label={T('Вперёд на 30 секунд')}
-                  title={T('Вперёд на 30 секунд')}
-                >
-                  <Forward30Icon sx={{ color: "white", fontSize: { xs: 20, md: 24 } }} />
-                </IconButton>
-                <IconButton
-                  sx={{
-                    width: { xs: 36, md: 40 },
-                    height: { xs: 36, md: 40 },
-                    bgcolor: "rgba(0, 0, 0, 0.3)",
-                    borderRadius: 1,
-                    p: { xs: 0.5, md: 1 }
-                  }}
-                  aria-label={T('Добавить закладку')}
-                  title={T('Добавить закладку')}
-                  onClick={() => { addBookmark(currentTrackId, Math.round(currentTrackPosition * 1000)); announce(T('Закладка добавлена')); }}
-                >
-                  {bookmarks?.length > 0 ? (
-                    <BookmarkIcon sx={{ color: "white", fontSize: { xs: 20, md: 24 } }} />
-                  ) : (
-                    <EmptyBookmarkIcon sx={{ color: "white", fontSize: { xs: 20, md: 24 } }} />
-                  )}
-                </IconButton>
-              </Stack>
-            </Stack>
-
-            {/* Progress bar and time */}
-            <Box sx={{ mt: 0}}>
-              <Stack direction="row" spacing={{ xs: 1, md: 2 }} alignItems="center">
-                <Typography
-                  variant="body2"
-                  color="white"
-                  fontWeight="bold"
-                  sx={{ fontSize: { xs: "12px", md: "14px" }, minWidth: "fit-content" }}
-                >
-                  <Timer value={currentPosition} ariaPrefix={T('Позиция')}/>
-                </Typography>
-                <Slider
-                  aria-label={T('Позиция воспроизведения')}
-                  min={0}
-                  max={Math.max(1, Math.round(totalTime))}
-                  step={5}
-                  value={Math.min(Math.round(currentPosition), Math.max(1, Math.round(totalTime)))}
-                  onChange={(_, v) => seekToPosition(Array.isArray(v) ? v[0] : v)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'PageUp') { e.preventDefault(); seekToPosition(currentPosition + 30); }
-                    if (e.key === 'PageDown') { e.preventDefault(); seekToPosition(currentPosition - 30); }
-                  }}
-                  getAriaValueText={() => formatAriaTime(currentPosition, T) + ' / ' + formatAriaTime(totalTime, T)}
-                  sx={{
-                    color: "#0288d1",
-                    "& .MuiSlider-thumb": {
-                      width: { xs: 16, md: 22 },
-                      height: { xs: 16, md: 22 },
-                      border: "2px solid white",
-                    },
-                  }}
-                />
-                <Typography
-                  variant="body2"
-                  color="white"
-                  fontWeight="bold"
-                  sx={{ fontSize: { xs: "12px", md: "14px" }, minWidth: "fit-content" }}
-                >
-                  <Timer value={totalTime} ariaPrefix={T('Общее время')}/>
-                </Typography>
-              </Stack>
-            </Box>
-
-            <Box
-              sx={{
-                marginTop: '8px',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                gap: { xs: 1, sm: 0 }
-              }}
-            >
-              <LikeSection book={book}/>
-              <Stack
-                direction="row"
-                spacing={1}
-                alignItems="center"
-                justifyContent={{ xs: "center", sm: "flex-end" }}
-                sx={{ display: { xs: "none", sm: "flex" } }}
-              >
-                {/* Volume control - hidden on mobile */}
-                <VolumeUpIcon aria-hidden="true" sx={{ color: "white", fontSize: { sm: 20, md: 24 } }} />
-                <Slider
-                  aria-label={T('Громкость')}
-                  size="small"
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={volume}
-                  onChange={(_, v) => {
-                    const nv = Array.isArray(v) ? v[0] : v;
-                    setVolume(nv);
-                    playerRef.current?.setVolume?.(nv / 100);
-                  }}
-                  getAriaValueText={(v) => v + ' %'}
-                  sx={{
-                    width: { sm: 80, md: 100 },
-                    color: "white",
-                  }}
-                />
-              </Stack>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Bookmark button - hidden on xs, visible on sm+ */}
-        <IconButton
-          sx={{
-            width: 44,
-            height: 44,
-            bgcolor: "rgba(255, 255, 255, 0.2)",
-            color: "white",
-            ml: 2,
-            display: { xs: "none", sm: "flex" },
-          }}
-          aria-label={bookshelfed ? T('Снять с книжной полки') : T('Поставить на книжную полку')}
-          title={bookshelfed ? T('Снять с книжной полки') : T('Поставить на книжную полку')}
-          onClick={() => saveBookshelfed(!bookshelfed)}
+      {/* Main transport: every control pairs its icon with a visible text label. */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        flexWrap="wrap"
+        sx={{ gap: { xs: 1, md: 2 } }}
+      >
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<Replay30Icon aria-hidden="true" />}
+          onClick={() => playerRef.current?.stepBackward()}
+          aria-label={T('Назад на 30 секунд')}
+          title={T('Назад на 30 секунд')}
+          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
         >
-          {bookshelfed ? <BookshelfedIcon /> : <NotBookshelfedIcon />}
-        </IconButton>
-      </Box>
-    </Box>
+          {T('Назад на 30 секунд')}
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<SkipPreviousIcon aria-hidden="true" />}
+          onClick={() => playerRef.current?.previosTrack()}
+          aria-label={T('Предыдущий фрагмент')}
+          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+        >
+          {T('Предыдущий фрагмент')}
+        </Button>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: { xs: 1, md: 2 } }}>
+          <Button
+            variant="contained"
+            onClick={() => playerRef.current?.playPause()}
+            aria-label={playLabel}
+            sx={{
+              width: 80,
+              height: 80,
+              minWidth: 80,
+              borderRadius: "50%",
+              p: 0,
+              "& .MuiButton-startIcon": { m: 0 },
+            }}
+            startIcon={isPlaying
+              ? <PauseIcon aria-hidden="true" sx={{ fontSize: 44 }} />
+              : <PlayArrowIcon aria-hidden="true" sx={{ fontSize: 44 }} />}
+          >
+            <VisuallyHidden>{playLabel}</VisuallyHidden>
+          </Button>
+          <Typography aria-hidden="true" sx={{ mt: 1, fontWeight: 700 }}>
+            {playLabel}
+          </Typography>
+        </Box>
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<SkipNextIcon aria-hidden="true" />}
+          onClick={() => playerRef.current?.nextTrack()}
+          aria-label={T('Следующий фрагмент')}
+          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+        >
+          {T('Следующий фрагмент')}
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={<Forward30Icon aria-hidden="true" />}
+          onClick={() => playerRef.current?.stepForward()}
+          aria-label={T('Вперёд на 30 секунд')}
+          title={T('Вперёд на 30 секунд')}
+          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+        >
+          {T('Вперёд на 30 секунд')}
+        </Button>
+      </Stack>
+
+      {/* Progress with big thumb (themed) and time text on both sides. */}
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 3 }}>
+        <Typography component="div" variant="body2" fontWeight="bold" sx={timerSx}>
+          <Timer value={currentPosition} ariaPrefix={T('Позиция')}/>
+        </Typography>
+        <Slider
+          aria-label={T('Позиция воспроизведения')}
+          min={0}
+          max={Math.max(1, Math.round(totalTime))}
+          step={5}
+          value={Math.min(Math.round(currentPosition), Math.max(1, Math.round(totalTime)))}
+          onChange={(_, v) => seekToPosition(Array.isArray(v) ? v[0] : v)}
+          onKeyDown={(e) => {
+            if (e.key === 'PageUp') { e.preventDefault(); seekToPosition(currentPosition + 30); }
+            if (e.key === 'PageDown') { e.preventDefault(); seekToPosition(currentPosition - 30); }
+          }}
+          getAriaValueText={() => formatAriaTime(currentPosition, T) + ' / ' + formatAriaTime(totalTime, T)}
+        />
+        <Typography component="div" variant="body2" fontWeight="bold" sx={timerSx}>
+          <Timer value={totalTime} ariaPrefix={T('Общее время')}/>
+        </Typography>
+      </Stack>
+
+      {/* Speed, chapter bookmark, volume — each with a visible text label. */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        flexWrap="wrap"
+        sx={{ mt: 2, gap: { xs: 1.5, md: 3 } }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography component="span" id="player-speed-label" sx={{ fontWeight: 600 }}>
+            {T('Скорость')}
+          </Typography>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={cycleRate}
+            aria-labelledby="player-speed-label player-speed-value"
+            title={T('Скорость')}
+            sx={{ borderWidth: 2, minWidth: 88, "&:hover": { borderWidth: 2 } }}
+          >
+            <span id="player-speed-value">{rate}x</span>
+          </Button>
+        </Box>
+        <Button
+          variant="outlined"
+          size="large"
+          startIcon={bookmarks?.length > 0
+            ? <BookmarkIcon aria-hidden="true" />
+            : <EmptyBookmarkIcon aria-hidden="true" />}
+          onClick={() => { addBookmark(currentTrackId, Math.round(currentTrackPosition * 1000)); announce(tr('Закладка добавлена')); }}
+          aria-label={T('Добавить закладку')}
+          title={T('Добавить закладку')}
+          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+        >
+          {T('Добавить закладку')}
+        </Button>
+        <Box
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            alignItems: "center",
+            gap: 1,
+            flex: 1,
+            minWidth: 200,
+          }}
+        >
+          <VolumeUpIcon aria-hidden="true" sx={{ color: kp.p.textSecondary }} />
+          <Typography component="label" htmlFor="player-volume" sx={{ fontWeight: 600 }}>
+            {T('Громкость')}
+          </Typography>
+          <Slider
+            id="player-volume"
+            aria-label={T('Громкость')}
+            size="small"
+            min={0}
+            max={100}
+            step={5}
+            value={volume}
+            onChange={(_, v) => {
+              const nv = Array.isArray(v) ? v[0] : v;
+              setVolume(nv);
+              playerRef.current?.setVolume?.(nv / 100);
+            }}
+            getAriaValueText={(v) => v + ' %'}
+            sx={{ maxWidth: 160 }}
+          />
+          <Typography aria-hidden="true" sx={{ fontVariantNumeric: "tabular-nums", color: kp.p.textSecondary }}>
+            {volume} %
+          </Typography>
+        </Box>
+      </Stack>
+    </Card>
   );
 });
 

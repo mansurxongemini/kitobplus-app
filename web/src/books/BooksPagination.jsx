@@ -1,76 +1,34 @@
-import React from 'react'
-import { Box, IconButton, Pagination, PaginationItem, } from "@mui/material";
-import NavigateBefore from "@mui/icons-material/NavigateBefore";
-import NavigateNext from "@mui/icons-material/NavigateNext";
-import T from "../lib/translator";
+import React from "react";
+import { Box, Pagination } from "@mui/material";
 import { getPaginationItemAriaLabel } from "../lib/a11y";
+import T from "../lib/translator";
 
-const BooksPagination = ({page, setPage, pagesCount}) => {
-    const handlePageChange = (event, page) => {
-        setPage(page); // Обновляем состояние при изменении
-        console.log('Текущая страница:', page);
-    };
+const BooksPagination = ({ page, setPage, pagesCount }) => {
+  const itemAriaLabel = getPaginationItemAriaLabel(T);
 
-    const itemAriaLabel = getPaginationItemAriaLabel(T);
+  if (!pagesCount || pagesCount <= 1) return null;
 
-    return (
-        <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
-            <Pagination
-                count={pagesCount}
-                page={page}
-                onChange={handlePageChange}
-                getItemAriaLabel={itemAriaLabel}
-                renderItem={(item) => {
-                    if (item.type === "previous") {
-                    return (
-                        <PaginationItem
-                            component={IconButton}
-                            {...item}
-                            aria-label={itemAriaLabel(item.type, item.page, item.selected)}
-                            icon={<NavigateBefore aria-hidden="true" />}
-                        />
-                    );
-                    }
-                    if (item.type === "next") {
-                    return (
-                        <PaginationItem
-                            component={IconButton}
-                            {...item}
-                            aria-label={itemAriaLabel(item.type, item.page, item.selected)}
-                            icon={<NavigateNext aria-hidden="true" />}
-                        />
-                    );
-                    }
-                    return (
-                        <PaginationItem
-                            {...item}
-                            sx={{
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "6px",
-                                ...(item.page === 12345 && {
-                                    border: "1px solid #00AEC7",
-                                    bgcolor: 'white',
-                                    color: "#00AEC7",
-                                }),
-                                ...(item.page === 12342 && {
-                                    bgcolor: "#e6f6f8",
-                                    color: "#262626",
-                                }),
-                                fontFamily: "'Open Sans', Helvetica",
-                                fontWeight: 600,
-                                '&.Mui-selected': {
-                                    border: "1px solid #00AEC7",
-                                    backgroundColor: "transparent",
-                                    color: "black",
-                                }                            
-                            }}
-                        />
-                    );
-                }}
-            />
-        </Box>
-    )
-}
+  const handlePageChange = (_, next) => {
+    setPage(next);
+    // Bring keyboard and screen-reader users back to the top of the results.
+    requestAnimationFrame(() => {
+      document.getElementById("books-results")?.scrollIntoView({ block: "start" });
+    });
+  };
 
-export default BooksPagination
+  return (
+    <Box sx={{ display: "flex", justifyContent: "center", my: { xs: 4, md: 5 } }}>
+      <Pagination
+        count={pagesCount}
+        page={page}
+        onChange={handlePageChange}
+        size="large"
+        showFirstButton
+        showLastButton
+        getItemAriaLabel={itemAriaLabel}
+      />
+    </Box>
+  );
+};
+
+export default BooksPagination;

@@ -1,218 +1,80 @@
-import React from 'react'
-import { getHost } from "../lib/api"
-import { Box, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse, Divider } from '@mui/material';
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import T from '../lib/translator';
+import React from "react";
+import { Box, Button, Skeleton, Typography, useTheme } from "@mui/material";
+import CheckRounded from "@mui/icons-material/CheckRounded";
+import { getHost } from "../lib/api";
+import { VisuallyHidden } from "../lib/a11y";
+import T from "../lib/translator";
 
-const GenresSelector = ({selectedGenres, setSelectedGenres}) => {
-  /* Genre data
-  const [businessExpanded, setBusinessExpanded] = useState(true);
-  const [classicsExpanded, setClassicsExpanded] = useState(false);
+// Genre filter as toggle chips. Selection state is announced as pressed / not
+// pressed, never by colour alone.
+const GenresSelector = ({ selectedGenres, setSelectedGenres }) => {
+  const { kp } = useTheme();
+  const [genres, setGenres] = React.useState(null);
 
-  const genres = [
-    {
-      id: 1,
-      name: "Бизнес-книги",
-      count: "20 123",
-      icon: <BusinessIcon />,
-      expanded: businessExpanded,
-      setExpanded: setBusinessExpanded,
-      active: false,
-      subCategories: [],
-    },
-  ];
-  */
-  const [genres, setGenres_] = React.useState(undefined);
   React.useEffect(() => {
-    if (genres !== undefined) return;
+    fetch(getHost() + "/srv/genres.php")
+      .then((result) => result.json())
+      .then((json) => setGenres(json.data || []))
+      .catch(() => setGenres([]));
+  }, []);
 
-    fetch(getHost() + "/srv/genres.php").then(result => result.json()).then(json => {
-      setGenres_(json.data);
-    });
-  }, [genres]);
-  
-  const handleGenreClick = (genreId) => {
-    // Handle genre selection
-    console.log("Genre clicked:", genreId);
-
+  const toggle = (genreId) => {
     setSelectedGenres((prevSet) => {
-      const newSet = new Set(prevSet);
-      if (newSet.has(genreId)) {
-        newSet.delete(genreId);
+      const next = new Set(prevSet);
+      if (next.has(genreId)) {
+        next.delete(genreId);
       } else {
-        newSet.add(genreId);
+        next.add(genreId);
       }
-      return newSet;
+      return next;
     });
   };
 
-  const handleSubCategoryClick = (genreId, subCategoryName) => {
-    // Handle subcategory selection
-    console.log("Subcategory clicked:", genreId, subCategoryName);
-  };
+  if (genres !== null && genres.length === 0) return null;
 
-    return (
-        <Box sx={{ width: "377px", ml: "30px", bgcolor: "background.paper" }}>
-            <Typography
-                variant="h2"
-                sx={{
-                fontFamily: "'PT Root UI', Helvetica",
-                fontWeight: 700,
-                color: "secondary.main",
-                mb: 3,
-                bgcolor: "background.paper"
-                }}
+  return (
+    <Box component="section" aria-labelledby="books-genres-title" sx={{ mt: { xs: 4, md: 5 } }}>
+      <Typography id="books-genres-title" variant="h2" sx={{ fontSize: "1.375rem", mb: 2 }}>
+        {T("Жанры")}
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+        {!genres &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} variant="rounded" width={120} height={48} sx={{ borderRadius: 999 }} />
+          ))}
+        {(genres || []).map((genre) => {
+          const selected = !!selectedGenres && selectedGenres.has(genre.id);
+          return (
+            <Button
+              key={genre.id}
+              variant={selected ? "contained" : "outlined"}
+              size="large"
+              aria-pressed={selected}
+              onClick={() => toggle(genre.id)}
+              startIcon={selected ? <CheckRounded aria-hidden="true" /> : null}
+              sx={{
+                borderWidth: 2,
+                ...(selected
+                  ? {}
+                  : {
+                      borderColor: kp.p.borderStrong,
+                      color: kp.p.text,
+                      "&:hover": { borderWidth: 2, borderColor: kp.p.text },
+                    }),
+              }}
             >
-                {T('Жанры')}
-            </Typography>
+              {genre.name}
+              {genre.books_count ? (
+                <VisuallyHidden>
+                  {` — ${genre.books_count} ${T("книг (число)")}`}
+                </VisuallyHidden>
+              ) : null}
+            </Button>
+          );
+        })}
+      </Box>
+    </Box>
+  );
+};
 
-            <List sx={{ width: "100%", p: 0 }}>
-                {genres && genres.map((genre) => (
-                <React.Fragment key={'g' + genre.id}>
-                    <ListItemButton
-                        style={{cursor: 'pointer'}}
-                        onClick={() => {
-                            handleGenreClick(genre.id);
-                            if (genre.setExpanded) {
-                            genre.setExpanded(!genre.expanded);
-                            }
-                        }}
-                        sx={{
-                            bgcolor: selectedGenres.has(genre.id)
-                                ? "#ecf1f5"
-                                : "background.paper",
-                            height: "46px",
-                            px: 0,
-                        }}
-                    >
-                        <Box
-                            sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            width: "100%",
-                            px: 1.5,
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: "34px",
-                                    height: "34px",
-                                    bgcolor: selectedGenres.has(genre.id) ? "background.paper" : "#ecf1f5",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    mr: 1,
-                                }}
-                            >
-                                <img
-                                    alt=""
-                                    aria-hidden="true"
-                                    style={{
-                                        width: 32,
-                                        height: 32,
-                                        /*filter: 'grayscale(100%) contrast(20) opacity(0.5) '*/
-                                    }}
-                                    src={getHost() + '/pics/genres.flat/' + genre?.id + '.png'} />
-                            </ListItemIcon>
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    fontFamily: "'PT_Root_UI-Bold', Helvetica",
-                                    fontWeight: 500,
-                                    fontSize: "16px",
-                                    color: "#9cb0bf",
-                                    ml: 1,
-                                    width: '100%'
-                                }}
-                            >{genre.name}</Typography>
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    fontFamily: "'PT_Root_UI-Bold', Helvetica",
-                                    fontWeight: 500,
-                                    fontSize: "16px",
-                                    color: "#9cb0bf",
-                                    ml: 1,
-                                }}
-                            >
-                            {genre.books_count}
-                            </Typography>
-                            {genre.subCategories &&
-                            genre.subCategories.length > 0 && (
-                                <Box sx={{ ml: 1 }}>
-                                {genre.expanded ? (
-                                    <KeyboardArrowDown />
-                                ) : (
-                                    <KeyboardArrowRight />
-                                )}
-                                </Box>
-                            )}
-                        </Box>
-                    </ListItemButton>
-
-                    {genre.subCategories && genre.subCategories.length > 0 && (
-                    <Collapse in={genre.expanded} timeout="auto" unmountOnExit>
-                        <Divider sx={{ mx: 1.5 }} />
-                        <List component="div" disablePadding>
-                        {genre.subCategories.map((subCategory, index) => (
-                            <ListItem
-                            key={index}
-                            button
-                            onClick={() =>
-                                handleSubCategoryClick(genre.id, subCategory.name)
-                            }
-                            sx={{
-                                bgcolor:
-                                index % 2 === 1 ? "#f6faff" : "transparent",
-                                height: "38px",
-                                pl: 4,
-                            }}
-                            >
-                            <Box
-                                sx={{
-                                width: "4px",
-                                height: "4px",
-                                borderRadius: "2px",
-                                bgcolor: subCategory.active
-                                    ? "#00AEC7"
-                                    : "rgba(38, 38, 38, 0.7)",
-                                mr: 1,
-                                }}
-                            />
-                            <ListItemText
-                                primary={subCategory.name}
-                                primaryTypographyProps={{
-                                fontFamily: "'PT Root UI', Helvetica",
-                                fontWeight: 500,
-                                fontSize: "16px",
-                                color: subCategory.active
-                                    ? "#00AEC7"
-                                    : "rgba(38, 38, 38, 0.7)",
-                                }}
-                            />
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                fontFamily: "'PT Root UI', Helvetica",
-                                fontWeight: 500,
-                                fontSize: "16px",
-                                color: "#9cb0bf",
-                                ml: 1,
-                                }}
-                            >
-                                {subCategory.count}
-                            </Typography>
-                            </ListItem>
-                        ))}
-                        </List>
-                    </Collapse>
-                    )}
-                </React.Fragment>
-                ))}
-            </List>
-        </Box>
-    )
-}
-
-export default GenresSelector
+export default GenresSelector;

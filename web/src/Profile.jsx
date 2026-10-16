@@ -1,59 +1,40 @@
-import { Box, Container, Typography } from "@mui/material";
 import React from "react";
-import BreadCrumbSection from "./profile/BreadCrumbSection";
-import FooterSection from "./parts/FooterSection";
-import EditProfileSection from "./profile/EditProfileSection";
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import PageShell, { PageHeader } from "./ds/components/PageShell";
+import Container from "./ds/components/Container";
 import ProfileMenuSection from "./profile/ProfileMenuSection";
-import { ThemeProvider } from "./profile/ThemeProvider";
-import Navigation from "./parts/Navigation";
+import useLibrary from "./LibraryContext";
+import { getToken } from "./lib/api";
+import T from "./lib/translator.js";
 
-const DivWrapper = () => {
+// Profile: global theme (the local ./profile/ThemeProvider is gone) and the
+// shared PageShell header/footer. Section navigation lives in
+// ProfileMenuSection. Без входа вместо пустого профиля — приглашение войти.
+const Profile = () => {
+  const { kp } = useTheme();
+  const { user } = useLibrary();
+  const signedOut = !user && !getToken();
+
   return (
-      <Box
-        sx={{
-          bgcolor: "background.paper",
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <Container
-          maxWidth={false}
-          sx={{
-            bgcolor: "background.paper",
-            width: "100%",
-            maxWidth: "1440px",
-            position: "relative",
-            p: 0,
-          }}
-        >
-          <Navigation />
-          <BreadCrumbSection />
-
-          <Box sx={{
-            px: { xs: 2, sm: 3, md: 8, lg: "124px" },
-            mt: { xs: 2, md: 3 }
-          }}>
-            <Typography
-              variant="h1"
-              color="secondary.main"
-              fontFamily="PT_Root_UI-Bold, Helvetica"
-              fontWeight="bold"
-              sx={{
-                fontSize: { xs: "32px", sm: "40px", md: "59px" },
-                lineHeight: { xs: "1.2", md: "82.6px" }
-              }}
-            >
-              Профиль
+    <PageShell title={T("Профиль")}>
+      <PageHeader title={T("Профиль")} crumbs={[{ label: T("Профиль") }]} />
+      <Container sx={{ py: { xs: 4, md: 6 } }}>
+        {signedOut ? (
+          <Box sx={{ maxWidth: 560, p: { xs: 3, md: 5 }, borderRadius: 6, border: `1px solid ${kp.p.border}`, bgcolor: kp.p.surface }}>
+            <Typography sx={{ fontSize: "1.25rem", lineHeight: 1.5 }}>
+              {T("Чтобы открыть профиль, войдите в аккаунт")}
             </Typography>
-
-            <ProfileMenuSection />
+            <Button component={RouterLink} to="/login" variant="contained" size="large" sx={{ mt: 3 }}>
+              {T("Вход")}
+            </Button>
           </Box>
-
-          <FooterSection />
-        </Container>
-      </Box>
+        ) : (
+          <ProfileMenuSection />
+        )}
+      </Container>
+    </PageShell>
   );
 };
 
-export default DivWrapper;
+export default Profile;

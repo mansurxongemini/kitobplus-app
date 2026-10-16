@@ -29,7 +29,6 @@ const PlanButton = ({
       aria-label={ariaLabel}
       sx={{
         // Visual improvements
-        fontFamily: "'PT_Root_UI-Bold',Helvetica",
         fontWeight: "bold",
         textTransform: "none",
         borderRadius: 2,
