@@ -30,3 +30,4 @@ response.json*
 # Служебное
 .DS_Store
 ._*
+srv/gemini/lib64
