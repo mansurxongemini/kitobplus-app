@@ -9,7 +9,16 @@ const LibraryContext = createContext();
 export function LibraryProvider({ children }) {
   const [user, setUser] = useState(undefined);
   const [countryCode, setCountryCode] = useState(getCountryCode() ?? 'UZ');
-  const [darkMode, setDarkMode] = useState(localStorage.getItem('dark_mode') == "dark");
+  // Тема: light | dark | contrast (высокий контраст). darkMode оставлен для старых компонентов.
+  const [themeMode, setThemeMode] = useState(() => {
+    const saved = localStorage.getItem('theme_mode');
+    if (['light', 'dark', 'contrast'].includes(saved)) return saved;
+    return localStorage.getItem('dark_mode') == "dark" ? 'dark' : 'light';
+  });
+  const darkMode = themeMode !== 'light';
+  const setDarkMode = (dark) => setThemeMode(dark ? 'dark' : 'light');
+  // Размер текста: normal | large | xlarge
+  const [textScale, setTextScale] = useState(() => localStorage.getItem('text_scale') || 'normal');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -39,15 +48,18 @@ export function LibraryProvider({ children }) {
     }
   }, [countryCode]);
 
-  // Сохранение темы в localStorage при изменении
+  // Сохранение темы и размера текста
   useEffect(() => {
-    if (darkMode !== null && darkMode !== undefined) {
-      localStorage.setItem('dark_mode', darkMode ? "dark" : "light");
-    }
-  }, [darkMode]);
+    localStorage.setItem('theme_mode', themeMode);
+    localStorage.setItem('dark_mode', themeMode === 'light' ? "light" : "dark");
+  }, [themeMode]);
+
+  useEffect(() => {
+    localStorage.setItem('text_scale', textScale);
+  }, [textScale]);
 
   return (
-    <LibraryContext.Provider value={{ user, setUser, isAdmin, darkMode, setDarkMode, countryCode, setCountryCode }}>
+    <LibraryContext.Provider value={{ user, setUser, isAdmin, darkMode, setDarkMode, themeMode, setThemeMode, textScale, setTextScale, countryCode, setCountryCode }}>
       {children}
     </LibraryContext.Provider>
   );

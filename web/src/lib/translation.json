@@ -1682,6 +1682,265 @@
   "Дата не указана": {
     "UZ": "Sana ko'rsatilmagan",
     "US": "Date not specified"
+  },
+  "ч.": {
+    "UZ": "soat",
+    "US": "h"
+  },
+  "мин.": {
+    "UZ": "daqiqa",
+    "US": "min"
+  },
+  "Основное меню": {
+    "UZ": "Asosiy menyu",
+    "US": "Main menu"
+  },
+  "Настройки отображения": {
+    "UZ": "Koʻrinish sozlamalari",
+    "US": "Display settings"
+  },
+  "Язык сайта": {
+    "UZ": "Sayt tili",
+    "US": "Site language"
+  },
+  "KitobPlus — главная страница": {
+    "UZ": "KitobPlus — bosh sahifa",
+    "US": "KitobPlus — home page"
+  },
+  "Вы находитесь здесь": {
+    "UZ": "Siz shu yerdasiz",
+    "US": "You are here"
+  },
+  "Контрастная": {
+    "UZ": "Yuqori kontrast",
+    "US": "High contrast"
+  },
+  "Обычный": {
+    "UZ": "Oddiy",
+    "US": "Normal"
+  },
+  "Крупный": {
+    "UZ": "Yirik",
+    "US": "Large"
+  },
+  "Очень крупный": {
+    "UZ": "Juda yirik",
+    "US": "Extra large"
+  },
+  "Тема оформления": {
+    "UZ": "Mavzu",
+    "US": "Theme"
+  },
+  "Размер текста": {
+    "UZ": "Matn oʻlchami",
+    "US": "Text size"
+  },
+  "Вид": {
+    "UZ": "Koʻrinish",
+    "US": "Display"
+  },
+  "Готово": {
+    "UZ": "Tayyor",
+    "US": "Done"
+  },
+  "Онлайн-аудиобиблиотека для людей с нарушениями зрения и всех, кто любит слушать книги.": {
+    "UZ": "Koʻrish imkoniyati cheklangan insonlar va kitob tinglashni sevuvchilar uchun onlayn audiokutubxona.",
+    "US": "An online audiobook library for people with visual impairments and everyone who loves listening to books."
+  },
+  "Приложение для iOS": {
+    "UZ": "iOS ilovasi",
+    "US": "iOS app"
+  },
+  "Приложение для Android": {
+    "UZ": "Android ilovasi",
+    "US": "Android app"
+  },
+  "О проекте": {
+    "UZ": "Loyiha haqida",
+    "US": "About"
+  },
+  "ОО инвалидов «ШароитПлюс»": {
+    "UZ": "«SharoitPlyus» nogironlar jamoat birlashmasi",
+    "US": "SharoitPlus public association of people with disabilities"
+  },
+  "Бесплатно для людей с нарушениями зрения": {
+    "UZ": "Koʻrish imkoniyati cheklanganlar uchun bepul",
+    "US": "Free for people with visual impairments"
+  },
+  "Книги, которые можно": {
+    "UZ": "Tinglash mumkin boʻlgan",
+    "US": "Books you can"
+  },
+  "услышать": {
+    "UZ": "kitoblar",
+    "US": "hear"
+  },
+  "Онлайн-аудиобиблиотека KitobPlus: узбекская и мировая литература в исполнении профессиональных дикторов. Удобно для экранных читалок и управления с клавиатуры.": {
+    "UZ": "KitobPlus onlayn audiokutubxonasi: oʻzbek va jahon adabiyoti professional suxandonlar ijrosida. Ekran oʻquvchilar va klaviatura bilan boshqarish uchun qulay.",
+    "US": "KitobPlus online audiobook library: Uzbek and world literature performed by professional narrators. Built for screen readers and keyboard control."
+  },
+  "Найдите книгу, автора или диктора": {
+    "UZ": "Kitob, muallif yoki suxandonni toping",
+    "US": "Find a book, author or narrator"
+  },
+  "Например, «O‘tkan kunlar»": {
+    "UZ": "Masalan, «Oʻtkan kunlar»",
+    "US": "For example, “O‘tkan kunlar”"
+  },
+  "Найти": {
+    "UZ": "Topish",
+    "US": "Search"
+  },
+  "Открыть каталог": {
+    "UZ": "Katalogni ochish",
+    "US": "Browse the catalogue"
+  },
+  "аудиокниг в каталоге": {
+    "UZ": "ta audiokitob katalogda",
+    "US": "audiobooks in the catalogue"
+  },
+  "доступно с экранной читалкой": {
+    "UZ": "ekran oʻquvchi bilan ishlaydi",
+    "US": "works with screen readers"
+  },
+  "языка интерфейса": {
+    "UZ": "interfeys tili",
+    "US": "interface languages"
+  },
+  "Что послушать": {
+    "UZ": "Nimani tinglash mumkin",
+    "US": "What to listen to"
+  },
+  "Новые поступления и книги, которые слушают чаще всего.": {
+    "UZ": "Yangi qoʻshilgan va eng koʻp tinglanayotgan kitoblar.",
+    "US": "New arrivals and the most listened-to books."
+  },
+  "Подборка книг": {
+    "UZ": "Kitoblar toʻplami",
+    "US": "Book selection"
+  },
+  "Книга дня": {
+    "UZ": "Kun kitobi",
+    "US": "Book of the day"
+  },
+  "Выберите настроение: от классики до сказок для детей.": {
+    "UZ": "Kayfiyatingizga mosini tanlang: mumtoz asarlardan bolalar ertaklarigacha.",
+    "US": "Pick your mood: from classics to children’s fairy tales."
+  },
+  "Библиотека для всех": {
+    "UZ": "Hamma uchun kutubxona",
+    "US": "A library for everyone"
+  },
+  "Бесплатно и без ограничений": {
+    "UZ": "Bepul va cheklovsiz",
+    "US": "Free and unlimited"
+  },
+  "Для людей с инвалидностью по зрению весь каталог открыт полностью и бесплатно. Для доступа нужно подтвердить статус.": {
+    "UZ": "Koʻrish boʻyicha nogironligi boʻlgan insonlar uchun butun katalog toʻliq va bepul ochiq. Buning uchun maqomni tasdiqlash kerak.",
+    "US": "For people with visual disabilities the entire catalogue is fully open and free. You only need to confirm your status."
+  },
+  "Все книги каталога без лимитов": {
+    "UZ": "Katalogdagi barcha kitoblar cheklovsiz",
+    "US": "Every book in the catalogue, no limits"
+  },
+  "Закладки, скорость и таймер сна": {
+    "UZ": "Xatchoʻplar, tezlik va uyqu taymeri",
+    "US": "Bookmarks, speed control and sleep timer"
+  },
+  "Подтверждение через школу, библиотеку или общество слепых": {
+    "UZ": "Maktab, kutubxona yoki Koʻzi ojizlar jamiyati orqali tasdiqlash",
+    "US": "Confirmation via a school, library or society of the blind"
+  },
+  "Подтвердить статус": {
+    "UZ": "Maqomni tasdiqlash",
+    "US": "Confirm status"
+  },
+  "Премиум для всех": {
+    "UZ": "Hamma uchun Premium",
+    "US": "Premium for everyone"
+  },
+  "7 дней Премиума бесплатно после регистрации": {
+    "UZ": "Roʻyxatdan oʻtgach 7 kun Premium bepul",
+    "US": "7 days of Premium free after sign-up"
+  },
+  "Без ограничений по времени и книжной полке": {
+    "UZ": "Vaqt va kitob javoni boʻyicha cheklovlarsiz",
+    "US": "No limits on listening time or bookshelf"
+  },
+  "Регистрация по номеру телефона": {
+    "UZ": "Telefon raqami orqali roʻyxatdan oʻtish",
+    "US": "Sign up with your phone number"
+  },
+  "Управлять подпиской": {
+    "UZ": "Obunani boshqarish",
+    "US": "Manage subscription"
+  },
+  "Попробовать бесплатно": {
+    "UZ": "Bepul sinab koʻrish",
+    "US": "Try for free"
+  },
+  "Для экранных читалок": {
+    "UZ": "Ekran oʻquvchilar uchun",
+    "US": "Made for screen readers"
+  },
+  "Понятные подписи, заголовки и объявления для NVDA, JAWS, TalkBack и VoiceOver.": {
+    "UZ": "NVDA, JAWS, TalkBack va VoiceOver uchun tushunarli nomlar, sarlavhalar va ovozli xabarlar.",
+    "US": "Clear labels, headings and announcements for NVDA, JAWS, TalkBack and VoiceOver."
+  },
+  "Управление с клавиатуры": {
+    "UZ": "Klaviatura bilan boshqarish",
+    "US": "Keyboard control"
+  },
+  "Пробел — пауза, стрелки — 30 секунд назад и вперёд, Shift и стрелки — скорость.": {
+    "UZ": "Boʻsh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik.",
+    "US": "Space — pause, arrows — 30 seconds back and forward, Shift + arrows — speed."
+  },
+  "Скорость и закладки": {
+    "UZ": "Tezlik va xatchoʻplar",
+    "US": "Speed and bookmarks"
+  },
+  "Слушайте в своём темпе и возвращайтесь к важным местам.": {
+    "UZ": "Oʻz suratingizda tinglang va muhim joylarga qayting.",
+    "US": "Listen at your own pace and return to the moments that matter."
+  },
+  "Книга остановится сама, когда вы уснёте.": {
+    "UZ": "Uxlab qolsangiz, kitob oʻzi toʻxtaydi.",
+    "US": "The book stops by itself when you fall asleep."
+  },
+  "Кнопки наушников": {
+    "UZ": "Quloqchin tugmalari",
+    "US": "Headphone buttons"
+  },
+  "Пауза и перемотка с наушников и экрана блокировки.": {
+    "UZ": "Quloqchin va qulflangan ekrandan pauza va oʻtkazish.",
+    "US": "Pause and skip from your headphones and lock screen."
+  },
+  "На всех устройствах": {
+    "UZ": "Barcha qurilmalarda",
+    "US": "On every device"
+  },
+  "Сайт, iPhone и Android: место остановки синхронизируется.": {
+    "UZ": "Sayt, iPhone va Android: toʻxtagan joyingiz saqlanadi.",
+    "US": "Web, iPhone and Android: your place is kept in sync."
+  },
+  "Удобно с первого касания": {
+    "UZ": "Birinchi teginishdan qulay",
+    "US": "Easy from the first touch"
+  },
+  "Каждой функцией можно пользоваться без мыши и без зрения.": {
+    "UZ": "Har bir imkoniyatdan sichqonchasiz va koʻrmasdan foydalanish mumkin.",
+    "US": "Every feature works without a mouse and without sight."
+  },
+  "7 дней Премиума — в подарок": {
+    "UZ": "7 kunlik Premium — sovgʻa",
+    "US": "7 days of Premium — on us"
+  },
+  "Для создания аккаунта требуется только номер телефона.": {
+    "UZ": "Hisob ochish uchun faqat telefon raqami kerak.",
+    "US": "All you need to create an account is a phone number."
+  },
+  "книг (число)": {
+    "UZ": "ta kitob",
+    "US": "books"
   }
 }
-

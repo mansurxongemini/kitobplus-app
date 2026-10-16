@@ -4,7 +4,7 @@ import {
     Route,
     Routes
 } from "react-router-dom"
-import Homepage from "./Homepage"
+import HomePage from "./home/HomePage"
 import { ThemeProvider } from "./parts/ThemeProvider"
 import NotFound from "./NotFound"
 import Login from "./Login"
@@ -25,7 +25,7 @@ function App() {
       <Router basename={'/'}>
         <ThemeProvider>
           <Routes>
-            <Route path="/" element={<Homepage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/books" element={<Books />} />
             <Route path="/books/:table/:id" element={<Books />} />
