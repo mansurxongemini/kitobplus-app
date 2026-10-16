@@ -1,7 +1,6 @@
 import EmailIcon from "@mui/icons-material/Email";
 import TelegramIcon from '@mui/icons-material/Telegram';
 import PhoneIcon from "@mui/icons-material/Phone";
-import TwitterIcon from "@mui/icons-material/Twitter";
 
 import { Box, Container, Grid, Link, Stack, Typography } from "@mui/material";
 import React from "react";
@@ -30,7 +29,6 @@ export default function FooterSection() {
   // Social media links
   const socialLinks = [
     { icon: <TelegramIcon aria-hidden="true" />, url: "https://t.me/kitobplus_uz", label: T('Телеграм') },
-    { icon: <TwitterIcon aria-hidden="true" />, url: "#", label: T('Твиттер') },
   ];
 
   return (
