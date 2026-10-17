@@ -149,7 +149,7 @@ const SiteHeader = () => {
           transition: "border-color .2s, background-color .3s",
         }}
       >
-        <Box sx={{ maxWidth: kp.layout.maxWidth + 48, mx: "auto", px: { xs: 2, sm: 3 }, height: kp.layout.headerHeight, display: "flex", alignItems: "center", gap: 3 }}>
+        <Box sx={{ maxWidth: kp.layout.maxWidth + 48, mx: "auto", px: { xs: 1.5, sm: 3 }, height: kp.layout.headerHeight, display: "flex", alignItems: "center", justifyContent: "space-between", gap: { xs: 1, md: 3 } }}>
           <Box sx={{ flexShrink: 0 }}>
             <Logo />
           </Box>
@@ -228,27 +228,40 @@ const SiteHeader = () => {
                 </Box>
               </>
             ) : (
-              <>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+                <LanguageMenu compact />
                 <IconButton
                   component={RouterLink}
                   to="/books"
                   aria-label={T("Поиск по книгам")}
-                  sx={{ color: kp.p.text }}
+                  sx={{
+                    color: kp.p.text,
+                    width: 38,
+                    height: 38,
+                    borderRadius: "50%",
+                    border: `1px solid ${kp.p.border}`,
+                    bgcolor: alpha(kp.p.surface, 0.6),
+                  }}
                 >
-                  <SearchIcon />
+                  <SearchIcon sx={{ fontSize: "1.2rem" }} />
                 </IconButton>
-                <LanguageMenu compact />
-                <Button
-                  variant="outlined"
+                <IconButton
                   onClick={() => setOpen(true)}
-                  startIcon={<MenuIcon aria-hidden="true" />}
                   aria-expanded={open}
                   aria-controls="kp-mobile-menu"
-                  sx={{ borderRadius: 999, ml: 0.5 }}
+                  aria-label={T("Меню")}
+                  sx={{
+                    color: kp.p.text,
+                    width: 38,
+                    height: 38,
+                    borderRadius: "50%",
+                    border: `1px solid ${kp.p.border}`,
+                    bgcolor: alpha(kp.p.surface, 0.6),
+                  }}
                 >
-                  {T("Меню")}
-                </Button>
-              </>
+                  <MenuIcon sx={{ fontSize: "1.25rem" }} />
+                </IconButton>
+              </Box>
             )}
           </Box>
         </Box>

@@ -55,8 +55,11 @@ export function LibraryProvider({ children }) {
     localStorage.setItem('text_scale', textScale);
   }, [textScale]);
 
+  // Global active audio state for floating mini player
+  const [activeAudio, setActiveAudio] = useState(null);
+
   return (
-    <LibraryContext.Provider value={{ user, setUser, isAdmin, darkMode, setDarkMode, themeMode, setThemeMode, textScale, setTextScale, countryCode, setCountryCode }}>
+    <LibraryContext.Provider value={{ user, setUser, isAdmin, darkMode, setDarkMode, themeMode, setThemeMode, textScale, setTextScale, countryCode, setCountryCode, activeAudio, setActiveAudio }}>
       {children}
     </LibraryContext.Provider>
   );

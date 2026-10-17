@@ -7,6 +7,26 @@
    (react-phone-input-2/lib/style.css); the rules below are the
    legacy overrides that used to live in the old global stylesheet. */
 
+/* Global overflow guard & responsive layout protection */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+
 /* Audio player timer (src/book/timer.js). The old stylesheet coloured
    span.timerNum white; AudioPlayerSection overrides colour/font locally
    with higher-specificity sx, and these rules keep the same inherit

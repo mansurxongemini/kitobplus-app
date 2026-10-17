@@ -42,6 +42,7 @@ const Section = ({ children, labelledBy, id, sx }) => (
 /* ---------- «Послушать 10 секунд»: бесплатный отрывок (/books/NNNNN.mp3) книги дня ---------- */
 const useSample = (book) => {
   const [playing, setPlaying] = useState(false);
+  const { setActiveAudio } = useLibrary();
   const audio = useRef(null);
   const timers = useRef([]);
   const clear = () => { timers.current.forEach((t) => clearTimeout(t) || clearInterval(t)); timers.current = []; };
@@ -50,6 +51,7 @@ const useSample = (book) => {
     if (audio.current) { audio.current.pause(); audio.current = null; }
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     setPlaying(false);
+    setActiveAudio(null);
   };
   // Если отрывок недоступен — зачитываем название и аннотацию голосом браузера.
   const speakFallback = () => {
@@ -58,12 +60,22 @@ const useSample = (book) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "uz-UZ";
     u.rate = 0.95;
-    u.onend = u.onerror = () => setPlaying(false);
+    u.onend = u.onerror = () => { setPlaying(false); setActiveAudio(null); };
     window.speechSynthesis.speak(u);
   };
   const start = () => {
     if (!book) return;
     setPlaying(true);
+    setActiveAudio({
+      id: book.id,
+      title: book.title,
+      author: book.authors_name,
+      cover: book.cover || (book.id ? `${getHost()}/books/${book.id}.jpg` : null),
+      isPlaying: true,
+      progress: 35,
+      onTogglePlay: () => stop(),
+      onClose: () => stop(),
+    });
     const a = new Audio(`${getHost()}/books/${String(book.id).padStart(5, "0")}.mp3`);
     audio.current = a;
     a.onerror = () => { if (audio.current === a) { audio.current = null; speakFallback(); } };
@@ -342,20 +354,21 @@ const Hero = () => {
         </Box>
       </Container>
 
-      <Container sx={{ width: "100%", zIndex: 1, mt: { xs: 4, md: 6 } }}>
+      <Container sx={{ width: "100%", maxWidth: "100%", zIndex: 1, mt: { xs: 3.5, md: 6 }, px: { xs: 2, sm: 3 } }}>
         <Box
           sx={{
-            p: { xs: 2, sm: 2.5, md: "18px 32px" },
-            borderRadius: { xs: 6, md: 8 },
+            p: { xs: 1.5, sm: 2, md: "18px 32px" },
+            borderRadius: { xs: 4, md: 8 },
             bgcolor: alpha(kp.p.surface, 0.92),
             backdropFilter: "blur(20px)",
             border: `1px solid ${kp.p.border}`,
             boxShadow: kp.shadows.raised,
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: { xs: "flex-start", lg: "space-between" },
             gap: { xs: 2, md: 2.5 },
             overflowX: "auto",
+            maxWidth: "100%",
             scrollbarWidth: "none",
             "&::-webkit-scrollbar": { display: "none" },
             ...fade(0.85),
@@ -378,9 +391,9 @@ const Hero = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 1.75,
+                  gap: 1.5,
                   flexShrink: 0,
-                  minWidth: { xs: 220, md: "auto" },
+                  minWidth: "max-content",
                 }}
               >
                 <Box

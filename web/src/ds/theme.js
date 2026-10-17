@@ -57,9 +57,11 @@ export const createAppTheme = (themeMode = "light", textScale = "normal") => {
     components: {
       MuiCssBaseline: {
         styleOverrides: {
-          html: { fontSize: `${100 * scale}%`, scrollBehavior: "smooth", WebkitTextSizeAdjust: "100%" },
+          html: { fontSize: `${100 * scale}%`, scrollBehavior: "smooth", WebkitTextSizeAdjust: "100%", overflowX: "hidden", maxWidth: "100%" },
           body: {
             margin: 0,
+            overflowX: "hidden",
+            maxWidth: "100%",
             backgroundColor: p.bg,
             color: p.text,
             fontFeatureSettings: "'cv11', 'ss01'",

@@ -4,24 +4,37 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink } from "react-router-dom";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
+import MobileBottomNav from "./MobileBottomNav";
+import MobileMiniPlayer from "./MobileMiniPlayer";
 import Container from "./Container";
 import { useRouteA11y } from "../../lib/a11y";
 import { Reveal } from "../motion";
 import useLibrary from "../../LibraryContext";
 import T from "../../lib/translator";
 
-// Каркас любой страницы: ссылка «к основному содержимому», шапка, <main>, подвал.
+// Каркас любой страницы: ссылка «к основному содержимому», шапка, <main>, подвал, мобильная навигация и мини-плеер.
 // title — заголовок вкладки браузера; при смене страницы фокус переходит в <main>.
 const PageShell = ({ title, children }) => {
   useLibrary();
   useRouteA11y(title);
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>
+    <Box sx={{ minHeight: "100vh", width: "100%", maxWidth: "100vw", overflowX: "hidden", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>
       <SiteHeader />
-      <Box component="main" id="main_content" tabIndex={-1} sx={{ flex: 1, "&:focus, &:focus-visible": { outline: "none", boxShadow: "none" } }}>
+      <Box
+        component="main"
+        id="main_content"
+        tabIndex={-1}
+        sx={{
+          flex: 1,
+          pb: { xs: "calc(74px + env(safe-area-inset-bottom, 0px))", md: 0 },
+          "&:focus, &:focus-visible": { outline: "none", boxShadow: "none" },
+        }}
+      >
         {children}
       </Box>
       <SiteFooter />
+      <MobileMiniPlayer />
+      <MobileBottomNav />
     </Box>
   );
 };

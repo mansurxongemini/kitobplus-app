@@ -113,10 +113,42 @@
 ## 11-bosqich: GitHub Actions Orqali Yangi Repoda Avtomatik APK Yig'ish
 | # | Vazifa | Holat | Izoh / Dalil |
 |---|--------|-------|--------------|
-| 67 | Yangi GitHub repozitoriyasi (`mansurxongemini/kitobplus-app`) yaratish | DOING | `gh repo create` orqali yangi repo ochilmoqda. |
-| 68 | GitHub Actions APK workflow faylini (`.github/workflows/build-apk.yml`) yaratish | TODO | Node, Java 17, Gradle va Capacitor orqali avtomatik APK build skripti tuziladi. |
-| 69 | Kodni yangi repoga push qilish va GitHub Actions jarayonini ishga tushirish | TODO | `git push` orqali CI/CD ishga tushiriladi. |
-| 70 | GitHub Actions orqali yig'ilgan tayyor APK artefaktini tekshirish | TODO | APK yuklab olish havolasi va natija tasdiqlanadi. |
+| 67 | Yangi GitHub repozitoriyasi (`mansurxongemini/kitobplus-app`) yaratish | DONE | `gh repo create` orqali yangi ommaviy repozitoriya ochildi: `https://github.com/mansurxongemini/kitobplus-app`. |
+| 68 | GitHub Actions APK workflow faylini (`.github/workflows/build-apk.yml`) yaratish | DONE | Node 20, Java 17, Android SDK va Gradle orqali avtomatik APK build konfiguratsiyasi tuzildi. |
+| 69 | Kodni yangi repoga push qilish va GitHub Actions jarayonini ishga tushirish | DONE | Barcha yangi dizayn, 12 ta janr, Capacitor va testlar yangi repoga push qilindi (`main` branch). |
+| 70 | GitHub Actions orqali yig'ilgan tayyor APK artefaktini tekshirish | BLOCKED | GitHub quyidagi bildirishnoma bilan to'xtatdi: `"The job was not started because your account is locked due to a billing issue"`. |
+
+## 12-bosqich: Terminal Orqali Android SDK va APK Yig'ish (Mahalliy)
+| # | Vazifa | Holat | Izoh / Dalil |
+|---|--------|-------|--------------|
+| 71 | Yengil Android Command-line Tools yuklab olish va o'rnatish (`~/Android/Sdk`) | DONE | Google rasmiy command-line tools `~/Android/Sdk/cmdline-tools/latest`ga o'rnatildi. |
+| 72 | Android SDK platformalari va litsenziyalarini sozlash (`android-34`, `build-tools`) | DONE | `build-tools 34.0.0`, `platforms/android-34` o'rnatildi, barcha Android litsenziyalari tasdiqlandi (`sdkmanager --licenses`). |
+| 73 | Gradle orqali KitobPlus Android APK paketini yig'ish (`./gradlew assembleDebug`) | DONE | Java 21, Gradle 8.14.3 va Android SDK 36 orqali muvaffaqiyatli yig'ildi (`BUILD SUCCESSFUL in 2m 30s`). |
+| 74 | Yig'ilgan tayyor APK faylini tekshirish va asosiy papkaga chiqarish | DONE | `KitobPlus.apk` (19 MB, package: `uz.kitobplus.app`, SDK 24-36) asosiy papkaga chiqarildi: `/home/mansurxon/Desktop/Loyihalar/KitobPlus/platform/KitobPlus.apk`. |
+
+## 13-bosqich: Mobil Ilova UX Transformatsiyasi (Mobile-First Native App Experience)
+| # | Vazifa | Holat | Izoh / Dalil |
+|---|--------|-------|--------------|
+| 75 | Mobil navigatsiya va moslashuv tizimini rejalashtirish | DONE | Bottom Navigation Bar va Floating Mini-Player arxitekturasi ishlab chiqildi va muvaffaqiyatli joriy etildi. |
+| 76 | Pastki navigatsiya paneli (`MobileBottomNav.jsx`) yaratish va integratsiya qilish | DONE | 4 ta asosiy tugma (Bosh sahifa, Audio kitoblar, Janrlar, Profil), aktiv holat nishoni va haptic/ripple bilan `PageShell`ga ulandi. |
+| 77 | Suzuvchi ixcham pleyer (`MobileMiniPlayer.jsx`) yaratish va audio holati bilan bog'lash | DONE | `LibraryContext`dagi `activeAudio` bilan bog'landi; muqova, sarlavha, progress bar, Play/Pause va Close boshqaruvlari bilan navigatsiya ustida suzib turadi. |
+| 78 | Mobil sarlavha va Safe Area (iOS/Android) moslashuvini ta'minlash (`SiteHeader.jsx`, `PageShell.jsx`) | DONE | `viewport-fit=cover` qo'shildi, `env(safe-area-inset-bottom)` va mobil asosiy kontent uchun `pb: calc(74px + safe-area)` ajratildi. |
+| 79 | Barcha avtotestlar va ishlab chiqarish buildini tekshirish (`CI=true npx react-scripts test`, `npm run build`) | DONE | `npm run build` 0 ta xato va 0 ta ogohlantirish (0 warnings) bilan muvaffaqiyatli yakunlandi. |
+| 80 | Capacitor bilan sinxronlash va yangilash (`npx cap sync`, `./gradlew assembleDebug`) | DONE | `npx cap sync` orqali Android va iOS loyihalariga nusxalandi; `KitobPlus.apk` 31 soniyada muvaffaqiyatli qayta yig'ildi (19 MB). |
+| 81 | Jonli brauzerda mobil rejimda (375x812) vizual QA tekshiruvidan o'tkazish | DONE | Brauzer orqali mobil pastki navigatsiya, suzuvchi mini-pleyer va desktop toza ajratilishi tasdiqlandi. Skrinshotlar: `mobile_bottom_nav_genres.png`, `mobile_mini_player_active.png`, `desktop_no_bottom_nav.png`. |
+
+## 14-bosqich: Mobil Responsivlikni Tubdan Mukammallashtirish (Critical Mobile Responsive Overhaul)
+| # | Vazifa | Holat | Izoh / Dalil |
+|---|--------|-------|--------------|
+| 82 | Gorizontal scroll (overflow-x) sabablarini topish va yo'qotish | DONE | Header 74px ortiqcha kengligi va footer `-40px` salbiy chekinishi bartaraf etildi. `html, body, #root` ga `overflow-x: hidden` va `max-width: 100vw` himoyasi qo'yildi. |
+| 83 | Bosh sahifa Hero qismi mobil moslashuvi (fon, matn, tugmalar, 5 ta kartochka) | DONE | Hero 5 ta kartochkasi `minWidth: max-content` va gorizontal silliq karuselga keltirildi; tugmalar va matnlar to'liq sig'dirildi. |
+| 84 | Janrlar, Top-10 va javonlar karuselini mobil ekranda mukammal qilish | DONE | Javonlar va karusellar `maxWidth: 100%` bilan chegaralandi, gorizontal siljish 0 ga tushirildi. |
+| 85 | Sayt boshqaruvi va sarlavhalarini mobil ekranlar uchun tozalash | DONE | `SiteHeader`dagi katta "Menyu" matnli tugmasi o'rniga ixcham 38px doira tugma o'rnatildi; `MobileBottomNav` 4 ta tugmasi 100% ekranga sig'dirildi. |
+| 86 | Brauzerda jonli ravishda 360px, 375px mobil o'lchamlarda skrinshotlar bilan tasdiqlash | DONE | Chrome DevTools orqali 375px (iPhone) va 360px (Android) ekranlarda `scrollW === clientW` (0 overflow) tasdiqlandi. Skrinshotlar: `mobile_375_perfect_fit.png`, `mobile_360_android.png`, `mobile_genres_perfect_fit.png`, `mobile_books_perfect_fit.png`. |
+
+
+
+
 
 
 

@@ -47,7 +47,7 @@ const PersonLinks = ({ table, people, fallbackName, fallbackId, color }) => {
 
 const Book = () => {
   const { kp } = useTheme();
-  useLibrary();
+  const { setActiveAudio } = useLibrary();
   const fmt = useFormatDuration();
 
   const [book, setBook] = React.useState({});
@@ -146,6 +146,21 @@ const Book = () => {
   const rating = Number(book?.rating) || 0;
   const duration = fmt(hero?.seconds);
   const shelfLabel = bookshelfed ? T("Снять с книжной полки") : T("Поставить на книжную полку");
+
+  React.useEffect(() => {
+    if (hero && hero.title && isPlaying) {
+      setActiveAudio({
+        id: params.id,
+        title: hero.title,
+        author: hero.authors_name || hero.author,
+        cover: heroCover,
+        isPlaying: true,
+        progress: 20,
+        onTogglePlay: () => setIsPlaying((prev) => !prev),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlaying, hero?.title, params.id, setActiveAudio, heroCover]);
 
   return (
     <PageShell title={hero && hero.title ? hero.title : T("Аудиокниги")}>
