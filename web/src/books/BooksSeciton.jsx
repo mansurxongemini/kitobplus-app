@@ -1,12 +1,12 @@
 import React from "react";
 import { Alert, Box, Button, Typography, useTheme } from "@mui/material";
-import SearchOffOutlined from "@mui/icons-material/SearchOffOutlined";
 import useSWRInfinite from "swr/infinite";
 import { getHost } from "../lib/api";
 import { BookGrid, BookCardSkeleton } from "../ds/components/BookCard";
 import Filter from "../parts/Filter";
 import { announce } from "../lib/a11y";
 import T, { tr } from "../lib/translator";
+import emptySearchImg from "../img/empty_search.svg";
 
 export const PER_PAGE = 24;
 
@@ -153,7 +153,20 @@ const BooksSection = ({ selectedGenres, sort = "new", table, persons_id, filter:
           )}
           {!isLoading && pages && books.length === 0 && (
             <Box sx={{ textAlign: "center", py: { xs: 6, md: 9 }, px: 3, borderRadius: 6, border: `1px solid ${kp.p.border}`, bgcolor: kp.p.surface, boxShadow: kp.shadows.card }}>
-              <SearchOffOutlined aria-hidden="true" sx={{ fontSize: 56, color: kp.p.textSecondary }} />
+              <Box
+                component="img"
+                src={emptySearchImg}
+                alt=""
+                aria-hidden="true"
+                sx={{
+                  width: { xs: 140, md: 180 },
+                  height: "auto",
+                  mx: "auto",
+                  mb: 1,
+                  display: "block",
+                  filter: kp.isContrast ? "invert(1)" : "none",
+                }}
+              />
               <Typography variant="h3" component="p" sx={{ mt: 2 }}>{T("Ничего не найдено")}</Typography>
               <Typography sx={{ mt: 1, color: kp.p.textSecondary }}>{T("Попробуйте изменить запрос или сбросить фильтры")}</Typography>
               <Button variant="contained" size="large" onClick={handleReset} sx={{ mt: 3 }}>{T("Сбросить фильтры")}</Button>

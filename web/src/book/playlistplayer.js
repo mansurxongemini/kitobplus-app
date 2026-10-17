@@ -161,10 +161,18 @@ const PlaylistPlayer = React.forwardRef((props, ref) => {
             setTimeout(() => {playerRef.current.currentTime = position;}, 100);
         }
 
-        setTimeout(() => playerRef.current.play().catch(_ => console.error(_)), playDelay);
-        setTimeout(_ => {
-            playerRef.current.playbackRate = rate;
-            playerRef.current.defaultPaybackRate = rate;
+        setTimeout(() => {
+            if (!playerRef.current) return;
+            const playPromise = playerRef.current.play();
+            if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch((_) => console.error(_));
+            }
+        }, playDelay);
+        setTimeout((_) => {
+            if (playerRef.current) {
+                playerRef.current.playbackRate = rate;
+                playerRef.current.defaultPaybackRate = rate;
+            }
         }, playDelay + 100);
         props.onProgress(true, trackId, position);
     }

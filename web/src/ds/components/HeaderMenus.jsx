@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Button, Menu, MenuItem, ListItemIcon, ListItemText, Divider, Typography, ToggleButton, ToggleButtonGroup, Popover, useTheme } from "@mui/material";
+import { Box, Button, Menu, MenuItem, ListItemIcon, ListItemText, Divider, Typography, ToggleButton, ToggleButtonGroup, Popover, useTheme, alpha } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
+import KeyboardArrowDownRounded from "@mui/icons-material/KeyboardArrowDownRounded";
 import TuneIcon from "@mui/icons-material/Tune";
 import CheckIcon from "@mui/icons-material/Check";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
@@ -26,23 +27,53 @@ export const useLanguage = () => {
   return { current: LANGUAGES.find((l) => l.code === countryCode) || LANGUAGES[0], select };
 };
 
-export const LanguageMenu = ({ compact = false }) => {
+export const LanguageMenu = ({ compact = false, pill = false }) => {
   const [anchor, setAnchor] = useState(null);
   const { current, select } = useLanguage();
+  const theme = useTheme();
+  const { kp } = theme;
   return (
     <>
       <Button
-        variant="text"
+        variant={pill ? "outlined" : "text"}
         onClick={(e) => setAnchor(e.currentTarget)}
-        startIcon={<LanguageIcon aria-hidden="true" />}
+        startIcon={<LanguageIcon aria-hidden="true" sx={{ fontSize: 18, color: kp.p.primary }} />}
+        endIcon={<KeyboardArrowDownRounded aria-hidden="true" sx={{ fontSize: 18, color: kp.p.textSecondary, ml: -0.5 }} />}
         aria-haspopup="menu"
         aria-expanded={Boolean(anchor)}
         aria-label={T("Язык сайта") + ": " + current.name}
-        sx={{ px: compact ? 1.5 : 2, fontWeight: 700 }}
+        sx={{
+          px: pill ? 1.75 : compact ? 1 : 1.5,
+          height: pill ? 38 : undefined,
+          borderRadius: pill ? 999 : undefined,
+          borderColor: pill ? (kp.isContrast ? kp.p.border : kp.p.borderStrong) : undefined,
+          fontWeight: 700,
+          color: kp.p.text,
+          fontSize: "0.875rem",
+          textTransform: "none",
+          "&:hover": {
+            borderColor: pill ? kp.p.primary : undefined,
+            bgcolor: kp.p.surfaceAlt,
+          },
+        }}
       >
         {current.short}
       </Button>
-      <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>
+      <Menu
+        anchorEl={anchor}
+        open={Boolean(anchor)}
+        onClose={() => setAnchor(null)}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: kp.p.surface,
+              color: kp.p.text,
+              border: kp.isContrast ? "1px solid #FFFFFF" : `1px solid ${kp.p.border}`,
+              borderRadius: 3,
+            },
+          },
+        }}
+      >
         {LANGUAGES.map((l) => (
           <MenuItem
             key={l.code}
@@ -50,8 +81,21 @@ export const LanguageMenu = ({ compact = false }) => {
             selected={l.code === current.code}
             aria-current={l.code === current.code ? "true" : undefined}
             onClick={() => { select(l.code); setAnchor(null); }}
+            sx={{
+              color: kp.p.text,
+              "&.Mui-selected": {
+                bgcolor: kp.isContrast ? "rgba(255, 225, 77, 0.15)" : alpha(kp.p.primary, 0.12),
+                color: kp.p.primary,
+                fontWeight: 700,
+              },
+              "&:hover": {
+                bgcolor: kp.p.surfaceAlt,
+              },
+            }}
           >
-            <ListItemIcon>{l.code === current.code && <CheckIcon aria-hidden="true" />}</ListItemIcon>
+            <ListItemIcon sx={{ color: kp.p.primary }}>
+              {l.code === current.code && <CheckIcon aria-hidden="true" />}
+            </ListItemIcon>
             <ListItemText>{l.name}</ListItemText>
           </MenuItem>
         ))}

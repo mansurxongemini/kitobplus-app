@@ -5,11 +5,13 @@ import AutoStoriesOutlined from "@mui/icons-material/AutoStoriesOutlined";
 import { Link as RouterLink } from "react-router-dom";
 import PageShell from "./ds/components/PageShell";
 import Container from "./ds/components/Container";
-import hf404 from "./img/404.png";
+import useLibrary from "./LibraryContext";
+import hf404 from "./img/404.webp";
 import T from "./lib/translator";
 
 const NotFound = () => {
   const { kp } = useTheme();
+  useLibrary();
 
   return (
     <PageShell title={T("Страница не найдена")}>

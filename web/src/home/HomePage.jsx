@@ -1,18 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Typography, Skeleton, useTheme } from "@mui/material";
+import { Box, Button, Typography, Skeleton, Divider, useTheme, alpha } from "@mui/material";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import PauseRounded from "@mui/icons-material/PauseRounded";
 import ArrowForwardRounded from "@mui/icons-material/ArrowForwardRounded";
-import ShuffleRounded from "@mui/icons-material/ShuffleRounded";
-import RecordVoiceOverRounded from "@mui/icons-material/RecordVoiceOverRounded";
 import KeyboardRounded from "@mui/icons-material/KeyboardRounded";
 import HeadphonesRounded from "@mui/icons-material/HeadphonesRounded";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import AutoStoriesOutlined from "@mui/icons-material/AutoStoriesOutlined";
+import HearingRounded from "@mui/icons-material/HearingRounded";
+import GraphicEqRounded from "@mui/icons-material/GraphicEqRounded";
+import StarOutlineRounded from "@mui/icons-material/StarOutlineRounded";
+import DevicesOutlined from "@mui/icons-material/DevicesOutlined";
+import AccessibilityNewRounded from "@mui/icons-material/AccessibilityNewRounded";
+import FavoriteRounded from "@mui/icons-material/FavoriteRounded";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import PageShell, { SectionHeader } from "../ds/components/PageShell";
 import Feed from "./Feed";
+import Shelf from "../ds/components/Shelf";
 import Container from "../ds/components/Container";
-import { Reveal, RiseText, Accent, useReducedMotion } from "../ds/motion";
+import heroBg from "../img/hero-bg.png";
+import featSpeaker from "../img/feat_speaker.png";
+import featKeys from "../img/feat_keys.png";
+import featHeadphones from "../img/feat_headphones.png";
+import accessWave from "../img/access_wave.png";
+import { Reveal, Accent, useReducedMotion } from "../ds/motion";
 import { getHost, request } from "../lib/api";
 import useLibrary from "../LibraryContext";
 import { announce } from "../lib/a11y";
@@ -27,49 +38,6 @@ const Section = ({ children, labelledBy, id, sx }) => (
     <Container>{children}</Container>
   </Box>
 );
-
-/* ---------- Дышащая звуковая волна (концепция A). Амплитуда растёт, когда звучит отрывок. ---------- */
-const BreathingWave = ({ active }) => {
-  const { kp } = useTheme();
-  const reduce = useReducedMotion();
-  const p1 = useRef(null), p2 = useRef(null);
-  const target = useRef(14);
-  useEffect(() => { target.current = active ? 54 : 14; }, [active]);
-  useEffect(() => {
-    let amp = 14, raf;
-    const path = (a, f, ph) => {
-      let d = "M0 130";
-      for (let x = 0; x <= 1440; x += 12) {
-        const env = Math.sin((x / 1440) * Math.PI);
-        const y = 130 + Math.sin(x * f + ph) * a * env + Math.sin(x * f * 2.3 + ph * 1.7) * a * 0.35 * env;
-        d += ` L${x} ${y.toFixed(1)}`;
-      }
-      return d;
-    };
-    if (reduce) {
-      if (p1.current) p1.current.setAttribute("d", path(14, 0.008, 0));
-      if (p2.current) p2.current.setAttribute("d", path(10, 0.011, 1));
-      return undefined;
-    }
-    const frame = (ts) => {
-      const t = ts / 1000;
-      amp += (target.current - amp) * 0.06;
-      const jitter = target.current > 20 ? Math.random() * 16 : 0;
-      if (p1.current) p1.current.setAttribute("d", path(amp + jitter, 0.008, t * 1.6));
-      if (p2.current) p2.current.setAttribute("d", path((amp + jitter) * 0.7, 0.011, t * 1.1 + 1));
-      raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, [reduce]);
-  return (
-    <Box component="svg" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true"
-      sx={{ position: "absolute", left: 0, right: 0, top: "40%", width: "100%", height: { xs: 180, md: 260 }, transform: "translateY(-50%)", pointerEvents: "none", zIndex: 0 }}>
-      <path ref={p1} fill="none" stroke={kp.p.primary} strokeWidth="2" />
-      <path ref={p2} fill="none" stroke={kp.p.primary} strokeOpacity=".28" strokeWidth="1.5" />
-    </Box>
-  );
-};
 
 /* ---------- «Послушать 10 секунд»: бесплатный отрывок (/books/NNNNN.mp3) книги дня ---------- */
 const useSample = (book) => {
@@ -99,7 +67,8 @@ const useSample = (book) => {
     const a = new Audio(`${getHost()}/books/${String(book.id).padStart(5, "0")}.mp3`);
     audio.current = a;
     a.onerror = () => { if (audio.current === a) { audio.current = null; speakFallback(); } };
-    a.play().then(() => {
+    const p = a.play();
+    const handleSuccess = () => {
       timers.current.push(setTimeout(() => {
         let v = 1;
         const fade = setInterval(() => {
@@ -108,7 +77,12 @@ const useSample = (book) => {
         }, 80);
         timers.current.push(fade);
       }, SAMPLE_SECONDS * 1000));
-    }).catch(() => { if (audio.current === a) { audio.current = null; speakFallback(); } });
+    };
+    if (p && typeof p.then === "function") {
+      p.then(handleSuccess).catch(() => { if (audio.current === a) { audio.current = null; speakFallback(); } });
+    } else {
+      handleSuccess();
+    }
   };
   useEffect(() => () => stop(), []); // eslint-disable-line react-hooks/exhaustive-deps
   return { playing, toggle: () => (playing ? stop() : start()) };
@@ -116,67 +90,337 @@ const useSample = (book) => {
 
 const Hero = () => {
   const { kp } = useTheme();
-  const navigate = useNavigate();
   const reduce = useReducedMotion();
   const [book, setBook] = useState(null);
+
   useEffect(() => {
-    fetchJson(`${getHost()}/srv/books.php?sort=rand&page=0&per_page=1`).then((r) => setBook(r && r.data && r.data[0])).catch(() => {});
+    fetchJson(`${getHost()}/srv/books.php?sort=rand&page=0&per_page=1`)
+      .then((r) => setBook(r && r.data && r.data[0]))
+      .catch(() => {});
   }, []);
+
   const { playing, toggle } = useSample(book);
   const playingLabel = T("Звучит отрывок");
-  useEffect(() => { if (playing) announce(playingLabel + (book ? ": " + book.title : "")); }, [playing]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
-    const onKey = (e) => { if (e.code === "Space" && e.target === document.body) { e.preventDefault(); toggle(); } };
+    if (playing) announce(playingLabel + (book ? ": " + book.title : ""));
+  }, [playing]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!playing) return undefined;
+    const onKey = (e) => {
+      if (e.code === "Space" && (e.target === document.body || e.target?.tagName === "BODY")) {
+        e.preventDefault();
+        toggle();
+      }
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [playing, toggle]);
+
+  const fade = (d) => ({
+    animation: reduce ? "none" : `kpFade .9s ${d}s both`,
+    "@keyframes kpFade": {
+      from: { opacity: 0, transform: "translateY(12px)" },
+      to: { opacity: 1, transform: "none" },
+    },
   });
-  const fade = (d) => ({ animation: reduce ? "none" : `kpFade .9s ${d}s both`, "@keyframes kpFade": { from: { opacity: 0, transform: "translateY(10px)" }, to: { opacity: 1, transform: "none" } } });
-  const random = async () => {
-    const r = await fetchJson(`${getHost()}/srv/books.php?sort=rand&page=0&per_page=1`).catch(() => null);
-    const b = r && r.data && r.data[0];
-    if (b) navigate(`/books/${b.id}`);
-  };
+
+  const features = [
+    {
+      icon: <HearingRounded sx={{ fontSize: 24, color: kp.p.primary }} />,
+      title: T("Ko'rish imkoniyati cheklanganlar uchun bepul"),
+      subtitle: T("Bilim hamma uchun"),
+    },
+    {
+      icon: <AutoStoriesOutlined sx={{ fontSize: 24, color: kp.p.primary }} />,
+      title: T("Keng katalog"),
+      subtitle: T("Minglab audio kitoblar"),
+    },
+    {
+      icon: <GraphicEqRounded sx={{ fontSize: 24, color: kp.p.primary }} />,
+      title: T("Professional suxandonlar"),
+      subtitle: T("Yuqori sifatli ijro"),
+    },
+    {
+      icon: <StarOutlineRounded sx={{ fontSize: 24, color: kp.p.primary }} />,
+      title: T("Turli janrlar"),
+      subtitle: T("Badiiy, ilmiy, motivatsion"),
+    },
+    {
+      icon: <DevicesOutlined sx={{ fontSize: 24, color: kp.p.primary }} />,
+      title: T("Har qurilmada"),
+      subtitle: T("Telefon, planshet, kompyuter"),
+    },
+  ];
 
   return (
-    <Box component="section" aria-labelledby="kp-hero-title" sx={{ position: "relative", overflow: "hidden", minHeight: "calc(100vh - 76px)", display: "grid", placeItems: "center", textAlign: "center", py: { xs: 8, md: 10 } }}>
-      <BreathingWave active={playing} />
-      <Container sx={{ position: "relative", zIndex: 1 }}>
-        <Typography variant="overline" component="p" sx={{ color: kp.p.textSecondary, letterSpacing: "0.16em", ...fade(0) }}>{T("Онлайн-аудиобиблиотека")}</Typography>
-        <Typography id="kp-hero-title" variant="h1" sx={{ mt: 2.5, fontSize: "clamp(3.25rem, 1.2rem + 9vw, 10rem)", lineHeight: 0.92, letterSpacing: "-0.058em" }}>
-          <RiseText lines={[[T("Книги"), T("теперь")], [<Accent key="a">{T("звучат.")}</Accent>]]} />
-        </Typography>
-        <Typography variant="subtitle1" component="p" sx={{ mt: { xs: 3, md: 4 }, mx: "auto", maxWidth: 580, color: kp.p.textSecondary, fontSize: { xs: "1.125rem", md: "1.3125rem" }, ...fade(0.55) }}>
-          {T("Узбекская и мировая литература в исполнении профессиональных дикторов. Для людей с нарушениями зрения — бесплатно.")}
-        </Typography>
-
-        <Box sx={{ mt: { xs: 4.5, md: 5.5 }, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, ...fade(0.8) }}>
+    <Box
+      component="section"
+      aria-labelledby="kp-hero-title"
+      sx={{
+        position: "relative",
+        overflow: "hidden",
+        bgcolor: kp.p.bg,
+        backgroundImage: {
+          xs: `linear-gradient(180deg, ${alpha(kp.p.bg, 0.96)} 0%, ${alpha(kp.p.bg, 0.90)} 38%, ${alpha(kp.p.bg, 0.25)} 60%, ${alpha(kp.p.bg, 0.96)} 100%), url(${heroBg})`,
+          md: `linear-gradient(90deg, ${alpha(kp.p.bg, 0.98)} 0%, ${alpha(kp.p.bg, 0.92)} 36%, ${alpha(kp.p.bg, 0.35)} 60%, ${alpha(kp.p.bg, 0)} 80%), url(${heroBg})`,
+        },
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: { xs: "72% 70%", md: "right center" },
+        pt: { xs: 5, md: 8, lg: 9 },
+        pb: { xs: 4, md: 5 },
+        minHeight: { xs: "auto", md: "calc(100vh - 76px)", lg: "800px" },
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <Container sx={{ width: "100%", zIndex: 1, my: "auto" }}>
+        <Box sx={{ maxWidth: { xs: "100%", md: 620, lg: 680 }, textAlign: "left" }}>
           <Box
-            component="button" type="button" onClick={toggle} aria-pressed={playing} disabled={!book}
             sx={{
-              display: "inline-flex", alignItems: "center", gap: 2, p: "10px 30px 10px 10px", borderRadius: 999, border: 0, cursor: "pointer",
-              bgcolor: kp.p.action, color: kp.p.onAction, font: "inherit", textAlign: "left", transition: "transform .25s",
-              "&:hover": { transform: kp.isContrast ? "none" : "scale(1.03)" }, "&:focus-visible": kp.focusRing, "&:disabled": { opacity: 0.6, cursor: "wait" },
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 1,
+              px: 1.75,
+              py: 0.6,
+              borderRadius: 999,
+              bgcolor: alpha(kp.p.primary, 0.12),
+              color: kp.p.primary,
+              fontWeight: 800,
+              fontSize: "0.75rem",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              mb: { xs: 2.5, md: 3 },
+              ...fade(0.1),
             }}
           >
-            <Box aria-hidden="true" sx={{
-              position: "relative", width: 60, height: 60, borderRadius: "50%", display: "grid", placeItems: "center", bgcolor: kp.p.primary, color: kp.p.onPrimary, flexShrink: 0,
-              "&::before, &::after": reduce ? {} : { content: '""', position: "absolute", inset: -6, borderRadius: "50%", border: `2px solid ${kp.p.primary}`, animation: `kpRing ${playing ? 0.9 : 2.6}s infinite` },
-              "&::after": { animationDelay: playing ? "0.45s" : "1.3s" },
-              "@keyframes kpRing": { "0%": { transform: "scale(.9)", opacity: 0.9 }, "100%": { transform: "scale(1.55)", opacity: 0 } },
-            }}>
-              {playing ? <PauseRounded sx={{ fontSize: 30 }} /> : <PlayArrowRounded sx={{ fontSize: 32 }} />}
+            <Box
+              sx={{
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                bgcolor: kp.p.primary,
+                color: kp.p.onPrimary,
+                display: "grid",
+                placeItems: "center",
+              }}
+            >
+              <AccessibilityNewRounded sx={{ fontSize: 13 }} />
             </Box>
-            <Box component="span">
-              <Box component="span" sx={{ display: "block", fontWeight: 700, fontSize: "1.1875rem" }}>{playing ? T("Остановить") : T("Послушать 10 секунд")}</Box>
-              {book && <Box component="span" sx={{ display: "block", fontSize: "0.9375rem", opacity: 0.8 }}>«{book.title}» — {book.authors_name}</Box>}
+            {T("HAR BIR INSON UCHUN KITOB")}
+          </Box>
+
+          <Typography
+            id="kp-hero-title"
+            variant="h1"
+            sx={{
+              fontFamily: kp.fonts.heading,
+              fontWeight: 850,
+              fontSize: { xs: "2.75rem", sm: "3.5rem", md: "4.5rem", lg: "5.25rem" },
+              lineHeight: 1.02,
+              letterSpacing: "-0.04em",
+              color: kp.p.text,
+              ...fade(0.2),
+            }}
+          >
+            {T("Kitoblar endi")}{" "}
+            <Box
+              component="span"
+              sx={{
+                display: "block",
+                fontFamily: kp.fonts.serif,
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: kp.p.primary,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.05,
+              }}
+            >
+              {T("eshitiladi.")}
             </Box>
+          </Typography>
+
+          <Typography
+            variant="body1"
+            sx={{
+              mt: { xs: 2.5, md: 3 },
+              fontSize: { xs: "1rem", sm: "1.0625rem", md: "1.1875rem" },
+              lineHeight: 1.6,
+              color: kp.p.textSecondary,
+              maxWidth: 540,
+              ...fade(0.4),
+            }}
+          >
+            {T("hero_description")}
+          </Typography>
+
+          <Box
+            sx={{
+              mt: { xs: 3.5, md: 4.5 },
+              display: "flex",
+              alignItems: "center",
+              gap: { xs: 1.5, sm: 2 },
+              flexWrap: "wrap",
+              ...fade(0.6),
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={toggle}
+              aria-pressed={playing}
+              disabled={!book}
+              startIcon={
+                <Box
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    bgcolor: alpha(kp.p.onPrimary, 0.2),
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  {playing ? <PauseRounded sx={{ fontSize: 18 }} /> : <PlayArrowRounded sx={{ fontSize: 20 }} />}
+                </Box>
+              }
+              endIcon={<ArrowForwardRounded sx={{ fontSize: 18 }} />}
+              sx={{
+                borderRadius: 999,
+                bgcolor: kp.p.primary,
+                "&:hover": { bgcolor: kp.p.primaryHover },
+                color: kp.p.onPrimary,
+                border: kp.isContrast ? "2px solid #FFFFFF" : "none",
+                px: { xs: 2.5, sm: 3.5 },
+                py: { xs: 1.25, sm: 1.5 },
+                fontSize: { xs: "0.9375rem", sm: "1rem" },
+                fontWeight: 700,
+                textTransform: "none",
+                boxShadow: kp.isContrast ? "none" : "0 6px 20px rgba(13, 80, 184, 0.28)",
+              }}
+            >
+              {playing ? T("Остановить") : T("10 soniya tinglab ko'ring")}
+            </Button>
+
+            <Button
+              component={RouterLink}
+              to="/books"
+              variant="outlined"
+              startIcon={<AutoStoriesOutlined sx={{ fontSize: 20, color: kp.p.primary }} />}
+              sx={{
+                borderRadius: 999,
+                bgcolor: kp.p.surface,
+                "&:hover": { bgcolor: kp.p.surfaceAlt, borderColor: kp.p.borderStrong },
+                color: kp.p.text,
+                borderColor: kp.p.border,
+                px: { xs: 2.5, sm: 3 },
+                py: { xs: 1.25, sm: 1.5 },
+                fontSize: { xs: "0.9375rem", sm: "1rem" },
+                fontWeight: 700,
+                textTransform: "none",
+                boxShadow: kp.shadows.card,
+              }}
+            >
+              {T("Katalogni ochish")}
+            </Button>
           </Box>
-          <Typography variant="body2" sx={{ color: kp.p.textSecondary }}>{T("Или нажмите пробел")}</Typography>
-          <Box sx={{ mt: 1, display: "flex", gap: 1, flexWrap: "wrap", justifyContent: "center" }}>
-            <Button component={RouterLink} to="/books" variant="text" endIcon={<ArrowForwardRounded aria-hidden="true" />}>{T("Открыть каталог")}</Button>
-            {book && <Button component={RouterLink} to={`/books/${book.id}`} variant="text">{T("Слушать полностью")}</Button>}
-            <Button variant="text" startIcon={<ShuffleRounded aria-hidden="true" />} onClick={random}>{T("Случайная аудиокнига")}</Button>
-          </Box>
+
+          <Typography
+            variant="body2"
+            sx={{
+              mt: 1.75,
+              fontSize: "0.875rem",
+              color: kp.p.textSecondary,
+              fontStyle: "italic",
+              ...fade(0.7),
+            }}
+          >
+            {book ? `«${book.title}» — ${book.authors_name}` : "«Dunyoning ishlari» — O'tkir Hoshimov"}
+          </Typography>
+        </Box>
+      </Container>
+
+      <Container sx={{ width: "100%", zIndex: 1, mt: { xs: 4, md: 6 } }}>
+        <Box
+          sx={{
+            p: { xs: 2, sm: 2.5, md: "18px 32px" },
+            borderRadius: { xs: 6, md: 8 },
+            bgcolor: alpha(kp.p.surface, 0.92),
+            backdropFilter: "blur(20px)",
+            border: `1px solid ${kp.p.border}`,
+            boxShadow: kp.shadows.raised,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: { xs: 2, md: 2.5 },
+            overflowX: "auto",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": { display: "none" },
+            ...fade(0.85),
+          }}
+        >
+          {features.map((feat, i) => (
+            <React.Fragment key={feat.title}>
+              {i > 0 && (
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{
+                    display: { xs: "none", lg: "block" },
+                    borderColor: kp.p.border,
+                    my: 0.5,
+                  }}
+                />
+              )}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.75,
+                  flexShrink: 0,
+                  minWidth: { xs: 220, md: "auto" },
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: "50%",
+                    bgcolor: alpha(kp.p.primary, 0.12),
+                    display: "grid",
+                    placeItems: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  {feat.icon}
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "0.875rem",
+                      color: kp.p.text,
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    {feat.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.75rem",
+                      color: kp.p.textSecondary,
+                      mt: 0.25,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {feat.subtitle}
+                  </Typography>
+                </Box>
+              </Box>
+            </React.Fragment>
+          ))}
         </Box>
       </Container>
     </Box>
@@ -189,23 +433,92 @@ const Statement = () => {
   const { data } = useBooks("new", 1);
   const total = data && data.total;
   const stats = [
-    { v: total ? Number(total).toLocaleString("ru-RU") : "—", l: T("аудиокниг в каталоге") },
-    { v: "100%", l: T("работает с экранной читалкой") },
-    { v: T("0 сум"), l: T("для читателей с инвалидностью по зрению") },
+    {
+      v: total ? Number(total).toLocaleString("ru-RU") : "61",
+      l: T("ta audiokitob katalogda"),
+      icon: <AutoStoriesOutlined sx={{ fontSize: 26, color: kp.p.primary }} />,
+      bg: alpha(kp.p.primary, 0.12),
+    },
+    {
+      v: "100%",
+      l: T("ekran o'quvchi bilan ishlaydi"),
+      icon: <AccessibilityNewRounded sx={{ fontSize: 26, color: kp.p.success }} />,
+      bg: alpha(kp.p.success, 0.14),
+    },
+    {
+      v: "0 so'm",
+      l: T("ko'rish bo'yicha nogironligi bo'lgan kitobxonlar uchun"),
+      icon: <FavoriteRounded sx={{ fontSize: 26, color: kp.p.error }} />,
+      bg: alpha(kp.p.error, 0.14),
+    },
   ];
   return (
-    <Section labelledBy="kp-about-title" id="about">
+    <Section labelledBy="kp-about-title" id="about" sx={{ py: { xs: 3, md: 5 } }}>
       <Typography id="kp-about-title" component="h2" sx={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0 0 0 0)" }}>{T("О нас")}</Typography>
-      <Reveal>
-        <Typography component="p" sx={{ fontFamily: kp.fonts.heading, fontWeight: 700, fontSize: "clamp(1.875rem, 1.1rem + 3.2vw, 3.75rem)", lineHeight: 1.12, letterSpacing: "-0.04em", maxWidth: 1080 }}>
-          {T("Мы превращаем книгу в то, что можно")} <Accent>{T("услышать")}</Accent> {T("— с экранной читалкой, клавиатурой и наушниками, без мыши и без зрения.")}
-        </Typography>
-      </Reveal>
-      <Box component="dl" sx={{ m: 0, mt: { xs: 6, md: 9 }, display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, borderTop: `1px solid ${kp.p.border}` }}>
+      <Box
+        component="dl"
+        sx={{
+          m: 0,
+          p: 0,
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+          gap: { xs: 2, md: 3 },
+        }}
+      >
         {stats.map((s, i) => (
-          <Reveal key={s.l} delay={i * 0.1} sx={{ py: { xs: 3, md: 4 }, pr: 3, display: "flex", flexDirection: "column-reverse", borderBottom: { xs: `1px solid ${kp.p.border}`, md: "none" } }}>
-            <Box component="dt" sx={{ color: kp.p.textSecondary, fontSize: "1.0625rem", mt: 0.5 }}>{s.l}</Box>
-            <Box component="dd" sx={{ m: 0, fontFamily: kp.fonts.heading, fontWeight: 800, fontSize: "clamp(2.5rem, 1.8rem + 2.4vw, 4rem)", letterSpacing: "-0.05em", lineHeight: 1 }}>{s.v}</Box>
+          <Reveal key={s.l} delay={i * 0.1}>
+            <Box
+              sx={{
+                bgcolor: kp.p.surface,
+                borderRadius: 5,
+                p: { xs: 2.5, sm: 3 },
+                border: `1px solid ${kp.p.border}`,
+                boxShadow: kp.shadows.card,
+                display: "flex",
+                alignItems: "center",
+                gap: 2.25,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: "50%",
+                  bgcolor: s.bg,
+                  display: "grid",
+                  placeItems: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {s.icon}
+              </Box>
+              <Box>
+                <Box
+                  component="dd"
+                  sx={{
+                    m: 0,
+                    fontWeight: 800,
+                    fontSize: { xs: "1.5rem", sm: "1.75rem" },
+                    letterSpacing: "-0.03em",
+                    color: kp.p.text,
+                    lineHeight: 1.15,
+                  }}
+                >
+                  {s.v}
+                </Box>
+                <Box
+                  component="dt"
+                  sx={{
+                    color: kp.p.textSecondary,
+                    fontSize: "0.84rem",
+                    mt: 0.25,
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {s.l}
+                </Box>
+              </Box>
+            </Box>
           </Reveal>
         ))}
       </Box>
@@ -248,19 +561,170 @@ const Access = () => {
 const Features = () => {
   const { kp } = useTheme();
   const items = [
-    { icon: <RecordVoiceOverRounded />, t: T("Для экранных читалок"), d: T("Понятные подписи, заголовки и объявления для NVDA, JAWS, TalkBack и VoiceOver.") },
-    { icon: <KeyboardRounded />, t: T("Управление с клавиатуры"), d: T("Пробел — пауза, стрелки — 30 секунд назад и вперёд, Shift и стрелки — скорость.") },
-    { icon: <HeadphonesRounded />, t: T("Кнопки наушников"), d: T("Пауза и перемотка с наушников и экрана блокировки.") },
+    {
+      icon: <AccessibilityNewRounded sx={{ fontSize: 24, color: kp.p.primary }} />,
+      bg: alpha(kp.p.primary, 0.12),
+      cardBg: kp.p.mode === "dark" ? kp.p.surface : "linear-gradient(135deg, #F0F7FF 0%, #E6F0FA 100%)",
+      borderColor: kp.p.border,
+      title: T("Ekran o'quvchilar uchun"),
+      desc: T("NVDA, JAWS, TalkBack va VoiceOver uchun tushunarli nomlar, sarlavhalar va ovozli xabarlar."),
+      img: featSpeaker,
+    },
+    {
+      icon: <KeyboardRounded sx={{ fontSize: 24, color: kp.p.primary }} />,
+      bg: alpha(kp.p.primary, 0.12),
+      cardBg: kp.p.mode === "dark" ? kp.p.surface : "linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%)",
+      borderColor: kp.p.border,
+      title: T("Klaviatura bilan boshqarish"),
+      desc: T("Bo'sh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik."),
+      img: featKeys,
+    },
+    {
+      icon: <HeadphonesRounded sx={{ fontSize: 24, color: kp.p.accent }} />,
+      bg: alpha(kp.p.accent, 0.15),
+      cardBg: kp.p.mode === "dark" ? kp.p.surface : "linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 60%, #FDF2E9 100%)",
+      borderColor: kp.p.border,
+      title: T("Quloqchin tugmalari"),
+      desc: T("Quloqchin va qulflangan ekrandan pauza va o'tkazish."),
+      img: featHeadphones,
+    },
   ];
+
   return (
-    <Section labelledBy="kp-features-title" sx={{ pt: { xs: 2, md: 4 } }}>
-      <SectionHeader id="kp-features-title" title={<>{T("Удобно")} <Accent>{T("без зрения")}</Accent></>} subtitle={T("Каждой функцией можно пользоваться без мыши и без зрения.")} />
-      <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "grid", gap: { xs: 0, md: 6 }, gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" } }}>
+    <Section labelledBy="kp-features-title" sx={{ pt: { xs: 2, md: 3 }, pb: { xs: 5, md: 8 } }}>
+      <Box sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", mb: { xs: 3, md: 4 }, flexWrap: "wrap", gap: 2 }}>
+        <Box>
+          <Typography
+            id="kp-features-title"
+            variant="h2"
+            component="h2"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "1.75rem", md: "2.375rem" },
+              letterSpacing: "-0.03em",
+              color: kp.p.text,
+            }}
+          >
+            {T("Ko'rmasdan ham")}{" "}
+            <Box
+              component="span"
+              sx={{
+                fontFamily: "Instrument Serif, serif",
+                fontStyle: "italic",
+                color: kp.p.primary,
+                fontWeight: 400,
+              }}
+            >
+              {T("qulay")}
+            </Box>
+          </Typography>
+          <Typography sx={{ color: kp.p.textSecondary, fontSize: "0.9375rem", mt: 0.5 }}>
+            {T("Har bir imkoniyatdan sichqonchasiz va ko'rmasdan foydalanish mumkin.")}
+          </Typography>
+        </Box>
+        <Box
+          component="img"
+          src={accessWave}
+          alt=""
+          aria-hidden="true"
+          sx={{
+            display: { xs: "none", md: "block" },
+            height: 38,
+            objectFit: "contain",
+            opacity: 0.85,
+          }}
+        />
+      </Box>
+
+      <Box
+        component="ul"
+        sx={{
+          listStyle: "none",
+          m: 0,
+          p: 0,
+          display: "grid",
+          gap: { xs: 2, md: 3 },
+          gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+        }}
+      >
         {items.map((it, i) => (
-          <Reveal as="li" key={it.t} delay={i * 0.1} sx={{ pt: 3, pb: { xs: 4, md: 0 }, borderTop: `1px solid ${kp.p.border}` }}>
-            <Box aria-hidden="true" sx={{ color: kp.p.primary, "& svg": { fontSize: 30 } }}>{it.icon}</Box>
-            <Typography variant="h4" component="h3" sx={{ mt: 2 }}>{it.t}</Typography>
-            <Typography sx={{ mt: 1, color: kp.p.textSecondary }}>{it.d}</Typography>
+          <Reveal as="li" key={it.title} delay={i * 0.1}>
+            <Box
+              sx={{
+                background: it.cardBg,
+                border: `1px solid ${it.borderColor}`,
+                borderRadius: 5,
+                p: { xs: 2.5, sm: 3 },
+                height: "100%",
+                minHeight: 180,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                position: "relative",
+                overflow: "hidden",
+                boxShadow: kp.shadows.card,
+                transition: "transform .25s ease, box-shadow .25s ease",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: kp.shadows.raised,
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5, position: "relative", zIndex: 1 }}>
+                <Box
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: "50%",
+                    bgcolor: it.bg,
+                    display: "grid",
+                    placeItems: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  {it.icon}
+                </Box>
+                <Box sx={{ pr: 6 }}>
+                  <Typography
+                    component="h3"
+                    sx={{
+                      fontWeight: 800,
+                      fontSize: "1rem",
+                      color: kp.p.text,
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    {it.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: kp.p.textSecondary,
+                      fontSize: "0.8125rem",
+                      mt: 0.75,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {it.desc}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box
+                component="img"
+                src={it.img}
+                alt=""
+                aria-hidden="true"
+                sx={{
+                  position: "absolute",
+                  right: 12,
+                  bottom: 12,
+                  width: { xs: 70, sm: 80 },
+                  height: "auto",
+                  objectFit: "contain",
+                  pointerEvents: "none",
+                }}
+              />
+            </Box>
           </Reveal>
         ))}
       </Box>
@@ -321,19 +785,36 @@ const JoinCta = () => {
   );
 };
 
+const CategoriesSection = () => (
+  <Container sx={{ mt: { xs: 4, md: 6 } }}>
+    <Shelf
+      id="home-categories"
+      eyebrow={T("JANRLAR BO'YICHA")}
+      title={T("Audiokitoblar toifalari")}
+      subtitle={T("Qiziqarli mavzularda minglab audiokitoblar sizni kutmoqda.")}
+      to="/genres"
+      actionLabel={T("Barchasini ko'rish")}
+      variant="categories"
+    />
+  </Container>
+);
+
 const HomePage = () => {
+  const { countryCode } = useLibrary();
   const location = useLocation();
   useEffect(() => {
     if (location.hash === "#about") requestAnimationFrame(() => document.getElementById("about")?.scrollIntoView({ block: "start" }));
   }, [location]);
-  // Промо-блоки создаются один раз: новые элементы на каждом рендере пересобирали бы список полок ленты.
+  // Промо-блоки пересобираются при смене языка
   const promos = React.useMemo(() => ({
     about: <><Statement /><Features /></>, join: <JoinCta />, access: <Access />, news: <News />,
-  }), []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [countryCode]);
   return (
     <PageShell title={T("Главная")}>
       <Hero />
       <Box component="a" href="#site-footer" className="kp-skip-link">{T("Пропустить ленту")}</Box>
+      <CategoriesSection />
       <Feed promos={promos} />
     </PageShell>
   );

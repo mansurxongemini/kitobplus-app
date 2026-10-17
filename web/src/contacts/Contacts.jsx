@@ -8,10 +8,12 @@ import PersonOutlineRounded from "@mui/icons-material/PersonOutlineRounded";
 import OpenInNewRounded from "@mui/icons-material/OpenInNewRounded";
 import PageShell, { PageHeader } from "../ds/components/PageShell";
 import Container from "../ds/components/Container";
+import useLibrary from "../LibraryContext";
 import T from "../lib/translator";
 
 const Contacts = () => {
   const { kp } = useTheme();
+  useLibrary();
 
   const contactsList = [
     {

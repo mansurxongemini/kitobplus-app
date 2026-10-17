@@ -1,0 +1,20 @@
+<svg width="240" height="180" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="90" r="70" fill="currentColor" fill-opacity="0.05"/>
+  <circle cx="120" cy="90" r="54" fill="currentColor" fill-opacity="0.08"/>
+  <!-- Desk surface line -->
+  <path d="M30 145H210" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.2"/>
+  <!-- Open empty book outline -->
+  <path d="M65 140C65 125 80 115 105 115C115 115 120 118 120 118C120 118 125 115 135 115C160 115 175 125 175 140" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35" fill="none"/>
+  <path d="M120 118V142" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35"/>
+  <!-- Magnifying glass -->
+  <g transform="translate(10, -5)">
+    <circle cx="115" cy="75" r="26" stroke="#185ADB" stroke-width="4.5" fill="#185ADB" fill-opacity="0.12"/>
+    <path d="M134 94L156 116" stroke="#185ADB" stroke-width="5.5" stroke-linecap="round"/>
+    <!-- Sparkles -->
+    <path d="M115 62V66M115 84V88M102 75H106M124 75H128" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <!-- Orbiting dots -->
+  <circle cx="55" cy="70" r="3" fill="#D97706" fill-opacity="0.7"/>
+  <circle cx="185" cy="60" r="4" fill="#185ADB" fill-opacity="0.6"/>
+  <circle cx="195" cy="105" r="2.5" fill="#D97706" fill-opacity="0.6"/>
+</svg>

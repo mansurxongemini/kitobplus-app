@@ -10,16 +10,17 @@
 -- but a state=2 test user is seeded for convenience.
 USE kitobplus;
 
--- 3 genres / 3 authors / 2 narrators / 1 publisher
+-- 3 genres / 4 authors / 2 narrators / 1 publisher
 INSERT INTO genres (id, name, annotation, url) VALUES
-  (1, 'Roman', 'Roman janridagi audiokitoblar', 'roman'),
-  (2, 'Hikoya', 'Hikoyalar to''plami', 'hikoya'),
-  (3, 'Ertak', 'Bolalar uchun ertaklar', 'ertak');
+  (1, 'Roman', 'Inson ruhiyati, jamiyat va davr ziddiyatlarini chuqur qamrab oluvchi yirik epik asarlar.', 'roman'),
+  (2, 'Hikoya', 'Ixcham syujet, yorqin xarakterlar va ibratli falsafiy ma''noga ega hayotiy lavhalar.', 'hikoya'),
+  (3, 'Ertak', 'Ezgu niyat, adolat va sehrli olam sarguzashtlari haqidagi xalq hamda mumtoz ertaklar.', 'ertak');
 
 INSERT INTO authors (id, name, annotation) VALUES
-  (1, 'Abdulla Qodiriy', 'O''zbek romanchiligining asoschisi'),
-  (2, 'O''tkir Hoshimov', 'O''zbek yozuvchisi'),
-  (3, 'Tohir Malik', 'O''zbek adibi');
+  (1, 'Abdulla Qodiriy', 'O''zbek milliy romanchiligining asoschisi va buyuk ma''rifatparvar adib.'),
+  (2, 'O''tkir Hoshimov', 'O''zbekiston xalq yozuvchisi, samimiy qissa va romanlar ustasi.'),
+  (3, 'Tohir Malik', 'O''zbekiston xalq yozuvchisi, mashhur detektiv va ruhiy tarbiya asarlari muallifi.'),
+  (23, 'Xalq og''zaki ijodi', 'O''zbek xalqining boy folklor merosi, doston va sehrli ertaklari.');
 
 INSERT INTO dictors (id, name, annotation) VALUES
   (1, 'Jasur Karimov', 'Audiokitob ovozlashtiruvchisi'),
@@ -30,14 +31,14 @@ INSERT INTO publishers (id, name, annotation) VALUES
 
 -- 5 visible books (is_readable_from in the past, imported set)
 INSERT INTO books (id, name, folder, imported, publishers_id, annotation, adult, is_readable_from, seconds, bytes) VALUES
-  (1, 'O''tkan kunlar', 'otkan-kunlar', NOW(), 1, 'Abdulla Qodiriyning mashhur romani', NULL, '2024-03-10 09:00:00', 37200.000, 895000000),
-  (2, 'Mehrobdan chayon', 'mehrobdan-chayon', NOW(), 1, 'Tarixiy roman', NULL, '2024-06-01 10:00:00', 28800.000, 691000000),
-  (3, 'Dunyoning ishlari', 'dunyoning-ishlari', NOW(), 1, 'Qissa va hikoyalar', NULL, '2024-09-15 12:00:00', 19800.000, 475000000),
-  (4, 'Shaytanat (1-kitob)', 'shaytanat-1', NOW(), 1, 'Mashhur romanlar silsilasi', 18, '2025-01-20 08:00:00', 45000.000, 1080000000),
-  (5, 'Zumrad va Qimmat', 'zumrad-va-qimmat', NOW(), 1, 'Bolalar ertagi', NULL, '2025-05-01 09:30:00', 3600.000, 86000000);
+  (1, 'O''tkan kunlar', 'otkan-kunlar', NOW(), 1, 'Abdulla Qodiriyning mashhur romani. Otabek va Kumush muhabbati hamda Turkiston xonliklari davri fojiasi.', NULL, '2024-03-10 09:00:00', 37200.000, 895000000),
+  (2, 'Mehrobdan chayon', 'mehrobdan-chayon', NOW(), 1, 'Xudoyorxon davri saroy fitnalari, Anvar va Ra''no pok sevgisi haqidagi tarixiy roman.', NULL, '2024-06-01 10:00:00', 28800.000, 691000000),
+  (3, 'Dunyoning ishlari', 'dunyoning-ishlari', NOW(), 1, 'Ona madhi, bolalik xotiralari va insoniy fazilatlarni ulug''lovchi samimiy qissalar to''plami.', NULL, '2024-09-15 12:00:00', 19800.000, 475000000),
+  (4, 'Shaytanat (1-kitob)', 'shaytanat-1', NOW(), 1, 'Jinoyat olami sirlari, Asadbek fojeasi va nafs tuzoqlari haqidagi mashhur detektiv epopeya.', 18, '2025-01-20 08:00:00', 45000.000, 1080000000),
+  (5, 'Zumrad va Qimmat', 'zumrad-va-qimmat', NOW(), 1, 'Mehnatsevarlik, halollik va odob-axloq haqidagi mashhur o''zbek xalq ertagi.', NULL, '2025-05-01 09:30:00', 3600.000, 86000000);
 
 INSERT INTO books2authors (books_id, authors_id, pos) VALUES
-  (1, 1, 1), (2, 1, 1), (3, 2, 1), (4, 3, 1), (5, 2, 1);
+  (1, 1, 1), (2, 1, 1), (3, 2, 1), (4, 3, 1), (5, 23, 1);
 
 INSERT INTO books2dictors (books_id, dictors_id, pos) VALUES
   (1, 1, 1), (2, 2, 1), (3, 1, 1), (4, 1, 1), (5, 2, 1);

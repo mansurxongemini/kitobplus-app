@@ -343,7 +343,7 @@ function NewsModalGP({ open, onClose, newsId, onSaveSuccess }) {
                         >
                             {loading ? 'Сохранение...' : 'Сохранить'}
                         </Button>                    
-                        {(newsId != 0) &&
+                        {(Number(newsId) !== 0) &&
                             <Button onClick={handleDelete} disabled={loading} color="secondary">Удалить</Button>                
                         }
                         <Button onClick={handleCancel} disabled={loading} color="secondary">

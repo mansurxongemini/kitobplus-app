@@ -15,11 +15,14 @@ import {
   AccordionDetails,
   Button,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
 import T from "../lib/translator";
 
 const HelpSection = () => {
+  const theme = useTheme();
+  const kp = theme.kp;
   const faqData = [
     {
       id: 1,
@@ -51,11 +54,11 @@ const HelpSection = () => {
   return (
     <Box
       sx={{
-        bgcolor: "background.paper",
+        bgcolor: kp?.p?.surface || "background.paper",
         border: 1,
-        borderColor: "divider",
+        borderColor: kp?.p?.border || "divider",
         borderRadius: 6,
-        p: 3,
+        p: { xs: 2, sm: 3 },
         width: "100%",
       }}
     >
@@ -70,7 +73,7 @@ const HelpSection = () => {
       </Typography>
 
       {/* Контактная информация */}
-      <Card sx={{ mb: 3, border: 1, borderColor: "divider" }}>
+      <Card sx={{ mb: 3, border: 1, borderColor: kp?.p?.border || "divider", bgcolor: kp?.p?.surface || "background.paper", borderRadius: 4 }}>
         <CardContent>
           <Typography
             variant="h4" component="h3"
@@ -131,7 +134,10 @@ const HelpSection = () => {
           sx={{
             mb: 1,
             border: 1,
-            borderColor: "divider",
+            borderColor: kp?.p?.border || "divider",
+            bgcolor: kp?.p?.surface || "background.paper",
+            borderRadius: "12px !important",
+            overflow: "hidden",
             "&:before": {
               display: "none",
             },
@@ -140,7 +146,7 @@ const HelpSection = () => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             sx={{
-              bgcolor: "background.paper",
+              bgcolor: kp?.p?.surface || "background.paper",
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -172,13 +178,18 @@ const HelpSection = () => {
       {/* Кнопка обратной связи */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <Button
+          component="a"
+          href="mailto:info@kitobplus.uz"
           variant="contained"
           color="primary"
+          startIcon={<Email />}
           sx={{
-            width: 250,
-            height: 44,
+            width: { xs: "100%", sm: 280 },
+            height: 48,
             fontWeight: "bold",
             fontSize: "1.0625rem",
+            borderRadius: 3,
+            textDecoration: "none",
           }}
         >
           {T('Написать в поддержку')}

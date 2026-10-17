@@ -9,11 +9,11 @@ import LikeDislikeButton from "./LikeDislikeButton.jsx";
 import T from "../lib/translator.js";
 
 const LikeSection = ({book}) => {
-    const likesCount = parseInt(book?.likes_count) + (parseInt(book?.like) == 1 ? -1 : 0);
-    const dislikesCount = parseInt(book?.dislikes_count) + (parseInt(book?.like) == -1 ? -1 : 0);
+    const likesCount = (parseInt(book?.likes_count, 10) || 0) + (Number(book?.like) === 1 ? -1 : 0);
+    const dislikesCount = (parseInt(book?.dislikes_count, 10) || 0) + (Number(book?.like) === -1 ? -1 : 0);
     const [like, setLike] = React.useState();
-    const handleLike = () => {const l = like == 1 ? 0 : 1; updateLike(book?.id, l); setLike(l);}
-    const handleDislike = () => {const l = like == -1 ? 0 : -1; updateLike(book?.id, l); setLike(l);}
+    const handleLike = () => {const l = Number(like) === 1 ? 0 : 1; updateLike(book?.id, l); setLike(l);}
+    const handleDislike = () => {const l = Number(like) === -1 ? 0 : -1; updateLike(book?.id, l); setLike(l);}
 
     React.useEffect(() => {
         if (book) {
@@ -30,8 +30,8 @@ const LikeSection = ({book}) => {
     >
         <LikeDislikeButton
             action={handleLike}
-            active={like == 1}
-            count={likesCount + (like == 1 ? 1 : 0)}
+            active={Number(like) === 1}
+            count={likesCount + (Number(like) === 1 ? 1 : 0)}
             icon_active={<ThumbUpIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
             icon_inactive={<ThumbUpOutlinedIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
             ariaLabel={T("Нравится")}
@@ -39,8 +39,8 @@ const LikeSection = ({book}) => {
 
         <LikeDislikeButton
             action={handleDislike}
-            active={like == -1}
-            count={dislikesCount + (like == -1 ? 1 : 0)}
+            active={Number(like) === -1}
+            count={dislikesCount + (Number(like) === -1 ? 1 : 0)}
             icon_active={<ThumbDownIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
             icon_inactive={<ThumbDownOutlinedIcon aria-hidden="true" sx={{ width: 26, height: 26 }} />}
             ariaLabel={T("Не нравится")}

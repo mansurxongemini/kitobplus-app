@@ -1,21 +1,13 @@
 import translation from './translation.json';
-import useLibrary from '../LibraryContext';
 import { getCountryCode } from './api';
 
 //const translation: any = 
 
-// T — в теле компонента: язык берётся из контекста, поэтому компонент перерисуется при смене языка.
-// В обработчиках событий и эффектах хуки недоступны — там нужен tr(); T в таком месте тоже не падает,
-// а берёт сохранённый язык.
+// T — чистая функция перевода: берёт текущий язык (сохранённый в localStorage / по умолчанию UZ).
+// При смене языка LibraryContext вызывает перерисовку приложения, и все T(...) обновляются
+// без нарушения правил хуков React (Rules of Hooks).
 const T = (verb) => {
-    let countryCode;
-    try {
-        // eslint-disable-next-line react-hooks/rules-of-hooks -- вызов безусловный, try ловит только вызов вне рендера
-        countryCode = useLibrary().countryCode;
-    } catch (error) {
-        countryCode = getCountryCode();
-    }
-    return tr(verb, countryCode);
+    return tr(verb, getCountryCode());
 };
 
 export const tr = (verb, countryCode = getCountryCode()) => {
@@ -27,31 +19,23 @@ export const tr = (verb, countryCode = getCountryCode()) => {
 };
 
 const _T = (verb, countryCode) => {
-    //let code = 'UZ';
-    //let code = 'RU';
-    
-    if (countryCode === 'RU') {
+    if (!verb) {
         return verb;
     }
 
-    let error = null;
-    if (!translation.hasOwnProperty(verb)) {
-        error = 'NF';
+    // 1. Проверяем наличие явного перевода для целевого языка (включая RU)
+    if (
+        Object.prototype.hasOwnProperty.call(translation, verb) &&
+        translation[verb] !== undefined &&
+        Object.prototype.hasOwnProperty.call(translation[verb], countryCode) &&
+        translation[verb][countryCode] !== undefined &&
+        translation[verb][countryCode] !== ""
+    ) {
+        return translation[verb][countryCode];
     }
 
-    if (!error && translation.hasOwnProperty(verb) && translation[verb] !== undefined && !translation[verb].hasOwnProperty(countryCode)) {
-        error = 'EC';
-    }
-
-    if (error) {
-        //return verb;
-        //return "[" + error + "] " + verb;
-        //request('translation/add', {'code': getCountryCode() ?? 'UZ', 'ru': verb}).then((_)=>{}).catch((error) => Alert.alert('Error while save translation verb ' + verb, error));
-        return verb;
-    }
-
-
-    return translation[verb][countryCode];
+    // 2. Резервный возврат: для старых русских ключей без потомка "RU" или неизвестных строк
+    return verb;
 };
 
 /*

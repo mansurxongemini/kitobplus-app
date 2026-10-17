@@ -7,11 +7,13 @@ import Filter from "../parts/Filter";
 import BooksViewParams from "./BooksViewParams";
 import GenresSelector from "./GenresSelector";
 import BooksSection from "./BooksSeciton";
+import useLibrary from "../LibraryContext";
 import T from "../lib/translator";
 
 // Catalog: /books and /books/:table/:id. The home hero links here with ?q=...,
 // so the search field reads its initial value from the URL and keeps it there.
 const Books = () => {
+  useLibrary();
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = React.useState(() => searchParams.get("q") || "");

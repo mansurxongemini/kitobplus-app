@@ -9,6 +9,7 @@ import PersonBanner from "./PersonBanner";
 import { get } from "../lib/person";
 import { getHost } from "../lib/api";
 import { getPaginationItemAriaLabel } from "../lib/a11y";
+import useLibrary from "../LibraryContext";
 import T from "../lib/translator";
 
 const PER_PAGE = 12;
@@ -27,6 +28,7 @@ const buildBooksUrl = (table, id, sort, page) => {
 const Person = () => {
   const { table = "authors", id } = useParams();
   const { kp } = useTheme();
+  useLibrary();
 
   const [personData, setPersonData] = useState(null);
   const [personLoading, setPersonLoading] = useState(true);

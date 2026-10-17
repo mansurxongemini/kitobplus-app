@@ -3,6 +3,7 @@ import { Box, Card, Typography, useTheme } from "@mui/material";
 import LoginForm from "./login/LoginForm.jsx";
 import PageShell from "./ds/components/PageShell";
 import Container from "./ds/components/Container";
+import useLibrary from "./LibraryContext";
 import T from "./lib/translator.js";
 import { useRouteA11y } from "./lib/a11y";
 
@@ -10,6 +11,7 @@ import { useRouteA11y } from "./lib/a11y";
 // All phone/SMS/Google/Apple logic lives in LoginForm and is unchanged.
 const Login = () => {
   const { kp } = useTheme();
+  useLibrary();
   useRouteA11y(T("Регистрация/вход"));
   return (
     <PageShell title={T("Регистрация/вход")}>

@@ -110,10 +110,19 @@ const EditProfileSection = () => {
           }}
         >
           <Avatar
-            src="/ellipse-15.png"
             alt={T('Профиль')}
-            sx={{ width: { xs: 80, md: 110 }, height: { xs: 80, md: 110 }, mb: 1 }}
-          />
+            sx={{
+              width: { xs: 80, md: 110 },
+              height: { xs: 80, md: 110 },
+              mb: 1,
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              fontSize: { xs: "2rem", md: "2.75rem" },
+              fontWeight: 700,
+            }}
+          >
+            {String(formData.name || user?.name || "U").trim().charAt(0).toUpperCase()}
+          </Avatar>
           <Typography
             sx={{
               color: "text.secondary",
@@ -205,20 +214,31 @@ const EditProfileSection = () => {
             }
           />
 
-          <div style={{flex: 1, gap: 8, justifyItems: 'stretch', alignItems: 'stretch', display: 'flex', flexDirection: 'row'}}>
+          <Box sx={{
+            flex: 1,
+            gap: { xs: 2, md: 1 },
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'stretch',
+          }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateField 
                       fullWidth
                       value={formData.birthday ? dayjs(formData.birthday) : null}
-                      onChange={(e) => handleInputChange('birthday', e.target.value)}
+                      onChange={(newValue) => {
+                        if (newValue && dayjs.isDayjs(newValue) && newValue.isValid()) {
+                          handleInputChange('birthday', newValue.format('YYYY-MM-DD'));
+                        } else if (!newValue) {
+                          handleInputChange('birthday', '');
+                        }
+                      }}
                       label={T("Дата рождения")}
                       format="DD.MM.YYYY"
                       variant="outlined"
-                      style={{paddingTop: 8}}
                       InputProps={{
                         sx: {
                           fontWeight: "medium",
-                          fontSize: "18px",
+                          fontSize: { xs: "16px", md: "18px" },
                           borderColor: "primary.main",
                         },
                       }}
@@ -233,14 +253,22 @@ const EditProfileSection = () => {
                 InputProps={{
                   sx: {
                     fontWeight: "medium",
-                    fontSize: "18px",
+                    fontSize: { xs: "16px", md: "18px" },
                     borderColor: "primary.main",
                   },
                 }}
               />
-          </div>
+          </Box>
 
-          <div style={{marginTop: 16, flex: 1, gap: 8, alignItems: 'center', justifyItems: 'center', justifyContent: 'space-between', display: 'flex', flexDirection: 'row'}}>
+          <Box sx={{
+            mt: 2,
+            flex: 1,
+            gap: 2,
+            alignItems: { xs: 'stretch', sm: 'center' },
+            justifyContent: 'space-between',
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' }
+          }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -273,7 +301,7 @@ const EditProfileSection = () => {
               onClick={handleSave}
               disabled={loading}
               sx={{
-                width: 211,
+                width: { xs: "100%", sm: 211 },
                 height: 44,
                 fontWeight: "bold",
                 fontSize: "1.0625rem",
@@ -281,7 +309,7 @@ const EditProfileSection = () => {
             >
               {loading ? T("Сохранение...") : T("Сохранить")}
             </Button>
-          </div>
+          </Box>
         </div>
       </Box>
       <Modal

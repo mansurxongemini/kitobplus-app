@@ -1,7 +1,37 @@
 {
+  "сегодня": {
+    "UZ": "bugun",
+    "RU": "сегодня",
+    "US": "today"
+  },
+  "вчера": {
+    "UZ": "kecha",
+    "RU": "вчера",
+    "US": "yesterday"
+  },
+  "КАТЕГОРИИ": {
+    "UZ": "KATEGORIYALAR",
+    "US": "CATEGORIES"
+  },
+  "genres_banner_subtitle": {
+    "UZ": "Oʻzingizga yoqadigan janrni tanlab, eng yaxshi audiokitoblarni kashf eting.",
+    "RU": "Выберите подходящий жанр и откройте для себя лучшие аудиокниги.",
+    "US": "Choose your favorite genre and discover the best audiobooks."
+  },
   "Русский": {
-    "UZ": "Узбекский",
-    "US": "Английский"
+    "UZ": "Ruscha",
+    "RU": "Русский",
+    "US": "Russian"
+  },
+  "Ruscha": {
+    "UZ": "Ruscha",
+    "RU": "Русский",
+    "US": "Russian"
+  },
+  "Russian": {
+    "UZ": "Ruscha",
+    "RU": "Русский",
+    "US": "Russian"
   },
   "Случайная аудиокнига": {
     "UZ": "Tasodifiy audiokitob",
@@ -2314,5 +2344,440 @@
   "Случайные": {
     "UZ": "Tasodifiy",
     "US": "Random"
+  },
+  "HAR BIR INSON UCHUN KITOB": {
+    "UZ": "HAR BIR INSON UCHUN KITOB",
+    "RU": "КНИГА ДЛЯ КАЖДОГО ЧЕЛОВЕКА",
+    "US": "BOOKS FOR EVERYONE"
+  },
+  "Kitoblar endi": {
+    "UZ": "Kitoblar endi",
+    "RU": "Книги теперь",
+    "US": "Books now"
+  },
+  "eshitiladi.": {
+    "UZ": "eshitiladi.",
+    "RU": "звучат.",
+    "US": "can be heard."
+  },
+  "hero_description": {
+    "UZ": "Oʻzbek va jahon adabiyoti professional suxandonlar ijrosida. Koʻrish imkoniyati cheklanganlar uchun — bepul, barcha uchun — qulay va zamonaviy audiokutubxona.",
+    "RU": "Узбекская и мировая литература в исполнении профессиональных дикторов. Для людей с инвалидностью по зрению — бесплатно, для всех — удобная онлайн-аудиобиблиотека.",
+    "US": "Uzbek and world literature performed by professional narrators. Free for the visually impaired, convenient for everyone."
+  },
+  "10 soniya tinglab ko'ring": {
+    "UZ": "10 soniya tinglab koʻring",
+    "RU": "Послушать 10 секунд",
+    "US": "Listen for 10 seconds"
+  },
+  "Katalogni ochish": {
+    "UZ": "Katalogni ochish",
+    "RU": "Открыть каталог",
+    "US": "Open catalog"
+  },
+  "Ko'rish imkoniyati cheklanganlar uchun bepul": {
+    "UZ": "Koʻrish imkoniyati cheklanganlar uchun bepul",
+    "RU": "Бесплатно для людей с инвалидностью",
+    "US": "Free for visually impaired"
+  },
+  "Bilim hamma uchun": {
+    "UZ": "Bilim hamma uchun",
+    "RU": "Знания для всех",
+    "US": "Knowledge for everyone"
+  },
+  "Keng katalog": {
+    "UZ": "Keng katalog",
+    "RU": "Большой каталог",
+    "US": "Wide catalog"
+  },
+  "Minglab audio kitoblar": {
+    "UZ": "Minglab audio kitoblar",
+    "RU": "Тысячи аудиокниг",
+    "US": "Thousands of audiobooks"
+  },
+  "Professional suxandonlar": {
+    "UZ": "Professional suxandonlar",
+    "RU": "Профессиональные дикторы",
+    "US": "Professional narrators"
+  },
+  "Yuqori sifatli ijro": {
+    "UZ": "Yuqori sifatli ijro",
+    "RU": "Высокое качество исполнения",
+    "US": "High quality audio"
+  },
+  "Turli janrlar": {
+    "UZ": "Turli janrlar",
+    "RU": "Разные жанры",
+    "US": "Various genres"
+  },
+  "Badiiy, ilmiy, motivatsion": {
+    "UZ": "Badiiy, ilmiy, motivatsion",
+    "RU": "Художественные, научные, мотивационные",
+    "US": "Fiction, science, motivation"
+  },
+  "Har qurilmada": {
+    "UZ": "Har qurilmada",
+    "RU": "На любом устройстве",
+    "US": "On any device"
+  },
+  "Telefon, planshet, kompyuter": {
+    "UZ": "Telefon, planshet, kompyuter",
+    "RU": "Телефон, планшет, компьютер",
+    "US": "Phone, tablet, computer"
+  },
+  "Qidirish...": {
+    "UZ": "Qidirish...",
+    "RU": "Поиск...",
+    "US": "Search..."
+  },
+  "Kitob, muallif yoki mavzu...": {
+    "UZ": "Kitob, muallif yoki mavzu...",
+    "RU": "Книга, автор или тема...",
+    "US": "Book, author or topic..."
+  },
+  "Audiokitoblar toifalari": {
+    "UZ": "Audiokitoblar toifalari",
+    "RU": "Категории аудиокниг",
+    "US": "Audiobook Categories"
+  },
+  "JANRLAR BO'YICHA": {
+    "UZ": "JANRLAR BO'YICHA",
+    "RU": "ПО ЖАНРАМ",
+    "US": "BY GENRES"
+  },
+  "Qiziqarli mavzularda minglab audiokitoblar sizni kutmoqda.": {
+    "UZ": "Qiziqarli mavzularda minglab audiokitoblar sizni kutmoqda.",
+    "RU": "Тысячи аудиокниг на интересные темы ждут вас.",
+    "US": "Thousands of audiobooks on fascinating topics await you."
+  },
+  "Barchasini ko'rish": {
+    "UZ": "Barchasini ko'rish",
+    "RU": "Смотреть все",
+    "US": "View All"
+  },
+  "ENG OMMABOP": {
+    "UZ": "ENG OMMABOP",
+    "RU": "САМЫЕ ПОПУЛЯРНЫЕ",
+    "US": "MOST POPULAR"
+  },
+  "Haftaning top-10 kitobi": {
+    "UZ": "Haftaning top-10 kitobi",
+    "RU": "Топ-10 книг недели",
+    "US": "Top 10 Books of the Week"
+  },
+  "Hammasini ko'rish": {
+    "UZ": "Hammasini ko'rish",
+    "RU": "Смотреть все",
+    "US": "View All"
+  },
+  "ta audiokitob katalogda": {
+    "UZ": "ta audiokitob katalogda",
+    "RU": "аудиокниг в каталоге",
+    "US": "audiobooks in catalog"
+  },
+  "ekran o'quvchi bilan ishlaydi": {
+    "UZ": "ekran o'quvchi bilan ishlaydi",
+    "RU": "работает с экранной читалкой",
+    "US": "works with screen reader"
+  },
+  "ko'rish bo'yicha nogironligi bo'lgan kitobxonlar uchun": {
+    "UZ": "ko'rish bo'yicha nogironligi bo'lgan kitobxonlar uchun",
+    "RU": "для читателей с инвалидностью по зрению",
+    "US": "for readers with visual disabilities"
+  },
+  "Ko'rmasdan ham": {
+    "UZ": "Ko'rmasdan ham",
+    "RU": "Удобно и",
+    "US": "Effortless and"
+  },
+  "qulay": {
+    "UZ": "qulay",
+    "RU": "доступно",
+    "US": "accessible"
+  },
+  "Har bir imkoniyatdan sichqonchasiz va ko'rmasdan foydalanish mumkin.": {
+    "UZ": "Har bir imkoniyatdan sichqonchasiz va ko'rmasdan foydalanish mumkin.",
+    "RU": "Каждой функцией можно пользоваться без мыши и без зрения.",
+    "US": "Every feature can be used without mouse or vision."
+  },
+  "Ekran o'quvchilar uchun": {
+    "UZ": "Ekran o'quvchilar uchun",
+    "RU": "Для экранных читалок",
+    "US": "For Screen Readers"
+  },
+  "Klaviatura bilan boshqarish": {
+    "UZ": "Klaviatura bilan boshqarish",
+    "RU": "Управление с клавиатуры",
+    "US": "Keyboard Control"
+  },
+  "Quloqchin tugmalari": {
+    "UZ": "Quloqchin tugmalari",
+    "RU": "Кнопки наушников",
+    "US": "Headphone Controls"
+  },
+  "Kirish sozlamalari": {
+    "UZ": "Kirish sozlamalari",
+    "RU": "Параметры доступа",
+    "US": "Access Settings"
+  },
+  "Shaxsiy kabinetingizda ma'lumotlaringizni boshqaring": {
+    "UZ": "Shaxsiy kabinetingizda ma'lumotlaringizni boshqaring",
+    "RU": "Управляйте данными в личном кабинете",
+    "US": "Manage your information in your personal account"
+  },
+  "Barcha audiokitoblardan foydalanish huquqini oling": {
+    "UZ": "Barcha audiokitoblardan foydalanish huquqini oling",
+    "RU": "Получите доступ ко всем аудиокнигам",
+    "US": "Get full access to all audiobooks"
+  },
+  "Sizning kirish darajangiz:": {
+    "UZ": "Sizning kirish darajangiz:",
+    "RU": "Ваш уровень доступа:",
+    "US": "Your access level:"
+  },
+  "Uzatish premium ruxsat uchun": {
+    "UZ": "Uzatish premium ruxsat uchun",
+    "RU": "Продлить премиум-доступ",
+    "US": "Extend premium access"
+  },
+  "1 oylik": {
+    "UZ": "1 oylik",
+    "RU": "1 месяц",
+    "US": "1 month"
+  },
+  "3 oylik": {
+    "UZ": "3 oylik",
+    "RU": "3 месяца",
+    "US": "3 months"
+  },
+  "uchun": {
+    "UZ": "uchun",
+    "RU": "за",
+    "US": "for"
+  },
+  "so'm": {
+    "UZ": "soʻm",
+    "RU": "сум",
+    "US": "UZS"
+  },
+  "soʻm": {
+    "UZ": "soʻm",
+    "RU": "сум",
+    "US": "UZS"
+  },
+  "ta kitob": {
+    "UZ": "ta kitob",
+    "RU": "книг",
+    "US": "books"
+  },
+  "ming": {
+    "UZ": "ming",
+    "RU": "тыс.",
+    "US": "k"
+  },
+  "NVDA, JAWS, TalkBack va VoiceOver uchun tushunarli nomlar, sarlavhalar va ovozli xabarlar.": {
+    "UZ": "NVDA, JAWS, TalkBack va VoiceOver uchun tushunarli nomlar, sarlavhalar va ovozli xabarlar.",
+    "RU": "Понятные подписи, заголовки и объявления для NVDA, JAWS, TalkBack и VoiceOver.",
+    "US": "Clear labels, headings and announcements for NVDA, JAWS, TalkBack and VoiceOver."
+  },
+  "Bo'sh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik.": {
+    "UZ": "Boʻsh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik.",
+    "RU": "Пробел — пауза, стрелки — 30 секунд назад и вперёд, Shift и стрелки — скорость.",
+    "US": "Space — pause, arrows — 30 seconds back and forward, Shift + arrows — speed."
+  },
+  "Boʻsh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik.": {
+    "UZ": "Boʻsh joy — pauza, strelkalar — 30 soniya orqaga va oldinga, Shift va strelkalar — tezlik.",
+    "RU": "Пробел — пауза, стрелки — 30 секунд назад и вперёд, Shift и стрелки — скорость.",
+    "US": "Space — pause, arrows — 30 seconds back and forward, Shift + arrows — speed."
+  },
+  "Quloqchin va qulflangan ekrandan pauza va o'tkazish.": {
+    "UZ": "Quloqchin va qulflangan ekrandan pauza va oʻtkazish.",
+    "RU": "Пауза и перемотка с наушников и экрана блокировки.",
+    "US": "Pause and skip from your headphones and lock screen."
+  },
+  "Quloqchin va qulflangan ekrandan pauza va oʻtkazish.": {
+    "UZ": "Quloqchin va qulflangan ekrandan pauza va oʻtkazish.",
+    "RU": "Пауза и перемотка с наушников и экрана блокировки.",
+    "US": "Pause and skip from your headphones and lock screen."
+  },
+  "JANRLAR BO'YICHA": {
+    "UZ": "JANRLAR BOʻYICHA",
+    "RU": "ПО ЖАНРАМ",
+    "US": "BY GENRE"
+  },
+  "JANRLAR BOʻYICHA": {
+    "UZ": "JANRLAR BOʻYICHA",
+    "RU": "ПО ЖАНРАМ",
+    "US": "BY GENRE"
+  },
+  "Barchasini ko'rish": {
+    "UZ": "Barchasini koʻrish",
+    "RU": "Смотреть все",
+    "US": "View all"
+  },
+  "Barchasini koʻrish": {
+    "UZ": "Barchasini koʻrish",
+    "RU": "Смотреть все",
+    "US": "View all"
+  },
+  "Hammasini ko'rish": {
+    "UZ": "Hammasini koʻrish",
+    "RU": "Смотреть все",
+    "US": "View all"
+  },
+  "Hammasini koʻrish": {
+    "UZ": "Hammasini koʻrish",
+    "RU": "Смотреть все",
+    "US": "View all"
+  },
+  "ekran o'quvchi bilan ishlaydi": {
+    "UZ": "ekran oʻquvchi bilan ishlaydi",
+    "RU": "работает с экранной читалкой",
+    "US": "works with screen readers"
+  },
+  "ekran oʻquvchi bilan ishlaydi": {
+    "UZ": "ekran oʻquvchi bilan ishlaydi",
+    "RU": "работает с экранной читалкой",
+    "US": "works with screen readers"
+  },
+  "ko'rish bo'yicha nogironligi bo'lgan kitobxonlar uchun": {
+    "UZ": "koʻrish boʻyicha nogironligi boʻlgan kitobxonlar uchun",
+    "RU": "для читателей с инвалидностью по зрению",
+    "US": "for readers with visual disabilities"
+  },
+  "koʻrish boʻyicha nogironligi boʻlgan kitobxonlar uchun": {
+    "UZ": "koʻrish boʻyicha nogironligi boʻlgan kitobxonlar uchun",
+    "RU": "для читателей с инвалидностью по зрению",
+    "US": "for readers with visual disabilities"
+  },
+  "Ko'rmasdan ham": {
+    "UZ": "Koʻrmasdan ham",
+    "RU": "Удобно и",
+    "US": "Easy and"
+  },
+  "Koʻrmasdan ham": {
+    "UZ": "Koʻrmasdan ham",
+    "RU": "Удобно и",
+    "US": "Easy and"
+  },
+  "Har bir imkoniyatdan sichqonchasiz va ko'rmasdan foydalanish mumkin.": {
+    "UZ": "Har bir imkoniyatdan sichqonchasiz va koʻrmasdan foydalanish mumkin.",
+    "RU": "Каждой функцией можно пользоваться без мыши и без зрения.",
+    "US": "Every feature can be used without mouse and sight."
+  },
+  "Har bir imkoniyatdan sichqonchasiz va koʻrmasdan foydalanish mumkin.": {
+    "UZ": "Har bir imkoniyatdan sichqonchasiz va koʻrmasdan foydalanish mumkin.",
+    "RU": "Каждой функцией можно пользоваться без мыши и без зрения.",
+    "US": "Every feature can be used without mouse and sight."
+  },
+  "Ekran o'quvchilar uchun": {
+    "UZ": "Ekran oʻquvchilar uchun",
+    "RU": "Для экранных читалок",
+    "US": "For Screen Readers"
+  },
+  "Ekran oʻquvchilar uchun": {
+    "UZ": "Ekran oʻquvchilar uchun",
+    "RU": "Для экранных читалок",
+    "US": "For Screen Readers"
+  },
+  "Shaxsiy kabinetingizda ma'lumotlaringizni boshqaring": {
+    "UZ": "Shaxsiy kabinetingizda maʼlumotlaringizni boshqaring",
+    "RU": "Управляйте данными в личном кабинете",
+    "US": "Manage your data in your personal profile"
+  },
+  "Shaxsiy kabinetingizda maʼlumotlaringizni boshqaring": {
+    "UZ": "Shaxsiy kabinetingizda maʼlumotlaringizni boshqaring",
+    "RU": "Управляйте данными в личном кабинете",
+    "US": "Manage your data in your personal profile"
+  },
+  "Новостей пока нет": {
+    "UZ": "Yangiliklar hozircha yoʻq",
+    "RU": "Новостей пока нет",
+    "US": "No news yet"
+  },
+  "Следите за обновлениями платформы": {
+    "UZ": "Platforma yangilanishlarini kuzatib boring",
+    "RU": "Следите за обновлениями платформы",
+    "US": "Follow platform updates"
+  },
+  "Включить звук": {
+    "UZ": "Ovozni yoqish",
+    "RU": "Включить звук",
+    "US": "Unmute"
+  },
+  "Выключить звук": {
+    "UZ": "Ovozni oʻchirish",
+    "RU": "Выключить звук",
+    "US": "Mute"
+  },
+  "Звук включён": {
+    "UZ": "Ovoz yoqildi",
+    "RU": "Звук включён",
+    "US": "Sound unmuted"
+  },
+  "Звук выключен": {
+    "UZ": "Ovoz oʻchirildi",
+    "RU": "Звук выключен",
+    "US": "Sound muted"
+  },
+  "Roman": {
+    "UZ": "Roman",
+    "RU": "Роман",
+    "US": "Novel"
+  },
+  "Hikoya": {
+    "UZ": "Hikoya",
+    "RU": "Рассказы",
+    "US": "Stories"
+  },
+  "Jahon klassikasi": {
+    "UZ": "Jahon klassikasi",
+    "RU": "Мировая классика",
+    "US": "World Classics"
+  },
+  "Bolalar adabiyoti": {
+    "UZ": "Bolalar adabiyoti",
+    "RU": "Детская литература",
+    "US": "Children's Literature"
+  },
+  "Dostonlar": {
+    "UZ": "Dostonlar",
+    "RU": "Дастаны и поэмы",
+    "US": "Epics & Poems"
+  },
+  "Fantastika": {
+    "UZ": "Fantastika",
+    "RU": "Фантастика",
+    "US": "Sci-Fi & Fantasy"
+  },
+  "Tarixiy": {
+    "UZ": "Tarixiy",
+    "RU": "Исторические",
+    "US": "Historical"
+  },
+  "Detektiv": {
+    "UZ": "Detektiv",
+    "RU": "Детектив",
+    "US": "Detective"
+  },
+  "Biografiya": {
+    "UZ": "Biografiya",
+    "RU": "Биография",
+    "US": "Biography"
+  },
+  "Psixologiya": {
+    "UZ": "Psixologiya",
+    "RU": "Психология",
+    "US": "Psychology"
+  },
+  "She'riyat": {
+    "UZ": "She'riyat",
+    "RU": "Поэзия",
+    "US": "Poetry"
+  },
+  "Ertak": {
+    "UZ": "Ertak",
+    "RU": "Сказки",
+    "US": "Fairy Tales"
   }
 }

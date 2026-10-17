@@ -7,7 +7,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import PageShell from "../ds/components/PageShell";
 import Container from "../ds/components/Container";
-import NewsSection from "./NewsSection";
+import NewsSection, { formatNewsDate } from "./NewsSection";
 import NewsModalGP from "./NewsModalGP";
 import useLibrary from "../LibraryContext";
 import { get } from "../lib/news";
@@ -119,7 +119,7 @@ const NewsView = () => {
                   <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
                     <ScheduleOutlined aria-hidden="true" sx={{ fontSize: 18 }} />
                     <time dateTime={String(news.datetime || "").replace(" ", "T")}>
-                      {news.datetime_str || news.datetime}
+                      {formatNewsDate(news)}
                     </time>
                   </Box>
                   {news.views !== undefined && news.views !== null && (

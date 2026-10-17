@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor/core": "^8.5.3",
     "@emotion/react": "11.13.3",
     "@emotion/styled": "11.13.0",
     "@fontsource-variable/inter": "5.1.0",
@@ -30,6 +31,9 @@
     "web-vitals": "2.1.4"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@types/node": "20.14.0",
@@ -38,7 +42,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "cap:sync": "cap sync",
+    "cap:build": "react-scripts build && cap sync",
+    "cap:android": "cap open android",
+    "cap:ios": "cap open ios"
   },
   "eslintConfig": {
     "extends": [

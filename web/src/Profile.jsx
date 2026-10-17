@@ -1,37 +1,59 @@
 import React from "react";
-import { Box, Button, Typography, useTheme } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import PageShell, { PageHeader } from "./ds/components/PageShell";
+import { Box, Typography, useTheme, alpha } from "@mui/material";
+import PageShell from "./ds/components/PageShell";
 import Container from "./ds/components/Container";
 import ProfileMenuSection from "./profile/ProfileMenuSection";
-import useLibrary from "./LibraryContext";
-import { getToken } from "./lib/api";
+import profileBannerBg from "./img/profile_banner_background.png";
 import T from "./lib/translator.js";
 
-// Profile: global theme (the local ./profile/ThemeProvider is gone) and the
-// shared PageShell header/footer. Section navigation lives in
-// ProfileMenuSection. Без входа вместо пустого профиля — приглашение войти.
 const Profile = () => {
   const { kp } = useTheme();
-  const { user } = useLibrary();
-  const signedOut = !user && !getToken();
 
   return (
     <PageShell title={T("Профиль")}>
-      <PageHeader title={T("Профиль")} crumbs={[{ label: T("Профиль") }]} />
+      <Box
+        component="section"
+        aria-labelledby="kp-profile-title"
+        sx={{
+          bgcolor: kp.p.surfaceAlt,
+          backgroundImage: `linear-gradient(90deg, ${kp.p.surfaceAlt} 0%, ${alpha(kp.p.surfaceAlt, 0.96)} 42%, ${alpha(kp.p.surfaceAlt, 0.2)} 70%, ${alpha(kp.p.surfaceAlt, 0)} 85%), url(${profileBannerBg})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: { xs: "right 30%", md: "right center" },
+          backgroundSize: { xs: "cover", md: "contain" },
+          borderBottom: `1px solid ${kp.p.border}`,
+          py: { xs: 4, md: 5.5 },
+        }}
+      >
+        <Container>
+          <Typography
+            id="kp-profile-title"
+            component="h1"
+            sx={{
+              fontFamily: kp.fonts.heading,
+              fontWeight: 900,
+              fontSize: { xs: "2.25rem", md: "3.25rem" },
+              letterSpacing: "-0.04em",
+              color: kp.p.text,
+              lineHeight: 1.1,
+            }}
+          >
+            {T("Профиль")}
+          </Typography>
+          <Typography
+            sx={{
+              color: kp.p.textSecondary,
+              fontSize: { xs: "0.9375rem", md: "1.0625rem" },
+              mt: 1,
+              maxWidth: 540,
+            }}
+          >
+            {T("Shaxsiy kabinetingizda ma'lumotlaringizni boshqaring")}
+          </Typography>
+        </Container>
+      </Box>
+
       <Container sx={{ py: { xs: 4, md: 6 } }}>
-        {signedOut ? (
-          <Box sx={{ maxWidth: 560, p: { xs: 3, md: 5 }, borderRadius: 6, border: `1px solid ${kp.p.border}`, bgcolor: kp.p.surface }}>
-            <Typography sx={{ fontSize: "1.25rem", lineHeight: 1.5 }}>
-              {T("Чтобы открыть профиль, войдите в аккаунт")}
-            </Typography>
-            <Button component={RouterLink} to="/login" variant="contained" size="large" sx={{ mt: 3 }}>
-              {T("Вход")}
-            </Button>
-          </Box>
-        ) : (
-          <ProfileMenuSection />
-        )}
+        <ProfileMenuSection />
       </Container>
     </PageShell>
   );

@@ -3,9 +3,10 @@ import { Box, Button, IconButton, Drawer, Divider, Typography, Avatar, useMediaQ
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
+import KeyboardArrowDownRounded from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import Logo from "./Logo";
-import { DisplaySettingsMenu, DisplaySettingsPanel, LanguageMenu, LANGUAGES, useLanguage } from "./HeaderMenus";
+import { DisplaySettingsPanel, LanguageMenu, LANGUAGES, useLanguage } from "./HeaderMenus";
 import useLibrary from "../../LibraryContext";
 import { Announcer } from "../../lib/a11y";
 import T from "../../lib/translator";
@@ -16,7 +17,7 @@ export const useNavItems = () => [
   { label: T("Жанры"), to: "/genres" },
   { label: T("Авторы"), to: "/persons/authors" },
   { label: T("Новости"), to: "/news" },
-  { label: T("Контакты"), to: "/contacts" },
+  { label: T("О нас"), to: "/contacts" },
 ];
 
 const isActive = (pathname, to) => (to === "/" ? pathname === "/" : pathname === to || pathname.startsWith(to + "/"));
@@ -47,16 +48,91 @@ const SiteHeader = () => {
   const authButtons = (stacked) =>
     user ? (
       <Button
-        component={RouterLink} to="/profile" variant="outlined" fullWidth={stacked}
-        startIcon={<Avatar aria-hidden="true" sx={{ width: 28, height: 28, fontSize: "0.9rem", bgcolor: kp.p.primary, color: kp.p.onPrimary }}>{String(userName || "K").slice(0, 1).toUpperCase()}</Avatar>}
+        component={RouterLink}
+        to="/profile"
+        variant="outlined"
+        fullWidth={stacked}
+        sx={{
+          borderRadius: 999,
+          borderColor: kp.isContrast ? kp.p.border : kp.p.borderStrong,
+          color: kp.p.text,
+          fontWeight: 700,
+          textTransform: "none",
+          px: 1.75,
+          height: 38,
+          "&:hover": {
+            borderColor: kp.p.primary,
+            bgcolor: kp.p.surfaceAlt,
+          },
+        }}
+        startIcon={
+          <Avatar
+            aria-hidden="true"
+            sx={{
+              width: 26,
+              height: 26,
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              bgcolor: kp.p.primary,
+              color: kp.p.onPrimary,
+            }}
+          >
+            {String(userName || "M").slice(0, 1).toUpperCase()}
+          </Avatar>
+        }
+        endIcon={<KeyboardArrowDownRounded sx={{ fontSize: "1.1rem !important", color: kp.p.textSecondary, ml: -0.5 }} />}
       >
         {T("Профиль")}
       </Button>
     ) : (
-      <>
-        <Button component={RouterLink} to="/login" variant={stacked ? "outlined" : "text"} fullWidth={stacked}>{T("Вход")}</Button>
-        <Button component={RouterLink} to="/login" variant="contained" fullWidth={stacked}>{T("Регистрация")}</Button>
-      </>
+      stacked ? (
+        <>
+          <Button component={RouterLink} to="/login" variant="outlined" fullWidth>{T("Вход")}</Button>
+          <Button component={RouterLink} to="/login" variant="contained" fullWidth>{T("Регистрация")}</Button>
+        </>
+      ) : (
+        <>
+          <Button
+            component={RouterLink}
+            to="/login"
+            variant="outlined"
+            sx={{
+              borderRadius: 999,
+              borderColor: kp.isContrast ? kp.p.border : kp.p.borderStrong,
+              color: kp.p.text,
+              fontWeight: 700,
+              textTransform: "none",
+              px: 2,
+              height: 38,
+              "&:hover": {
+                borderColor: kp.p.primary,
+                bgcolor: kp.p.surfaceAlt,
+              },
+            }}
+          >
+            {T("Вход")}
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/login"
+            variant="contained"
+            sx={{
+              borderRadius: 999,
+              fontWeight: 700,
+              textTransform: "none",
+              px: 2,
+              height: 38,
+              bgcolor: kp.p.action,
+              color: kp.p.onAction,
+              "&:hover": {
+                bgcolor: kp.p.actionHover,
+              },
+            }}
+          >
+            {T("Регистрация")}
+          </Button>
+        </>
+      )
     );
 
   return (
@@ -73,24 +149,32 @@ const SiteHeader = () => {
           transition: "border-color .2s, background-color .3s",
         }}
       >
-        <Box sx={{ maxWidth: kp.layout.maxWidth + 48, mx: "auto", px: { xs: 2, sm: 3 }, height: kp.layout.headerHeight, display: "flex", alignItems: "center", gap: 2 }}>
-          <Logo />
+        <Box sx={{ maxWidth: kp.layout.maxWidth + 48, mx: "auto", px: { xs: 2, sm: 3 }, height: kp.layout.headerHeight, display: "flex", alignItems: "center", gap: 3 }}>
+          <Box sx={{ flexShrink: 0 }}>
+            <Logo />
+          </Box>
           {isDesktop && (
             <Box component="nav" aria-label={T("Основное меню")} sx={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center" }}>
               <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "flex", gap: 0.5 }}>
-                {items.filter((it) => it.to !== "/" && it.to !== "/contacts").map((it) => {
+                {items.filter((it) => it.to !== "/").map((it) => {
                   const active = isActive(pathname, it.to);
                   return (
                     <li key={it.to}>
                       <Box
                         component={RouterLink} to={it.to} aria-current={active ? "page" : undefined}
                         sx={{
-                          position: "relative", display: "inline-flex", alignItems: "center", minHeight: 48, px: 1.5, borderRadius: 999, whiteSpace: "nowrap",
-                          fontWeight: 500, fontSize: "1.0625rem", textDecoration: kp.isContrast && active ? "underline" : "none",
-                          color: active ? kp.p.text : kp.p.textSecondary, transition: "color .2s",
-                          "&::after": { content: '""', position: "absolute", left: "50%", bottom: 4, width: 5, height: 5, borderRadius: "50%", bgcolor: kp.p.primary, transform: `translateX(-50%) scale(${active ? 1 : 0})`, transition: "transform .3s cubic-bezier(.2,.8,.2,1)" },
-                          "&:hover": { color: kp.p.text, textDecoration: kp.isContrast ? "underline" : "none" },
-                          "&:hover::after": { transform: "translateX(-50%) scale(1)" },
+                          display: "inline-flex", alignItems: "center", minHeight: 40, px: 2, borderRadius: 999, whiteSpace: "nowrap",
+                          fontWeight: active ? 700 : 500, fontSize: "0.9375rem", textDecoration: "none",
+                          color: active ? kp.p.primary : kp.p.textSecondary,
+                          bgcolor: active ? (kp.isContrast ? "transparent" : alpha(kp.p.primary, kp.p.mode === "dark" ? 0.16 : 0.08)) : "transparent",
+                          border: kp.isContrast && active ? `2px solid ${kp.p.primary}` : "2px solid transparent",
+                          transition: "all .2s ease",
+                          "&:hover": {
+                            color: active ? kp.p.primary : kp.p.text,
+                            bgcolor: active
+                              ? (kp.isContrast ? "transparent" : alpha(kp.p.primary, kp.p.mode === "dark" ? 0.24 : 0.12))
+                              : (kp.isContrast ? "transparent" : alpha(kp.p.text, 0.05)),
+                          },
                         }}
                       >
                         {it.label}
@@ -101,23 +185,70 @@ const SiteHeader = () => {
               </Box>
             </Box>
           )}
-          <Box sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 0.5 }}>
-            <IconButton component={RouterLink} to="/books" aria-label={T("Поиск по книгам")}>
-              <SearchIcon />
-            </IconButton>
+          <Box sx={{ ml: "auto", display: "flex", alignItems: "center", gap: 1.25, flexShrink: 0 }}>
             {isDesktop ? (
               <>
-                <DisplaySettingsMenu />
-                <LanguageMenu />
-                <Box sx={{ display: "flex", gap: 1, ml: 1, "& .MuiButton-root": { whiteSpace: "nowrap" } }}>{authButtons(false)}</Box>
+                <Box
+                  component={RouterLink}
+                  to="/books"
+                  aria-label={T("Поиск по книгам")}
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 1.25,
+                    height: 40,
+                    width: { md: 200, lg: 260 },
+                    px: 2,
+                    borderRadius: 999,
+                    border: "1px solid",
+                    borderColor: kp.isContrast ? kp.p.border : kp.p.borderStrong,
+                    bgcolor: kp.p.surface,
+                    color: kp.p.textSecondary,
+                    fontSize: "0.875rem",
+                    textDecoration: "none",
+                    transition: "all .2s ease",
+                    "&:hover": {
+                      borderColor: kp.p.primary,
+                      color: kp.p.text,
+                      bgcolor: kp.p.surfaceAlt,
+                      "& .kp-search-icon": {
+                        color: kp.p.primary,
+                      },
+                    },
+                  }}
+                >
+                  <SearchIcon className="kp-search-icon" sx={{ fontSize: "1.15rem", color: kp.p.textSecondary, flexShrink: 0, transition: "color .2s ease" }} />
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {T("Kitob, muallif yoki mavzu...")}
+                  </span>
+                </Box>
+                <LanguageMenu pill />
+                <Box sx={{ display: "flex", gap: 1, ml: 0.5, "& .MuiButton-root": { whiteSpace: "nowrap" } }}>
+                  {authButtons(false)}
+                </Box>
               </>
             ) : (
-              <Button
-                variant="outlined" onClick={() => setOpen(true)} startIcon={<MenuIcon aria-hidden="true" />}
-                aria-expanded={open} aria-controls="kp-mobile-menu"
-              >
-                {T("Меню")}
-              </Button>
+              <>
+                <IconButton
+                  component={RouterLink}
+                  to="/books"
+                  aria-label={T("Поиск по книгам")}
+                  sx={{ color: kp.p.text }}
+                >
+                  <SearchIcon />
+                </IconButton>
+                <LanguageMenu compact />
+                <Button
+                  variant="outlined"
+                  onClick={() => setOpen(true)}
+                  startIcon={<MenuIcon aria-hidden="true" />}
+                  aria-expanded={open}
+                  aria-controls="kp-mobile-menu"
+                  sx={{ borderRadius: 999, ml: 0.5 }}
+                >
+                  {T("Меню")}
+                </Button>
+              </>
             )}
           </Box>
         </Box>

@@ -24,6 +24,7 @@ import { coverGradients } from "../ds/tokens";
 import { coverTransitionName } from "../ds/motion";
 import { getHost } from "../lib/api";
 import { useRouteA11y } from "../lib/a11y";
+import useLibrary from "../LibraryContext";
 import T, { tr } from "../lib/translator.js";
 
 // Авторы и чтецы приходят массивами (books/get: authors[], dictors[]); в данных карточки каталога — только имя и,
@@ -46,6 +47,7 @@ const PersonLinks = ({ table, people, fallbackName, fallbackId, color }) => {
 
 const Book = () => {
   const { kp } = useTheme();
+  useLibrary();
   const fmt = useFormatDuration();
 
   const [book, setBook] = React.useState({});

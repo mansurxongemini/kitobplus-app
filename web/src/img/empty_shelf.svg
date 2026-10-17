@@ -1,0 +1,24 @@
+<svg width="240" height="180" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="120" cy="85" r="65" fill="currentColor" fill-opacity="0.05"/>
+  <!-- Cozy wooden shelf -->
+  <rect x="35" y="130" width="170" height="10" rx="5" fill="currentColor" fill-opacity="0.25"/>
+  <path d="M50 140L42 152M190 140L198 152" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-opacity="0.2"/>
+  <!-- Bookend on left -->
+  <path d="M55 130V95C55 92 58 90 61 90H65V130" fill="#D97706" fill-opacity="0.8" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Slanted book -->
+  <g transform="rotate(12 85 130)">
+    <rect x="75" y="88" width="12" height="42" rx="2" fill="#185ADB"/>
+  </g>
+  <!-- Standing book 2 -->
+  <rect x="100" y="92" width="14" height="38" rx="2" fill="currentColor" fill-opacity="0.3"/>
+  <!-- Empty open space with floating soundwaves -->
+  <path d="M135 110C140 102 145 102 150 110C155 118 160 118 165 110" stroke="#185ADB" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M140 100C145 94 150 94 155 100" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+  <!-- Mini sleeping cat or coffee cup on right -->
+  <path d="M170 130C170 120 178 116 186 116C194 116 200 122 200 130H170Z" fill="currentColor" fill-opacity="0.35"/>
+  <path d="M174 118L172 113L178 116" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M188 116L192 112L194 118" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Sparkles -->
+  <circle cx="145" cy="75" r="2.5" fill="#D97706"/>
+  <circle cx="165" cy="65" r="3.5" fill="#185ADB" fill-opacity="0.7"/>
+</svg>

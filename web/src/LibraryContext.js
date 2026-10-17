@@ -12,7 +12,7 @@ export function LibraryProvider({ children }) {
   const [themeMode, setThemeMode] = useState(() => {
     const saved = localStorage.getItem('theme_mode');
     if (['light', 'dark', 'contrast'].includes(saved)) return saved;
-    return localStorage.getItem('dark_mode') == "dark" ? 'dark' : 'light';
+    return localStorage.getItem('dark_mode') === "dark" ? 'dark' : 'light';
   });
   const darkMode = themeMode !== 'light';
   const setDarkMode = (dark) => setThemeMode(dark ? 'dark' : 'light');
@@ -28,7 +28,7 @@ export function LibraryProvider({ children }) {
     request('auth/user', {}).then(_ => {
       if (_.success && _.user) {
         setUser(_.user);
-        setIsAdmin(_.user['levels_id'] == 1 && _.user['state'] == 2);
+        setIsAdmin(Number(_.user['levels_id']) === 1 && Number(_.user['state']) === 2);
       }
     }).catch(() => {
       // Гость без токена — обычная ситуация, не ошибка.
@@ -38,7 +38,7 @@ export function LibraryProvider({ children }) {
   useEffect(() => {
     if (countryCode !== undefined) {
       var cc = countryCode.toLowerCase()
-      if (cc == 'us') {
+      if (cc === 'us') {
         cc = 'en';
       }
       document.documentElement.setAttribute('lang', cc);

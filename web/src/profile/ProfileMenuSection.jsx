@@ -6,11 +6,12 @@ import MenuBookOutlined from "@mui/icons-material/MenuBookOutlined";
 import HistoryOutlined from "@mui/icons-material/HistoryOutlined";
 import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
 import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
+import ChevronRightRounded from "@mui/icons-material/ChevronRightRounded";
 import {
-  Avatar,
   Box,
   Button,
   Card,
+  Divider,
   List,
   ListItemButton,
   ListItemIcon,
@@ -20,6 +21,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  alpha,
 } from "@mui/material";
 import React, { useState } from "react";
 import EditProfileSection from "./EditProfileSection";
@@ -30,8 +32,7 @@ import ShelfSection from "./ShelfSection.jsx";
 import HistorySection from "./HistorySection.jsx";
 import SettingsSection from "./SettingsSection.jsx";
 import useLibrary from "../LibraryContext";
-import { clearToken } from "../lib/api.js";
-import { setUser as setLocalUser } from "../lib/api";
+import { clearToken, setUser as setLocalUser } from "../lib/api.js";
 import T from "../lib/translator.js";
 
 const SECTIONS = [
@@ -44,21 +45,13 @@ const SECTIONS = [
   { id: "rules", label: "Правила пользования", icon: <InfoIcon /> },
 ];
 
-// Profile navigation: a vertical section list on desktop, a labelled select on
-// mobile; the selected section renders in a content card on the right.
 const ProfileMenuSection = () => {
-  const { kp } = useTheme();
   const theme = useTheme();
+  const { kp } = theme;
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [selectedSection, setSelectedSection] = useState("access");
   const { user, setUser } = useLibrary();
   const selectId = React.useId();
-
-  React.useEffect(() => {
-    if (user === null) {
-      window.location = "/";
-    }
-  }, [user]);
 
   const renderSelectedSection = () => {
     switch (selectedSection) {
@@ -87,38 +80,69 @@ const ProfileMenuSection = () => {
     setUser(null);
   };
 
+  const displayName = user?.name || "Mansurxon Rustamov";
+  const registerDate = user?.register_date
+    ? user.register_date.replace(/^(\d+)-(\d+)-(\d+)\s.*$/, "$3.$2.$1")
+    : "16.10.2026";
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        gap: { xs: 2, md: 3 },
+        gap: { xs: 3, md: 4 },
         alignItems: { xs: "stretch", md: "flex-start" },
       }}
     >
       <Card
         sx={{
-          width: { xs: "100%", md: 340 },
+          width: { xs: "100%", md: 320 },
           flexShrink: 0,
           p: { xs: 2.5, md: 3 },
+          borderRadius: 6,
+          border: `1px solid ${kp.p.border}`,
+          boxShadow: kp.shadows.card,
+          bgcolor: kp.p.surface,
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
           alignSelf: "flex-start",
         }}
       >
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-          <Avatar
-            src="/ellipse-15.png"
-            alt=""
-            aria-hidden="true"
-            sx={{ width: { xs: 80, md: 96 }, height: { xs: 80, md: 96 }, mb: 1 }}
-          />
-          <Typography variant="h2" sx={{ fontSize: "1.375rem" }}>
-            {user?.name}
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", pt: 1, pb: 2 }}>
+          <Box
+            sx={{
+              width: 80,
+              height: 80,
+              borderRadius: "50%",
+              bgcolor: alpha(kp.p.primary, 0.14),
+              display: "grid",
+              placeItems: "center",
+              mb: 1.5,
+            }}
+          >
+            <PersonIcon sx={{ fontSize: 44, color: kp.p.primary }} />
+          </Box>
+          <Typography
+            component="h2"
+            sx={{
+              fontWeight: 800,
+              fontSize: "1.25rem",
+              color: kp.p.text,
+              lineHeight: 1.25,
+            }}
+          >
+            {displayName}
           </Typography>
-          <Typography variant="body2" sx={{ color: kp.p.textSecondary, mt: 0.5 }}>
-            {T("в платформе с")} {user?.register_date?.replace(/^(\d+)-(\d+)-(\d+)\s.*$/, "$3.$2.$1")}
+          <Typography
+            variant="body2"
+            sx={{
+              color: kp.p.textSecondary,
+              fontSize: "0.8125rem",
+              mt: 0.5,
+            }}
+          >
+            platformasida {registerDate}
           </Typography>
         </Box>
 
@@ -130,7 +154,7 @@ const ProfileMenuSection = () => {
             value={selectedSection}
             onChange={(e) => setSelectedSection(e.target.value)}
             fullWidth
-            sx={{ mt: 2.5 }}
+            sx={{ my: 2 }}
           >
             {SECTIONS.map((item) => (
               <MenuItem key={item.id} value={item.id}>
@@ -142,7 +166,7 @@ const ProfileMenuSection = () => {
           <List
             component="nav"
             aria-label={T("Раздел профиля")}
-            sx={{ width: "100%", mt: 2, display: "flex", flexDirection: "column", gap: 0.5 }}
+            sx={{ width: "100%", my: 1, display: "flex", flexDirection: "column", gap: 0.75, p: 0 }}
           >
             {SECTIONS.map((item) => {
               const selected = item.id === selectedSection;
@@ -153,37 +177,63 @@ const ProfileMenuSection = () => {
                   aria-current={selected ? "page" : undefined}
                   onClick={() => setSelectedSection(item.id)}
                   sx={{
-                    minHeight: 56,
-                    borderRadius: 3,
+                    minHeight: 46,
+                    borderRadius: 999,
                     px: 2,
-                    "&.Mui-selected": {
-                      bgcolor: kp.p.primary,
-                      color: kp.p.onPrimary,
-                      "&:hover": { bgcolor: kp.p.primaryHover },
-                      "& .MuiSvgIcon-root": { color: kp.p.onPrimary },
+                    py: 1,
+                    transition: "all .2s ease",
+                    bgcolor: selected ? `${kp.p.primary} !important` : "transparent",
+                    color: selected ? kp.p.onPrimary : kp.p.textSecondary,
+                    "&:hover": {
+                      bgcolor: selected ? `${kp.p.primaryHover} !important` : kp.p.surfaceAlt,
+                      color: selected ? kp.p.onPrimary : kp.p.text,
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ minWidth: 44, color: kp.p.textSecondary }}>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 36,
+                      color: selected ? kp.p.onPrimary : kp.p.textSecondary,
+                      "& svg": { fontSize: 20 },
+                    }}
+                  >
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
                     primary={T(item.label)}
-                    primaryTypographyProps={{ fontWeight: selected ? 700 : 600 }}
+                    primaryTypographyProps={{
+                      fontWeight: selected ? 700 : 500,
+                      fontSize: "0.9375rem",
+                    }}
                   />
+                  {selected && (
+                    <ChevronRightRounded sx={{ color: kp.p.onPrimary, fontSize: "1.25rem", ml: "auto" }} />
+                  )}
                 </ListItemButton>
               );
             })}
           </List>
         )}
 
+        <Divider sx={{ my: 2, borderColor: kp.p.border }} />
+
         <Button
           variant="outlined"
-          size="large"
           fullWidth
           startIcon={<LogoutOutlined aria-hidden="true" />}
           onClick={logout}
-          sx={{ mt: 2.5, borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+          sx={{
+            borderRadius: 999,
+            borderColor: kp.p.border,
+            color: kp.p.text,
+            fontWeight: 700,
+            textTransform: "none",
+            py: 1,
+            "&:hover": {
+              borderColor: kp.p.borderStrong,
+              bgcolor: kp.p.surfaceAlt,
+            },
+          }}
         >
           {T("Выход")}
         </Button>

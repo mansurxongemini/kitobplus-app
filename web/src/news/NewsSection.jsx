@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Skeleton, useTheme } from "@mui/material";
+import ArticleOutlined from "@mui/icons-material/ArticleOutlined";
 import { Link as RouterLink } from "react-router-dom";
 import { list } from "../lib/news";
 import { getHost } from "../lib/api";
 import T from "../lib/translator";
+
+export const formatNewsDate = (item) => {
+  if (!item) return "";
+  if (item.datetime_str) {
+    let str = item.datetime_str;
+    if (str.includes("сегодня")) {
+      return str.replace("сегодня", T("сегодня"));
+    }
+    if (str.includes("вчера")) {
+      return str.replace("вчера", T("вчера"));
+    }
+    return str;
+  }
+  return item.datetime || "";
+};
 
 export const NewsCard = ({ item, headingLevel = "h3" }) => {
   const { kp } = useTheme();
@@ -58,7 +74,7 @@ export const NewsCard = ({ item, headingLevel = "h3" }) => {
 
       <Typography component="p" variant="body2" sx={{ color: kp.p.textSecondary, mb: 1.25 }}>
         <time dateTime={String(item.datetime || "").replace(" ", "T")}>
-          {item.datetime_str || item.datetime}
+          {formatNewsDate(item)}
         </time>
       </Typography>
 
@@ -112,6 +128,7 @@ export const NewsCard = ({ item, headingLevel = "h3" }) => {
 };
 
 const NewsSection = ({ title, exclude = 0, per_page = 0, hideHeader = false, onReloadRef }) => {
+  const { kp } = useTheme();
   const [items, setItems] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -139,7 +156,40 @@ const NewsSection = ({ title, exclude = 0, per_page = 0, hideHeader = false, onR
   }
 
   if (!loading && items && items.length === 0) {
-    return null;
+    if (exclude > 0) {
+      return null;
+    }
+    return (
+      <Box sx={{ width: "100%" }}>
+        {!hideHeader && title && (
+          <Typography variant="h2" component="h2" sx={{ mb: 4 }}>
+            {title}
+          </Typography>
+        )}
+        <Box
+          sx={{
+            py: 8,
+            px: 3,
+            textAlign: "center",
+            borderRadius: 5,
+            border: `1px dashed ${kp.p.border}`,
+            bgcolor: kp.p.surface,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ArticleOutlined sx={{ fontSize: 56, color: kp.p.textMuted, mb: 2 }} />
+          <Typography variant="h5" sx={{ fontWeight: 700, color: kp.p.text, mb: 1 }}>
+            {T("Новостей пока нет")}
+          </Typography>
+          <Typography variant="body2" sx={{ color: kp.p.textSecondary }}>
+            {T("Следите за обновлениями платформы")}
+          </Typography>
+        </Box>
+      </Box>
+    );
   }
 
   return (

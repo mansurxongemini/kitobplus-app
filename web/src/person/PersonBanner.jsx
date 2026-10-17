@@ -6,11 +6,13 @@ import BreadcrumbsSection from "./BreadcrumbsSection";
 import { getHost } from "../lib/api";
 import { getInitials } from "../persons/PersonCard";
 import T from "../lib/translator";
+import { GENRE_IMG_MAP } from "../genres/GenresView";
 
 export const GenreHeaderIcon = ({ id }) => {
   const { kp } = useTheme();
   const [failed, setFailed] = useState(false);
-  const src = `${getHost()}/pics/genres.flat/${id}.png`;
+  const localImg = id ? GENRE_IMG_MAP[String(id)] : null;
+  const src = localImg || `${getHost()}/pics/genres.flat/${id}.png`;
 
   return (
     <Box
@@ -28,13 +30,18 @@ export const GenreHeaderIcon = ({ id }) => {
         overflow: "hidden",
       }}
     >
-      {!failed ? (
+      {!failed && src ? (
         <Box
           component="img"
           src={src}
           alt=""
           onError={() => setFailed(true)}
-          sx={{ width: 44, height: 44, objectFit: "contain", display: "block" }}
+          sx={{
+            width: localImg ? "100%" : 44,
+            height: localImg ? "100%" : 44,
+            objectFit: localImg ? "cover" : "contain",
+            display: "block",
+          }}
         />
       ) : (
         <AutoStoriesOutlined sx={{ fontSize: 40 }} />

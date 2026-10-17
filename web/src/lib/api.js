@@ -17,7 +17,7 @@ export const logout = () => {setUser(null); clearToken();}
 export const registered = () => (getToken() && getUser() !== null && getUser().state === 2);
 
 export const getMode = () => 'kitob';
-export const getCountryCode = () => (getMode() == 'lv' ? 'RU' : (localStorage.getItem('country_code') ?? 'UZ'));
+export const getCountryCode = () => (getMode() === 'lv' ? 'RU' : (localStorage.getItem('country_code') ?? 'UZ'));
 export const setCountryCode = (countryCode) => localStorage.setItem('country_code', countryCode);
 export const getHost = () => SITE_URL;
 

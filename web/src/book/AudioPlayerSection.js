@@ -7,7 +7,8 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import Replay30Icon from "@mui/icons-material/Replay30";
 import Forward30Icon from "@mui/icons-material/Forward30";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import { Box, Button, Card, Slider, Stack, Typography, useTheme } from "@mui/material";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import { Box, Button, Card, IconButton, Slider, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { getHost } from '../lib/api';
 import PlaylistPlayer from './playlistplayer';
@@ -37,6 +38,23 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
   const [rate, setRate] = React.useState(1);
   const [currentTrackPosition, setCurrentTrackPosition] = React.useState(0);
   const [volume, setVolume] = React.useState(70);
+  const prevVolumeRef = React.useRef(70);
+  const isMuted = volume === 0;
+
+  const toggleMute = () => {
+    if (isMuted) {
+      const restored = prevVolumeRef.current || 70;
+      setVolume(restored);
+      playerRef.current?.setVolume?.(restored / 100);
+      announce(tr('Звук включён') + ': ' + restored + '%');
+    } else {
+      prevVolumeRef.current = volume > 0 ? volume : 70;
+      setVolume(0);
+      playerRef.current?.setVolume?.(0);
+      announce(tr('Звук выключен'));
+    }
+  };
+
   const lastPositionStateRef = React.useRef({ position: -1, duration: -1, rate: -1 });
   const prevTrackRef = React.useRef(null);
 
@@ -126,8 +144,10 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
       }
       const onSlider = target && target.closest && target.closest('[role="slider"]');
       const onInteractive = target && target.closest && target.closest('button, a, [role="button"]');
-      if (event.key === ' ') {
+      if (event.key === ' ' || event.code === 'Space') {
         if (onInteractive) return; // let the control activate natively
+        const inPlayer = Boolean(target && typeof target.closest === 'function' && target.closest('[role="region"]'));
+        if (!isPlaying && !inPlayer) return; // preserve native spacebar page scrolling when paused unless inside player
         event.preventDefault();
         playerRef.current?.playPause();
       } else if (event.key === 'ArrowLeft' && !onSlider) {
@@ -163,7 +183,9 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
   React.useEffect(() => {
     if (typeof navigator === 'undefined' || !('mediaSession' in navigator)) return;
     try {
-      const cover = getHost() + '/pics/' + (book && book.pics_ext ? 'books/' + book.id + '.' + book.pics_ext : 'book.png');
+      const cover = (book && book.pics_ext)
+        ? `${getHost()}/pics/books/${book.id}.${book.pics_ext}`
+        : `${getHost()}/logo512.png`;
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: (book && book.title) || 'KitobPlus',
         artist: (book && (book.authors_name || book.dictors_name)) || '',
@@ -213,74 +235,131 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
         direction="row"
         alignItems="center"
         justifyContent="center"
-        flexWrap="wrap"
-        sx={{ gap: { xs: 1, md: 2 } }}
+        flexWrap="nowrap"
+        sx={{ gap: { xs: 0.75, sm: 1.5, md: 2 }, width: "100%", py: 1 }}
       >
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<Replay30Icon aria-hidden="true" />}
-          onClick={() => playerRef.current?.stepBackward()}
-          aria-label={T('Назад на 30 секунд')}
-          title={T('Назад на 30 секунд')}
-          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
-        >
-          {T('Назад на 30 секунд')}
-        </Button>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<SkipPreviousIcon aria-hidden="true" />}
-          onClick={() => playerRef.current?.previosTrack()}
-          aria-label={T('Предыдущий фрагмент')}
-          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
-        >
-          {T('Предыдущий фрагмент')}
-        </Button>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: { xs: 1, md: 2 } }}>
+        <Tooltip title={T('Назад на 30 секунд')}>
+          <Button
+            variant="outlined"
+            onClick={() => playerRef.current?.stepBackward()}
+            aria-label={T('Назад на 30 секунд')}
+            sx={{
+              borderWidth: 2,
+              borderColor: kp.p.border,
+              color: kp.p.text,
+              "&:hover": { borderWidth: 2, borderColor: kp.p.primary, color: kp.p.primary },
+              minWidth: { xs: 42, sm: 46, md: 80 },
+              width: { xs: 42, sm: 46, md: "auto" },
+              height: { xs: 42, sm: 46, md: 48 },
+              p: { xs: 0, md: "6px 14px" },
+              borderRadius: { xs: "50%", md: 3 },
+            }}
+          >
+            <Replay30Icon aria-hidden="true" sx={{ fontSize: { xs: 24, sm: 26, md: 28 } }} />
+            <Box component="span" sx={{ display: { xs: "none", md: "inline" }, ml: 0.75, fontWeight: 700, fontSize: "0.875rem" }}>
+              -30s
+            </Box>
+          </Button>
+        </Tooltip>
+
+        <Tooltip title={T('Предыдущий фрагмент')}>
+          <Button
+            variant="outlined"
+            onClick={() => playerRef.current?.previosTrack()}
+            aria-label={T('Предыдущий фрагмент')}
+            sx={{
+              borderWidth: 2,
+              borderColor: kp.p.border,
+              color: kp.p.text,
+              "&:hover": { borderWidth: 2, borderColor: kp.p.primary, color: kp.p.primary },
+              minWidth: { xs: 42, sm: 46, md: 80 },
+              width: { xs: 42, sm: 46, md: "auto" },
+              height: { xs: 42, sm: 46, md: 48 },
+              p: { xs: 0, md: "6px 14px" },
+              borderRadius: { xs: "50%", md: 3 },
+            }}
+          >
+            <SkipPreviousIcon aria-hidden="true" sx={{ fontSize: { xs: 24, sm: 26, md: 28 } }} />
+            <Box component="span" sx={{ display: { xs: "none", md: "inline" }, ml: 0.75, fontWeight: 700, fontSize: "0.875rem" }}>
+              {T('Предыдущий')}
+            </Box>
+          </Button>
+        </Tooltip>
+
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", px: { xs: 0.5, sm: 1, md: 2 } }}>
           <Button
             variant="contained"
             onClick={() => playerRef.current?.playPause()}
             aria-label={playLabel}
             sx={{
-              width: 80,
-              height: 80,
-              minWidth: 80,
+              width: { xs: 58, sm: 68, md: 80 },
+              height: { xs: 58, sm: 68, md: 80 },
+              minWidth: { xs: 58, sm: 68, md: 80 },
               borderRadius: "50%",
               p: 0,
+              bgcolor: kp.p.primary,
+              boxShadow: kp.shadows?.button || '0 4px 14px rgba(24, 90, 219, 0.35)',
+              "&:hover": { bgcolor: kp.p.primaryHover || '#164C88' },
               "& .MuiButton-startIcon": { m: 0 },
             }}
             startIcon={isPlaying
-              ? <PauseIcon aria-hidden="true" sx={{ fontSize: 44 }} />
-              : <PlayArrowIcon aria-hidden="true" sx={{ fontSize: 44 }} />}
+              ? <PauseIcon aria-hidden="true" sx={{ fontSize: { xs: 32, sm: 38, md: 44 } }} />
+              : <PlayArrowIcon aria-hidden="true" sx={{ fontSize: { xs: 32, sm: 38, md: 44 } }} />}
           >
             <VisuallyHidden>{playLabel}</VisuallyHidden>
           </Button>
-          <Typography aria-hidden="true" sx={{ mt: 1, fontWeight: 700 }}>
+          <Typography aria-hidden="true" sx={{ mt: 0.75, fontWeight: 700, fontSize: { xs: "0.75rem", sm: "0.875rem" }, color: kp.p.text }}>
             {playLabel}
           </Typography>
         </Box>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<SkipNextIcon aria-hidden="true" />}
-          onClick={() => playerRef.current?.nextTrack()}
-          aria-label={T('Следующий фрагмент')}
-          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
-        >
-          {T('Следующий фрагмент')}
-        </Button>
-        <Button
-          variant="outlined"
-          size="large"
-          startIcon={<Forward30Icon aria-hidden="true" />}
-          onClick={() => playerRef.current?.stepForward()}
-          aria-label={T('Вперёд на 30 секунд')}
-          title={T('Вперёд на 30 секунд')}
-          sx={{ borderWidth: 2, "&:hover": { borderWidth: 2 } }}
-        >
-          {T('Вперёд на 30 секунд')}
-        </Button>
+
+        <Tooltip title={T('Следующий фрагмент')}>
+          <Button
+            variant="outlined"
+            onClick={() => playerRef.current?.nextTrack()}
+            aria-label={T('Следующий фрагмент')}
+            sx={{
+              borderWidth: 2,
+              borderColor: kp.p.border,
+              color: kp.p.text,
+              "&:hover": { borderWidth: 2, borderColor: kp.p.primary, color: kp.p.primary },
+              minWidth: { xs: 42, sm: 46, md: 80 },
+              width: { xs: 42, sm: 46, md: "auto" },
+              height: { xs: 42, sm: 46, md: 48 },
+              p: { xs: 0, md: "6px 14px" },
+              borderRadius: { xs: "50%", md: 3 },
+            }}
+          >
+            <SkipNextIcon aria-hidden="true" sx={{ fontSize: { xs: 24, sm: 26, md: 28 } }} />
+            <Box component="span" sx={{ display: { xs: "none", md: "inline" }, ml: 0.75, fontWeight: 700, fontSize: "0.875rem" }}>
+              {T('Следующий')}
+            </Box>
+          </Button>
+        </Tooltip>
+
+        <Tooltip title={T('Вперёд на 30 секунд')}>
+          <Button
+            variant="outlined"
+            onClick={() => playerRef.current?.stepForward()}
+            aria-label={T('Вперёд на 30 секунд')}
+            sx={{
+              borderWidth: 2,
+              borderColor: kp.p.border,
+              color: kp.p.text,
+              "&:hover": { borderWidth: 2, borderColor: kp.p.primary, color: kp.p.primary },
+              minWidth: { xs: 42, sm: 46, md: 80 },
+              width: { xs: 42, sm: 46, md: "auto" },
+              height: { xs: 42, sm: 46, md: 48 },
+              p: { xs: 0, md: "6px 14px" },
+              borderRadius: { xs: "50%", md: 3 },
+            }}
+          >
+            <Forward30Icon aria-hidden="true" sx={{ fontSize: { xs: 24, sm: 26, md: 28 } }} />
+            <Box component="span" sx={{ display: { xs: "none", md: "inline" }, ml: 0.75, fontWeight: 700, fontSize: "0.875rem" }}>
+              +30s
+            </Box>
+          </Button>
+        </Tooltip>
       </Stack>
 
       {/* Progress with big thumb (themed) and time text on both sides. */}
@@ -343,15 +422,26 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
         </Button>
         <Box
           sx={{
-            display: { xs: "none", sm: "flex" },
+            display: "flex",
             alignItems: "center",
             gap: 1,
-            flex: 1,
-            minWidth: 200,
+            width: { xs: "100%", sm: "auto" },
+            flex: { sm: 1 },
+            minWidth: { sm: 200 },
+            mt: { xs: 1.5, sm: 0 },
           }}
         >
-          <VolumeUpIcon aria-hidden="true" sx={{ color: kp.p.textSecondary }} />
-          <Typography component="label" htmlFor="player-volume" sx={{ fontWeight: 600 }}>
+          <Tooltip title={isMuted ? (T('Включить звук') || 'Unmute') : (T('Выключить звук') || 'Mute')}>
+            <IconButton
+              size="small"
+              onClick={toggleMute}
+              aria-label={isMuted ? (T('Включить звук') || 'Unmute') : (T('Выключить звук') || 'Mute')}
+              sx={{ color: isMuted ? "error.main" : kp.p.textSecondary }}
+            >
+              {isMuted ? <VolumeOffIcon aria-hidden="true" /> : <VolumeUpIcon aria-hidden="true" />}
+            </IconButton>
+          </Tooltip>
+          <Typography component="label" htmlFor="player-volume" sx={{ fontWeight: 600, display: { xs: "none", md: "inline" } }}>
             {T('Громкость')}
           </Typography>
           <Slider
@@ -365,12 +455,13 @@ const AudioPlayerSection = React.forwardRef(({book, playlist, bookmarks, setBook
             onChange={(_, v) => {
               const nv = Array.isArray(v) ? v[0] : v;
               setVolume(nv);
+              if (nv > 0) prevVolumeRef.current = nv;
               playerRef.current?.setVolume?.(nv / 100);
             }}
             getAriaValueText={(v) => v + ' %'}
-            sx={{ maxWidth: 160 }}
+            sx={{ flex: 1, maxWidth: { xs: "100%", sm: 160 } }}
           />
-          <Typography aria-hidden="true" sx={{ fontVariantNumeric: "tabular-nums", color: kp.p.textSecondary }}>
+          <Typography aria-hidden="true" sx={{ fontVariantNumeric: "tabular-nums", color: kp.p.textSecondary, minWidth: 42 }}>
             {volume} %
           </Typography>
         </Box>

@@ -16,6 +16,7 @@ import Container from "../ds/components/Container";
 import PersonCard from "./PersonCard";
 import { getPersons } from "../lib/persons";
 import { getPaginationItemAriaLabel } from "../lib/a11y";
+import useLibrary from "../LibraryContext";
 import T, { tr } from "../lib/translator";
 
 const PER_PAGE = 12;
@@ -23,6 +24,7 @@ const PER_PAGE = 12;
 const Persons = () => {
   const { table = "authors" } = useParams();
   const { kp } = useTheme();
+  useLibrary();
   const [persons, setPersons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

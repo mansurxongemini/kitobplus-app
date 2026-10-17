@@ -7,11 +7,13 @@ import SiteFooter from "./SiteFooter";
 import Container from "./Container";
 import { useRouteA11y } from "../../lib/a11y";
 import { Reveal } from "../motion";
+import useLibrary from "../../LibraryContext";
 import T from "../../lib/translator";
 
 // Каркас любой страницы: ссылка «к основному содержимому», шапка, <main>, подвал.
 // title — заголовок вкладки браузера; при смене страницы фокус переходит в <main>.
 const PageShell = ({ title, children }) => {
+  useLibrary();
   useRouteA11y(title);
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>

@@ -4,6 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import useSWR from "swr";
 import { LazyShelf } from "../ds/components/Shelf";
 import Container from "../ds/components/Container";
+import useLibrary from "../LibraryContext";
 import { getHost, getToken } from "../lib/api";
 import { announce } from "../lib/a11y";
 import T, { tr } from "../lib/translator";
@@ -18,6 +19,7 @@ const booksUrl = (params) => `${getHost()}/srv/books.php?${params}`;
 // next batch and the manual button does the same (and moves focus).
 const Feed = ({ promos = {} }) => {
   const { kp } = useTheme();
+  const { countryCode } = useLibrary();
   const token = getToken();
   const { data: genresData } = useSWR(`${getHost()}/srv/genres.php`, fetchJson);
   const { data: authorsData } = useSWR(`${getHost()}/srv/persons.php?table=authors`, fetchJson);
@@ -29,8 +31,17 @@ const Feed = ({ promos = {} }) => {
     if (token) {
       list.push({ key: "continue", title: T("Продолжить прослушивание"), to: "/profile", variant: "progress", count: 10, url: booksUrl(`realm=listened&token=${encodeURIComponent(token)}&page=0&per_page=10`) });
     }
+    list.push({
+      key: "top",
+      title: T("Топ-10 недели"),
+      eyebrow: T("ENG OMMABOP"),
+      actionLabel: T("Hammasini ko'rish"),
+      to: "/books?sort=popular",
+      variant: "ranked",
+      count: 10,
+      url: booksUrl("sort=popular&page=0&per_page=10"),
+    });
     list.push({ key: "new", title: T("Новые поступления"), to: "/books?sort=new", count: 10, url: booksUrl("sort=new&page=0&per_page=10") });
-    list.push({ key: "top", title: T("Топ-10 недели"), to: "/books?sort=popular", variant: "ranked", count: 10, url: booksUrl("sort=popular&page=0&per_page=10") });
     // «О нас» (#about) — в первой порции ленты, чтобы ссылка /#about всегда находила блок.
     if (promos.about) list.push({ key: "promo-about", type: "promo", node: promos.about });
     if (promos.join) list.push({ key: "promo-join", type: "promo", node: promos.join });
@@ -59,7 +70,7 @@ const Feed = ({ promos = {} }) => {
     list.push({ key: "end", type: "end" });
     return list;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, genresData, authorsData, dictorsData, promos.about, promos.join, promos.access, promos.news]);
+  }, [countryCode, token, genresData, authorsData, dictorsData, promos.about, promos.join, promos.access, promos.news]);
 
   const [visible, setVisible] = React.useState(INITIAL);
   const sentinelRef = React.useRef(null);
